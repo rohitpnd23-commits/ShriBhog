@@ -23,7 +23,6 @@ body{background:#fdf6ea}
 .btn-order-main{background:#b91c1c;color:white;width:100%;padding:14px;border-radius:12px;border:none;font-weight:700;cursor:pointer}
 .menu{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px 5% 30px}
 .dish{background:white;border-radius:14px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.05);border:1px solid #fef3c7;display:flex;flex-direction:column}
-/* --- PHOTO FIX YAHI HAI --- */
 .dish img{width:100%;height:125px;object-fit:contain;background:#ffffff;padding:6px;border-bottom:1px solid #fff7ed}
 .dish-info{padding:8px}
 .qty-btn{width:26px;height:26px;border-radius:50%;border:1.5px solid #facc15;background:white;font-weight:800;cursor:pointer}
@@ -128,7 +127,7 @@ let deliveryBoys=[{name:"Raju",earn:0},{name:"Amit",earn:0}];let currentBoy=0;
 let allOrders=[{id:101,time:"10:32 AM",shop:"jora",shopName:"Jora Mandir - Rohit",cust:"Amit",amt:198,comm:19,del:20,shopEarn:159,status:"PAID",settle:"PENDING",items:"Veg Thali x2"}];
 
 function switchRole(r){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.querySelectorAll('.role-btn').forEach(b=>{b.classList.remove('active');b.classList.add('inactive')});document.getElementById(r+'View').classList.add('active');event.target.classList.remove('inactive');event.target.classList.add('active');renderAll();}
-function changeShop(){currentShop=document.getElementById('shopSwitcher').value;document.getElementById('custShopName').innerText=shops[currentShop].name;renderMenu();}
+function changeShop(){currentShop=document.getElementById('shopSwitcher').value;document.getElementById('custShopName').innerText=shops[currentShop].name;renderMenu();renderAll();}
 
 function ownerAddDish(){
  let name=document.getElementById('dishName').value.trim();
@@ -158,7 +157,10 @@ function approveDish(id){
  if(!dish) return;
  shops[dish.shop].menu.push({n:dish.n,p:dish.p,i:dish.i,status:"APPROVED"});
  pendingDishes=pendingDishes.filter(d=>d.id!=id);
- alert(`✅ ${dish.n} Approved! Ab customer ko ${shops[dish.shop].name} me dikhega`);
+ currentShop = dish.shop;
+ document.getElementById('shopSwitcher').value = dish.shop;
+ document.getElementById('custShopName').innerText = shops[currentShop].name;
+ alert(`✅ ${dish.n} Approved! Ab ${shops[dish.shop].name} me customer ko dikhega`);
  renderAll();
 }
 function rejectDish(id){if(confirm('Reject karna hai?')){pendingDishes=pendingDishes.filter(d=>d.id!=id);renderAll();}}
@@ -176,7 +178,7 @@ function renderCart(){
  renderMenu();
 }
 function renderMenu(){
- let h='';shops[currentShop].menu.filter(m=>m.status==="APPROVED").forEach(m=>{
+ let h='';(shops[currentShop].menu || []).filter(m=>m.status==="APPROVED").forEach(m=>{
    let inCart=cart.find(c=>c.name===m.n);let qty=inCart?inCart.qty:0;let idx=cart.findIndex(c=>c.name===m.n);
    h+=`<div class=dish><img src="${m.i}"><div class=dish-info><div style="font-size:13px;font-weight:700">${m.n}</div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px"><span style="font-weight:800;color:#b91c1c">₹${m.p}</span>${qty===0?`<button onclick="add('${m.n}',${m.p})" style="background:#fef9c3;border:1.5px solid #facc15;padding:5px 14px;border-radius:12px;font-size:12px;font-weight:700">Add</button>`:`<div style="display:flex;align-items:center;gap:4px;background:#fef9c3;border:1.5px solid #facc15;border-radius:12px;padding:3px 6px"><button class="qty-btn" onclick="decrease(${idx})">-</button><span style="font-size:12px;font-weight:800">${qty}</span><button class="qty-btn" onclick="increase(${idx})" style="background:white">+</button></div>`}</div></div></div>`;
  });
