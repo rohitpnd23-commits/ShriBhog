@@ -1,67 +1,53 @@
 <!DOCTYPE html>
 <html lang="hi"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>ShriBhog LIVE - Supabase Connected</title>
+<title>ShriBhog LIVE - Jora Mandir Full</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
-body{background:#fdf6e3;color:#1f2937}
-.top{background:#0f0f0f;color:white;padding:14px 5%;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
-.card{background:white;border-radius:16px;padding:14px;margin:10px 5%;box-shadow:0 4px 14px rgba(0,0,0,0.06);border:1px solid #fef3c7}
-.input{width:100%;padding:11px;border-radius:10px;border:1.5px solid #fde68a;background:#fefce8;margin:6px 0;outline:none;font-size:15px}
-.btn{width:100%;padding:12px;border-radius:10px;border:none;font-weight:800;cursor:pointer;font-size:14px}
+body{background:#fffbeb;color:#1f2937;min-height:100vh}
+.top{background:#111827;color:white;padding:12px 4%;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:20}
+.loginBox{max-width:380px;margin:70px auto;background:white;padding:24px;border-radius:20px;box-shadow:0 15px 40px rgba(0,0,0,0.15);border:2px solid #facc15;text-align:center}
+.input{width:100%;padding:12px;border-radius:12px;border:1.5px solid #fde68a;background:#fefce8;margin:7px 0;outline:none;font-size:14px}
+.btn{padding:12px 14px;border-radius:12px;border:none;font-weight:800;cursor:pointer;font-size:13px}
 .btn-red{background:#b91c1c;color:white}.btn-green{background:#16a34a;color:white}.btn-yellow{background:#fef9c3;border:1.5px solid #facc15}
-.menu{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px 5%}
-.dish{background:white;border-radius:14px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.06);border:1px solid #fff7d6}
-.dish img{width:100%;height:110px;object-fit:cover}
-.loginBox{max-width:360px;margin:60px auto;background:white;padding:22px;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,0.12);border:2px solid #facc15;text-align:center}
+.grid-dishes{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px 4%}
+.dish{background:white;border-radius:14px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.07);border:1px solid #fff7d6}
+.dish img{width:100%;height:120px;object-fit:cover}
+.card{background:white;border-radius:16px;padding:14px;margin:10px 4%;box-shadow:0 4px 14px rgba(0,0,0,0.06);border:1px solid #fef3c7}
 </style>
 </head>
 <body>
-<div class="top"><b>ShriBhog - Jora Mandir</b><span style="font-size:12px">LIVE FIXED</span></div>
+<div class="top"><div><b>ShriBhog - Jora Mandir</b></div><div><button id="logoutBtn" onclick="logout()" style="display:none">Logout</button></div></div>
 
 <div id="loginDiv" class="loginBox">
-<h2 style="color:#7f1d1d;margin-bottom:10px">Login Karo</h2>
-<p style="font-size:12px;color:#555;line-height:1.5">Bhabhi: joramandir / jora123<br>Admin: admin / admin123<br>Raju: raju / raju123</p>
+<h2 style="color:#7f1d1d">Jai Shri Ram 🙏</h2>
+<p style="font-size:12px">joramandir / jora123<br>admin / admin123<br>raju / raju123</p>
 <input id="loginId" class="input" placeholder="Login ID" value="joramandir">
 <input id="password" type="password" class="input" placeholder="Password" value="jora123">
-<button onclick="login()" class="btn btn-red" style="margin-top:10px">Login Karo →</button>
-<div id="msg" style="margin-top:12px;font-size:13px"></div>
+<button onclick="login()" class="btn btn-red" style="width:100%;margin-top:8px">Login Karo →</button>
+<div id="msg" style="margin-top:10px;font-size:12px"></div>
 </div>
 
 <div id="mainDiv" style="display:none">
-<div class="menu">
-<button class="btn btn-yellow" onclick="alert('Dishes loaded')">🍛 Dishes</button>
-<button class="btn btn-yellow" onclick="alert('Orders')">📦 Orders</button>
-</div>
-<div id="content" class="card">Login success! Ab tum dashboard me ho. Yaha se dishes add kar sakte ho.</div>
+<div style="display:flex;gap:8px;padding:12px 4%"><button class="btn btn-yellow" style="flex:1" onclick="showTab('dishes')">🍛 Dishes</button><button class="btn btn-yellow" style="flex:1" onclick="showTab('add')">➕ Add</button><button class="btn btn-yellow" style="flex:1" onclick="showTab('orders')">📦 Orders</button></div>
+<div id="addDiv" class="card" style="display:none"><h3>Naya Bhog</h3><input id="dishName" class="input" placeholder="Poori Sabzi"><input id="dishPrice" type="number" class="input" placeholder="80"><input id="dishImg" class="input" placeholder="Image URL"><textarea id="dishDesc" class="input" placeholder="Description"></textarea><button onclick="saveDish()" class="btn btn-green" style="width:100%">💾 Save</button><div id="addMsg"></div></div>
+<div id="dishesDiv"><div id="dishesGrid" class="grid-dishes"></div></div>
+<div id="ordersDiv" style="display:none"><div id="ordersList" class="card">Koi order nahi</div></div>
 </div>
 
 <script>
-// LOCAL LOGIN FIX - Supabase ko login ke liye use nahi kar rahe
-async function login(){
-  const id = (document.getElementById('loginId').value||'').trim().toLowerCase();
-  const pass = (document.getElementById('password').value||'').trim();
-  const msg = document.getElementById('msg');
-
-  const localUsers = {
-    'joramandir': { password:'jora123', role:'SHOP_OWNER', name:'Jora Bhabhi', shop_id:'jora' },
-    'admin': { password:'admin123', role:'ADMIN', name:'Rohit Admin', shop_id:'jora' },
-    'raju': { password:'raju123', role:'DELIVERY', name:'Raju Delivery', shop_id:'jora' }
-  };
-
-  const u = localUsers[id];
-  if(u && u.password === pass){
-    localStorage.setItem('shribhog_user', JSON.stringify({login_id:id,...u}));
-    msg.innerHTML = '<b style="color:green">✓ Success! '+u.name+'</b>';
-    setTimeout(()=>{
-      document.getElementById('loginDiv').style.display='none';
-      document.getElementById('mainDiv').style.display='block';
-    },400);
-  } else {
-    msg.innerHTML = '<b style="color:#b91c1c">❌ Galat ID / Password</b>';
-  }
-}
+const SUPA_URL="https://zosffnxuwrknbfisnxgt.supabase.co";
+let supabaseClient=null;
+let dishes=JSON.parse(localStorage.getItem('shribhog_dishes')||'[]');
+const localUsers={'joramandir':{password:'jora123',role:'SHOP_OWNER',name:'Jora Bhabhi'},'admin':{password:'admin123',role:'ADMIN',name:'Admin'},'raju':{password:'raju123',role:'DELIVERY',name:'Raju'}};
+function login(){const id=document.getElementById('loginId').value.trim().toLowerCase();const pass=document.getElementById('password').value.trim();const u=localUsers[id];if(u&&u.password===pass){localStorage.setItem('shribhog_user',JSON.stringify({login_id:id,...u}));document.getElementById('loginDiv').style.display='none';document.getElementById('mainDiv').style.display='block';document.getElementById('logoutBtn').style.display='block';renderDishes();}else{document.getElementById('msg').innerHTML='❌ Galat ID';}}
+function showTab(t){document.getElementById('addDiv').style.display=t==='add'?'block':'none';document.getElementById('dishesDiv').style.display=t==='dishes'?'block':'none';document.getElementById('ordersDiv').style.display=t==='orders'?'block':'none';}
+function saveDish(){const name=document.getElementById('dishName').value.trim();const price=parseInt(document.getElementById('dishPrice').value||'0');const img=document.getElementById('dishImg').value.trim()||`https://picsum.photos/seed/${Date.now()}/400/300`;if(!name||!price){document.getElementById('addMsg').innerHTML='Naam Price bharo';return;}const nd={id:Date.now(),name,price,image:img,is_available:true};dishes.unshift(nd);localStorage.setItem('shribhog_dishes',JSON.stringify(dishes));renderDishes();showTab('dishes');document.getElementById('dishName').value='';}
+function renderDishes(){const g=document.getElementById('dishesGrid');if(dishes.length===0){g.innerHTML='<div class=card>Koi dish nahi</div>';return;}g.innerHTML=dishes.map(d=>`<div class=dish><img src=${d.image}><div style=padding:8px><b>${d.name}</b><br><span style=color:#b91c1c;font-weight:800>₹${d.price}</span><br><button onclick="deleteDish(${d.id})" style=font-size:11px>🗑️ Delete</button></div></div>`).join('');}
+function deleteDish(id){dishes=dishes.filter(d=>d.id!=id);localStorage.setItem('shribhog_dishes',JSON.stringify(dishes));renderDishes();}
+function logout(){localStorage.removeItem('shribhog_user');location.reload();}
+window.onload=()=>{const s=localStorage.getItem('shribhog_user');if(s){document.getElementById('loginDiv').style.display='none';document.getElementById('mainDiv').style.display='block';renderDishes();}}
 </script>
 </body></html>
