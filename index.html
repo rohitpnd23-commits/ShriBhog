@@ -1,122 +1,117 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html>
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ShriBhog - Jora Mandir</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui}
-body{background:#fff7ed}
-.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
-.card{background:white;padding:28px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.1);width:100%;max-width:380px}
-input{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;margin:8px 0}
-.btn{width:100%;padding:12px;background:#ea580c;color:white;border:none;border-radius:8px;font-weight:700;cursor:pointer}
-.topbar{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:white;box-shadow:0 2px 8px rgba(0,0,0,.06);position:sticky;top:0;z-index:10}
-.tabs{display:flex;gap:8px;padding:12px 16px}
-.tab{padding:8px 16px;border-radius:20px;border:1px solid #fed7aa;background:white;cursor:pointer}
-.tab.active{background:#ea580c;color:white;border-color:#ea580c}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;padding:16px;max-width:1100px;margin:auto}
-.dish{background:white;border-radius:14px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.06)}
-.dish img{width:100%;height:180px;object-fit:cover;background:#fef3c7}
-.dish-body{padding:12px}
-.row{display:flex;gap:8px;margin-top:10px}
-.row button{flex:1;padding:8px;border-radius:8px;border:none;cursor:pointer;font-weight:600}
-.edit{background:#e0f2fe;color:#0369a1}.del{background:#fee2e2;color:#991b1b}
-.form-wrap{max-width:500px;margin:20px auto;background:white;padding:20px;border-radius:14px}
-#preview{width:100%;height:200px;object-fit:cover;border-radius:10px;display:none;margin-top:10px;border:1px dashed #ddd}
-.small{font-size:12px;color:green;display:none}
-</style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ShriBhog Admin</title>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, onSnapshot, updateDoc, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "PASTE_YOUR_API_KEY",
+  authDomain: "PASTE_YOUR_AUTH_DOMAIN",
+  projectId: "PASTE_YOUR_PROJECT_ID",
+  storageBucket: "PASTE_YOUR_STORAGE_BUCKET",
+  messagingSenderId: "PASTE_YOUR_SENDER_ID",
+  appId: "PASTE_YOUR_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const dishesRef = collection(db, "dishes");
+window.dbTools = { db, dishesRef, addDoc, onSnapshot, updateDoc, doc, deleteDoc };
+</script>
+<style>body{font-family:sans-serif;padding:10px;background:#fff8f0}.card{border:1px solid #ddd;padding:10px;margin:10px 0;border-radius:8px;background:white}.pending{border-left:5px solid orange}.approved{border-left:5px solid green} button{padding:6px 12px;margin:3px;cursor:pointer}</style>
 </head>
 <body>
-<div id="loginPage" class="login-wrap">
-<div class="card">
-<h2 style="text-align:center;color:#ea580c">🙏 Jai Shri Ram</h2><p style="text-align:center;margin:8px 0 16px">ShriBhog - Jora Mandir</p>
-<input id="uid" placeholder="Login ID - joramandir"><input id="pwd" type="password" placeholder="Password - jora123"><button class="btn" onclick="doLogin()">Login Karo</button>
-<p style="font-size:12px;margin-top:12px;color:#666">Demo: joramandir/jora123, admin/admin123, raju/raju123</p>
-</div></div>
+<div id="loginBox">
+<h2>ShriBhog Login</h2>
+<input id="u" placeholder="username"><br><br>
+<input id="p" type="password" placeholder="password"><br><br>
+<button onclick="login()">Login</button>
+<p style="font-size:12px">Seller: joramandir/jora123, raju/raju123 | Admin: admin/admin123</p>
+</div>
 
-<div id="mainPage" style="display:none">
-<div class="topbar"><b>ShriBhog</b><div><span id="uname"></span> <button onclick="doLogout()" style="margin-left:10px;padding:6px 10px;border-radius:6px;border:1px solid #ddd;background:white;cursor:pointer">Logout</button></div></div>
-<div class="tabs"><div id="t1" class="tab active" onclick="showTab('dishes')">Dishes</div><div id="t2" class="tab" onclick="showTab('add')">+ Add</div><div id="t3" class="tab" onclick="showTab('orders')">Orders</div></div>
-<div id="dishesSec" class="grid"></div>
-<div id="addSec" style="display:none"><div class="form-wrap">
-<h3 id="formTitle">Naya Dish Add Karo</h3>
-<input id="dname" placeholder="Name - jaise Puri Sabji"><input id="dprice" type="number" placeholder="Price - 40">
-<input id="durl" placeholder="Image URL (optional)">
-<div style="margin:8px 0">Ya <input type="file" id="dfile" accept="image/*" onchange="handleFile(this)"></div>
-<div id="fileOk" class="small">✓ Photo select ho gayi</div>
-<img id="preview"><button class="btn" style="margin-top:12px" id="saveBtn" onclick="saveDish()">Save Dish</button>
-<button id="cancelEdit" style="display:none;width:100%;margin-top:8px;padding:10px;border:1px solid #ddd;background:white;border-radius:8px;cursor:pointer" onclick="cancelEdit()">Cancel Edit</button>
-</div></div>
-<div id="ordersSec" style="display:none;padding:16px;text-align:center;color:#666">Abhi koi order nahi</div>
+<div id="mainBox" style="display:none">
+<h3>Welcome <span id="who"></span> (<span id="role"></span>) <button onclick="location.reload()">Logout</button></h3>
+
+<div class="card">
+<h4>Add New Dish (Photo auto 100KB me compress hoga)</h4>
+<input id="dname" placeholder="Dish Name e.g. Samosa"><br><br>
+<input id="dprice" type="number" placeholder="Price"><br><br>
+<input type="file" id="dimg" accept="image/*"><br><br>
+<button onclick="addDish()">Add for Approval</button>
+<p id="status"></p>
+</div>
+
+<h3>Pending Dishes (Admin hi approve karega)</h3>
+<div id="pendingList"></div>
+
+<h3>Approved Dishes (Customer ko dikh raha hai)</h3>
+<div id="approvedList"></div>
 </div>
 
 <script>
-const users={'joramandir':{p:'jora123',n:'Jora Bhabhi'},'admin':{p:'admin123',n:'Admin'},'raju':{p:'raju123',n:'Raju'}};
-let dishes=JSON.parse(localStorage.getItem('shribhog_v3')||'[]');
-let currentImg=''; let editIndex=-1;
+let currentUser=null, isAdmin=false;
+function login(){
+  const u=document.getElementById('u').value.trim();
+  const p=document.getElementById('p').value.trim();
+  const users={joramandir:'jora123', raju:'raju123', admin:'admin123'};
+  if(users[u] && users[u]==p){
+    currentUser=u; isAdmin=(u==='admin');
+    document.getElementById('loginBox').style.display='none';
+    document.getElementById('mainBox').style.display='block';
+    document.getElementById('who').innerText=u;
+    document.getElementById('role').innerText=isAdmin?'ADMIN':'SELLER';
+    listenDishes();
+  } else alert('Wrong login');
+}
 
-if(dishes.length===0){dishes=[{name:'Puri Sabji',price:40,img:'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=400'}]; saveLocal();}
+function compressImage(file){
+  return new Promise(res=>{
+    const img=new Image();
+    img.onload=()=>{
+      const canvas=document.createElement('canvas');
+      const max=400; let w=img.width, h=img.height;
+      if(w>h){ if(w>max){h*=max/w; w=max} } else { if(h>max){w*=max/h; h=max} }
+      canvas.width=w; canvas.height=h;
+      canvas.getContext('2d').drawImage(img,0,0,w,h);
+      res(canvas.toDataURL('image/jpeg',0.6));
+    };
+    img.src=URL.createObjectURL(file);
+  });
+}
 
-function saveLocal(){localStorage.setItem('shribhog_v3',JSON.stringify(dishes));}
-function doLogin(){
- let u=document.getElementById('uid').value.trim().toLowerCase();
- let p=document.getElementById('pwd').value.trim();
- if(users[u] && users[u].p===p){localStorage.setItem('sb_user',u);initApp();}else alert('Galat ID / Password');
+async function addDish(){
+  const name=document.getElementById('dname').value;
+  const price=Number(document.getElementById('dprice').value);
+  const file=document.getElementById('dimg').files[0];
+  if(!name ||!price) return alert('Name Price bharo');
+  document.getElementById('status').innerText='Uploading...';
+  let imgData='';
+  if(file) imgData=await compressImage(file);
+  const { addDoc, dishesRef } = window.dbTools;
+  await addDoc(dishesRef, { name, price, img: imgData, status: isAdmin?'approved':'pending', seller: currentUser, created: Date.now() });
+  document.getElementById('status').innerText='Saved as '+(isAdmin?'Approved':'Pending');
+  document.getElementById('dname').value=''; document.getElementById('dprice').value='';
 }
-function initApp(){
- let u=localStorage.getItem('sb_user'); if(!u ||!users[u]) return;
- document.getElementById('loginPage').style.display='none'; document.getElementById('mainPage').style.display='block';
- document.getElementById('uname').innerText=users[u].n; renderDishes();
+
+function listenDishes(){
+  const { onSnapshot, dishesRef, updateDoc, doc, deleteDoc } = window.dbTools;
+  onSnapshot(dishesRef, (snap)=>{
+    const pending=document.getElementById('pendingList'); const approved=document.getElementById('approvedList');
+    pending.innerHTML=''; approved.innerHTML='';
+    snap.forEach(d=>{
+      const data=d.data(); const id=d.id;
+      const el=`<div class="card ${data.status}"><b>${data.name}</b> - Rs ${data.price}<br><small>Seller:${data.seller} | ${data.status}</small><br>${data.img?`<img src="${data.img}" style="width:100px;height:100px;object-fit:cover">`:''}<br>
+      ${isAdmin && data.status==='pending'? `<button onclick="approveDish('${id}')">✅ Approve</button>`:''}
+      ${isAdmin? `<button onclick="deleteDish('${id}')">❌ Delete</button>`:''}</div>`;
+      if(data.status==='pending') pending.innerHTML+=el; else approved.innerHTML+=el;
+    });
+  });
 }
-function doLogout(){localStorage.removeItem('sb_user'); location.reload();}
-function showTab(t){
- document.getElementById('dishesSec').style.display=t==='dishes'?'grid':'none';
- document.getElementById('addSec').style.display=t==='add'?'block':'none';
- document.getElementById('ordersSec').style.display=t==='orders'?'block':'none';
- document.getElementById('t1').classList.toggle('active',t==='dishes');
- document.getElementById('t2').classList.toggle('active',t==='add');
- document.getElementById('t3').classList.toggle('active',t==='orders');
-}
-function handleFile(inp){
- let f=inp.files[0]; if(!f) return;
- let r=new FileReader(); r.onload=e=>{
-   currentImg=e.target.result;
-   document.getElementById('preview').src=currentImg; document.getElementById('preview').style.display='block';
-   document.getElementById('fileOk').style.display='block';
- }; r.readAsDataURL(f);
-}
-function saveDish(){
- let n=document.getElementById('dname').value.trim();
- let pr=document.getElementById('dprice').value.trim();
- let url=document.getElementById('durl').value.trim();
- if(!n ||!pr) return alert('Naam aur Price bhare');
- let finalImg = currentImg || url || 'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=400';
- if(editIndex>=0){dishes[editIndex]={name:n,price:pr,img:finalImg}; editIndex=-1;}
- else dishes.push({name:n,price:pr,img:finalImg});
- saveLocal(); resetForm(); showTab('dishes'); renderDishes();
-}
-function renderDishes(){
- let g=document.getElementById('dishesSec'); g.innerHTML='';
- dishes.forEach((d,i)=>{
-  g.innerHTML+=`<div class="dish"><img src="${d.img}" onerror="this.src='https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=400'"><div class="dish-body"><div style="display:flex;justify-content:space-between"><b>${d.name}</b><b style="color:#ea580c">₹${d.price}</b></div><div class="row"><button class="edit" onclick="editDish(${i})">Edit</button><button class="del" onclick="delDish(${i})">Delete</button></div></div></div>`;
- });
-}
-function delDish(i){if(confirm('Delete karna hai?')){dishes.splice(i,1); saveLocal(); renderDishes();}}
-function editDish(i){
- editIndex=i; let d=dishes[i];
- document.getElementById('dname').value=d.name; document.getElementById('dprice').value=d.price;
- document.getElementById('durl').value=d.img.startsWith('data:')?'':d.img;
- currentImg=d.img; document.getElementById('preview').src=d.img; document.getElementById('preview').style.display='block';
- document.getElementById('formTitle').innerText='Edit Dish'; document.getElementById('saveBtn').innerText='Update Dish';
- document.getElementById('cancelEdit').style.display='block'; showTab('add');
-}
-function cancelEdit(){editIndex=-1; resetForm();}
-function resetForm(){
- document.getElementById('dname').value=''; document.getElementById('dprice').value=''; document.getElementById('durl').value=''; document.getElementById('dfile').value='';
- currentImg=''; document.getElementById('preview').style.display='none'; document.getElementById('fileOk').style.display='none';
- document.getElementById('formTitle').innerText='Naya Dish Add Karo'; document.getElementById('saveBtn').innerText='Save Dish'; document.getElementById('cancelEdit').style.display='none';
-}
-if(localStorage.getItem('sb_user')) initApp();
+window.approveDish=async(id)=>{ const {updateDoc, doc, db}=window.dbTools; await updateDoc(doc(db,'dishes',id), {status:'approved'}) }
+window.deleteDish=async(id)=>{ if(confirm('Delete?')){ const {deleteDoc, doc, db}=window.dbTools; await deleteDoc(doc(db,'dishes',id)) } }
 </script>
 </body>
 </html>
