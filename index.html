@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="hi"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ShriBhog LIVE - Supabase Connected</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+body{background:#fdf6ea;color:#1f2937}
+.top{background:#0f0f0f;color:white;padding:14px 5%;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:99}
+.card{background:white;border-radius:16px;padding:14px;margin:10px 5%;box-shadow:0 4px 14px rgba(0,0,0,0.06);border:1px solid #fef3c7}
+.input{width:100%;padding:11px;border-radius:10px;border:1.5px solid #fde68a;background:#fefce8;margin:6px 0;outline:none}
+.btn{width:100%;padding:12px;border-radius:10px;border:none;font-weight:800;cursor:pointer;font-size:14px}
+.btn-red{background:#b91c1c;color:white}.btn-green{background:#16a34a;color:white}.btn-yellow{background:#fef9c3;border:1.5px solid #facc15;color:#111}
+.menu{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px 5%}
+.dish{background:white;border-radius:14px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.06);border:1px solid #fff7d6}
+.dish img{width:100%;height:110px;object-fit:cover}
+.loginBox{max-width:360px;margin:60px auto;background:white;padding:22px;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,0.12);border:2px solid #fde68a}
+.badge{padding:3px 8px;border-radius:20px;font-size:10px;font-weight:800}
+.badge-PENDING{background:#fef3c7;color:#92400e}.badge-APPROVED{background:#dcfce7;color:#166534}.badge-REJECTED{background:#fee2e2;color:#991b1b}
+</style>
+</head><body>
+
+<div class="top"><b>🍛 SHRIBHOG LIVE</b><span id="userInfo" style="font-size:12px;background:#fef9c3;color:#111;padding:4px 10px;border-radius:20px"></span></div>
+
+<div id="loginView">
+<div class="loginBox">
+<h2 style="text-align:center;color:#b91c1c">ShriBhog Login</h2>
+<p style="font-size:11px;text-align:center;color:#666;margin:10px 0;line-height:1.5">🔑 Bhabhi (Owner):<br><b>joramandir / jora123</b><br><br>👑 Admin (Aap):<br><b>admin / admin123</b><br><br>🛵 Delivery: raju / raju123</p>
+<input id="loginId" class="input" placeholder="Login ID jaise joramandir">
+<input id="loginPass" type="password" class="input" placeholder="Password">
+<button class="btn btn-red" onclick="doLogin()">Login Karo →</button>
+<p id="loginMsg" style="font-size:12px;text-align:center;margin-top:10px;color:#b91c1c"></p>
+<p style="font-size:10px;text-align:center;margin-top:12px;color:#888">Supabase: zosffnxuwrknbfisnxgt</p>
+</div>
+</div>
+
+<div id="appView" style="display:none">
+<div class="card" style="display:flex;gap:8px;align-items:center;background:#fffbeb">
+<label style="font-size:12px;font-weight:700">Shop:</label>
+<select id="shopSwitcher" class="input" style="margin:0" onchange="loadDishes()"></select>
+<button class="btn btn-yellow" style="width:auto;padding:8px 12px" onclick="logout()">Logout</button>
+</div>
+
+<div id="customerSection">
+<div class="card">
+<h3 style="color:#b91c1c">Order - <span id="shopNameShow">Jora Mandir</span></h3>
+<div id="cartShow" style="font-size:12px;color:#666;background:#fefce8;padding:8px;border-radius:8px;margin:8px 0">Niche se Veg Thali Add karo</div>
+<div style="display:flex;justify-content:space-between;font-weight:800;margin-top:8px"><span>Total</span><span id="totalShow">₹0</span></div>
+<input id="cName" class="input" placeholder="Customer Naam">
+<input id="cPhone" class="input" placeholder="Customer Phone">
+<textarea id="cAddr" class="input" placeholder="Full Address"></textarea>
+<input id="txn" class="input" placeholder="UPI Txn ID (rohitpnd23-6@okaxis)">
+<button class="btn btn-red" onclick="placeOrderSupabase()">✅ Order Confirm - Supabase me Save</button>
+</div>
+<div class="menu" id="menuShow">Loading...</div>
+</div>
+
+<div id="ownerSection" style="display:none">
+<div class="card" style="border:2px dashed #facc15;background:linear-gradient(135deg,#fefce8,#fffbeb)">
+<h3 style="color:#92400e">🍛 Nayi Dish - Admin Approval</h3>
+<input type="file" id="dishFile" accept="image/*" class="input">
+<input id="dishName" class="input" placeholder="Dish Naam - Veg Thali">
+<input id="dishPrice" type="number" class="input" placeholder="Price - 99">
+<button class="btn btn-green" onclick="addDishSupabase()">📤 Approval ke liye Bhejo</button>
+<p id="dishMsg" style="font-size:11px;text-align:center;margin-top:8px;font-weight:700"></p>
+</div>
+<div class="card"><h4 style="color:#b91c1c">📋 Meri Dishes Status</h4><div id="ownerDishList" style="font-size:12px;margin-top:8px"></div></div>
+<div class="card"><h4 style="color:#b91c1c">💰 Mere Shop Orders</h4><div id="ownerOrders" style="font-size:11px;margin-top:8px"></div></div>
+</div>
+
+<div id="adminSection" style="display:none">
+<div class="card" style="background:#fffbeb;border-color:#facc15"><h4 style="color:#92400e">⏳ Pending Dishes - Approve Karo</h4><div id="adminPending" style="font-size:12px;margin-top:10px"></div></div>
+<div class="card"><h4 style="color:#b91c1c">📦 Sab Orders</h4><div id="adminAllOrders" style="font-size:11px;margin-top:10px"></div></div>
+</div>
+
+</div>
+
+<script>
+const SUPABASE_URL = "https://zosffnxuwrknbfisnxgt.supabase.co";
+const SUPABASE_KEY = "sb_publishable_2rWJ-Jxlyp1FENQGflbLJg_Xau0WSLi";
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let currentUser = null; let currentShop = 'jora'; let cart = []; let shopsCache = [];
+
+async function doLogin(){
+ let id = document.getElementById('loginId').value.trim();
+ let pass = document.getElementById('loginPass').value.trim();
+ if(!id||!pass){ document.getElementById('loginMsg').innerText='ID Password likho'; return; }
+ document.getElementById('loginMsg').innerText='Checking...';
+ let {data, error} = await supabaseClient.from('users').select('*').eq('login_id', id).eq('password', pass).single();
+ if(error || !data){ document.getElementById('loginMsg').innerText='❌ Galat ID/Password - SQL Tables banaye?'; console.log(error); return; }
+ currentUser = data;
+ document.getElementById('loginView').style.display='none';
+ document.getElementById('appView').style.display='block';
+ document.getElementById('userInfo').innerText = data.name + ' - ' + data.role;
+ await loadShops();
+ if(data.shop_id) { currentShop = data.shop_id; document.getElementById('shopSwitcher').value = currentShop; }
+ loadDishes();
+ if(data.role==='SHOP_OWNER'){ document.getElementById('ownerSection').style.display='block'; loadOwnerData(); }
+ if(data.role==='ADMIN'){ document.getElementById('adminSection').style.display='block'; loadAdminData(); }
+}
+function logout(){ location.reload(); }
+
+async function loadShops(){
+ let {data, error} = await supabaseClient.from('shops').select('*');
+ if(error){ console.log(error); return; }
+ shopsCache = data;
+ let sel = document.getElementById('shopSwitcher');
+ sel.innerHTML = data.map(s=>`<option value="${s.id}">${s.name} (${s.id})</option>`).join('');
+ sel.value = currentShop;
+}
+
+async function loadDishes(){
+ currentShop = document.getElementById('shopSwitcher').value;
+ let shop = shopsCache.find(s=>s.id==currentShop);
+ document.getElementById('shopNameShow').innerText = shop? shop.name : currentShop;
+ let {data, error} = await supabaseClient.from('dishes').select('*').eq('shop_id', currentShop).eq('status','APPROVED');
+ if(error){ document.getElementById('menuShow').innerHTML='Error: '+error.message; return; }
+ let html='';
+ data.forEach(d=>{
+   html+=`<div class=dish><img src="${d.image_url}" onerror="this.src='https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=400'"><div style="padding:8px"><b style="font-size:12px">${d.name}</b><br><span style="color:#b91c1c;font-weight:800">₹${d.price}</span><br><button onclick="addToCart('${d.name}',${d.price})" class="btn btn-yellow" style="margin-top:6px;padding:6px;font-size:11px">+ Add</button></div></div>`;
+ });
+ document.getElementById('menuShow').innerHTML = html || '<p style="padding:20px;text-align:center;color:#888">Koi Approved Dish nahi</p>';
+}
+
+function addToCart(n,p){ let ex=cart.find(c=>c.name==n); if(ex) ex.qty++; else cart.push({name:n,price:p,qty:1}); renderCart(); }
+function renderCart(){ let t=0; let h=''; cart.forEach(c=>{ t+=c.price*c.qty; h+=`${c.name} x${c.qty} = ₹${c.price*c.qty}<br>`; }); document.getElementById('cartShow').innerHTML = h||'Empty'; document.getElementById('totalShow').innerText='₹'+t; }
+
+async function placeOrderSupabase(){
+ if(cart.length==0){ alert('Cart empty'); return; }
+ if(!document.getElementById('cName').value){ alert('Naam likho'); return; }
+ let total = cart.reduce((a,b)=>a+b.price*b.qty,0);
+ let comm = Math.round(total*0.10); let del=20; let earn=total-comm-del;
+ let items = cart.map(c=>`${c.name} x${c.qty}`).join(', ');
+ let {error} = await supabaseClient.from('orders').insert({ shop_id:currentShop, customer_name:document.getElementById('cName').value, customer_phone:document.getElementById('cPhone').value, customer_address:document.getElementById('cAddr').value, items:items, total_amount:total, commission:comm, delivery_charge:del, shop_earn:earn, txn_id:document.getElementById('txn').value, status:'PAID', settlement_status:'PENDING' });
+ if(error) alert('Error: '+error.message);
+ else { alert('✅ Order Supabase me save!'); cart=[]; renderCart(); loadAdminData(); loadOwnerData(); }
+}
+
+async function addDishSupabase(){
+ let name=document.getElementById('dishName').value.trim(); let price=document.getElementById('dishPrice').value.trim();
+ if(!name||!price){ alert('Naam price likho'); return; }
+ document.getElementById('dishMsg').innerText='⏳ Uploading...';
+ let img = 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=400';
+ let file = document.getElementById('dishFile').files[0];
+ if(file){
+   let fileName = Date.now()+'_'+file.name.replace(/[^a-zA-Z0-9.]/g,'_');
+   let {data, error} = await supabaseClient.storage.from('dishes').upload(fileName, file);
+   if(error){ document.getElementById('dishMsg').innerText='Storage Error: '+error.message+' (Bucket dishes banao, Public ON)'; return; }
+   let {data:pub} = supabaseClient.storage.from('dishes').getPublicUrl(fileName); img = pub.publicUrl;
+ }
+ let {error} = await supabaseClient.from('dishes').insert({ shop_id:currentShop, name:name, price:parseInt(price), image_url:img, status:'PENDING' });
+ if(error) document.getElementById('dishMsg').innerText='DB Error: '+error.message;
+ else { document.getElementById('dishMsg').innerText='✅ Admin ko bhej diya!'; document.getElementById('dishName').value=''; document.getElementById('dishPrice').value=''; loadOwnerData(); loadAdminData(); }
+}
+
+async function loadOwnerData(){
+ let {data:dishes} = await supabaseClient.from('dishes').select('*').eq('shop_id', currentShop).order('created_at',{ascending:false});
+ document.getElementById('ownerDishList').innerHTML = dishes?.map(d=>`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed #fde68a"><span>${d.name} ₹${d.price}</span><span class="badge badge-${d.status}">${d.status}</span></div>`).join('') || 'Koi dish nahi';
+ let {data:orders} = await supabaseClient.from('orders').select('*').eq('shop_id', currentShop).order('created_at',{ascending:false}).limit(20);
+ document.getElementById('ownerOrders').innerHTML = orders?.map(o=>`<div style="padding:6px 0;border-bottom:1px solid #fef3c7"><b>${o.customer_name}</b> - ${o.items}<br>Total ₹${o.total_amount} | Earn <b style="color:green">₹${o.shop_earn}</b></div>`).join('') || 'Koi order nahi';
+}
+
+async function loadAdminData(){
+ let {data:pending} = await supabaseClient.from('dishes').select('*, shops(name)').eq('status','PENDING').order('created_at',{ascending:false});
+ document.getElementById('adminPending').innerHTML = pending?.map(d=>`<div style="border:1.5px solid #fde68a;padding:10px;margin:6px 0;border-radius:12px;background:white;display:flex;gap:10px"><img src="${d.image_url}" style="width:60px;height:45px;object-fit:cover;border-radius:8px"><div style="flex:1"><b>${d.name}</b> ₹${d.price}<br><span style="font-size:11px;color:#666">${d.shops?.name}</span><br><button onclick="approveDish(${d.id})" class="btn btn-green" style="width:auto;padding:6px 14px;margin-top:4px;font-size:11px">✅ Approve</button> <button onclick="rejectDish(${d.id})" class="btn" style="width:auto;padding:6px 14px;background:#fee2e2;font-size:11px">❌ Reject</button></div></div>`).join('') || '<p style="text-align:center;color:#888">Koi pending nahi</p>';
+ let {data:orders} = await supabaseClient.from('orders').select('*, shops(name)').order('created_at',{ascending:false}).limit(30);
+ document.getElementById('adminAllOrders').innerHTML = orders?.map(o=>`<div style="padding:6px 0;border-bottom:1px solid #fef3c7;font-size:11px"><b>#${o.id}</b> ${o.shops?.name} | ${o.items} | ₹${o.total_amount}</div>`).join('') || 'Koi order nahi';
+}
+async function approveDish(id){ await supabaseClient.from('dishes').update({status:'APPROVED'}).eq('id', id); loadAdminData(); loadOwnerData(); loadDishes(); }
+async function rejectDish(id){ await supabaseClient.from('dishes').update({status:'REJECTED'}).eq('id', id); loadAdminData(); }
+</script>
+</body></html>
