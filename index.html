@@ -3,50 +3,74 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shri Bhog - Ghar Jaisa Swad</title>
+<title>Shri Bhog - Admin Panel</title>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
 body{background:#fff8f0;color:#333}
-.header{background:#b91c1c;color:white;padding:16px;text-align:center;position:sticky;top:0;z-index:10}
-.menu{padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.card{background:white;border-radius:16px;padding:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1);border:1px solid #fee2e2}
-.card img{width:100%;height:110px;object-fit:cover;border-radius:12px}
-.card h3{margin:8px 0 4px;font-size:16px}
-.card p{color:#b91c1c;font-weight:700}
-.card button{background:#b91c1c;color:white;border:none;width:100%;padding:8px;border-radius:8px;margin-top:6px;font-weight:600}
-.cart{position:fixed;bottom:0;left:0;right:0;background:white;border-top:2px solid #b91c1c;padding:12px;max-height:85vh;overflow:auto;border-radius:20px 20px 0 0;box-shadow:0 -4px 20px rgba(0,0,0,0.15)}
+.header{background:#b91c1c;color:white;padding:18px;text-align:center;position:sticky;top:0;z-index:10}
+.header h1{font-family:'Tiro Devanagari Hindi',serif;font-size:26px}
+.card{background:white;border-radius:16px;padding:14px;box-shadow:0 4px 12px rgba(0,0,0,0.08);border:1px solid #fee2e2;margin-bottom:12px}
 .input{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:6px 0}
-.btn-main{background:#b91c1c;color:white;border:none;width:100%;padding:14px;border-radius:12px;font-weight:700;font-size:16px;margin-top:8px}
-.btn-loc{background:#fff;border:1.5px dashed #b91c1c;color:#b91c1c;width:100%;padding:10px;border-radius:10px;font-weight:600}
+.btn-main{background:#b91c1c;color:white;border:none;width:100%;padding:12px;border-radius:10px;font-weight:700;cursor:pointer}
+.btn-green{background:#16a34a;color:white;border:none;padding:8px 12px;border-radius:8px;font-weight:600;margin-right:6px;cursor:pointer}
+.btn-red{background:#ef4444;color:white;border:none;padding:8px 12px;border-radius:8px;font-weight:600;cursor:pointer}
+.btn-black{background:#111;color:white;border:none;padding:8px 12px;border-radius:8px;cursor:pointer}
+.container{padding:14px;max-width:700px;margin:auto}
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600}
+.badge-paid{background:#dcfce7;color:#166534} .badge-cod{background:#fef9c3;color:#854d0e}
 </style>
 </head>
 <body>
 <div class="header">
-<h1>🙏 Shri Bhog</h1>
-<p style="font-size:13px">Shuddh • Satvik • Ghar Jaisa - Kolkata</p>
+<h1>🙏 Shri Bhog - Admin</h1>
+<p style="font-size:12px;opacity:0.9">Orders • Location • Menu Control</p>
 </div>
-<div style="padding:12px 16px;font-size:12px">UPI: <b>rohitpnd23-6@okaxis</b></div>
-<div class="menu" id="menu"></div>
-<div class="cart" id="cartBox">
-<h3>🛒 Aapka Order <span id="count" style="color:#b91c1c">(0)</span></h3>
-<div id="cartItems" style="font-size:14px;color:#666">Cart khali hai</div>
-<div id="orderForm" style="display:none;margin-top:12px">
-<input id="cName" class="input" placeholder="Aapka Naam *">
-<input id="cPhone" class="input" placeholder="Mobile Number * (10 digit)" type="tel">
-<textarea id="cAddr" class="input" placeholder="Pura Address *"></textarea>
-<button class="btn-loc" onclick="getLocation()">📍 Live Location Lo</button>
-<p id="locStatus" style="font-size:12px;margin:6px 0;color:green"></p>
-<input id="cLatLng" class="input" placeholder="Location auto-ayega" readonly style="background:#f9f9f9;font-size:12px">
-<div style="background:#fff7ed;padding:10px;border-radius:10px;margin:8px 0;border:1px solid #fed7aa">
-<p style="font-size:13px">Total: <b id="totalAmt">₹0</b></p>
+
+<div class="container">
+<!-- LOGIN -->
+<div id="loginBox" class="card">
+<h3 style="margin-bottom:8px">🔐 Admin Login</h3>
+<p style="font-size:11px;color:#666;margin-bottom:8px">Firebase > Authentication > Add User se pehle admin banao<br>Example: admin@shribhog.com / ShriBhog123</p>
+<input id="email" class="input" placeholder="Admin Email - admin@shribhog.com">
+<input id="pass" type="password" class="input" placeholder="Password">
+<button class="btn-main" onclick="login()">Login</button>
+<p style="font-size:11px;margin-top:8px">Customer app: <a href="index.html" style="color:#b91c1c">index.html kholo</a></p>
+<p id="loginErr" style="color:red;font-size:12px;margin-top:6px"></p>
 </div>
-<button class="btn-main" onclick="payAndOrder()">💳 UPI se Pay Karo & Order Karo</button>
-<button class="btn-main" style="background:#16a34a" onclick="placeOrderWithoutPay()">📦 Cash on Delivery</button>
+
+<!-- PANEL -->
+<div id="panel" style="display:none">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+<h3>Live Orders (<span id="orderCount">0</span>)</h3>
+<button class="btn-black" onclick="logout()">Logout</button>
+</div>
+
+<div id="orders">Loading orders...</div>
+
+<hr style="margin:20px 0;border:none;border-top:1px dashed #fecaca">
+
+<div class="card">
+<h3 style="margin-bottom:8px">➕ Naya Khana Add Karo (Menu)</h3>
+<input id="mName" class="input" placeholder="Naam - Jaise Veg Thali">
+<input id="mPrice" type="number" class="input" placeholder="Price - 180">
+<input id="mImg" class="input" placeholder="Image URL - https://... (Unsplash link)">
+<button class="btn-main" onclick="addMenu()">Menu Me Add Karo</button>
+<p style="font-size:11px;color:#666;margin-top:6px">Add karne ke baad customer app (index.html) me auto dikhega</p>
+</div>
+
+<div class="card">
+<h3 style="margin-bottom:8px">📋 Aapki Details</h3>
+<p style="font-size:13px">UPI: <b>rohitpnd23-6@okaxis</b><br>
+Firebase Project: <b>shri-bhog</b><br>
+Customer Link: <b id="custLink"></b></p>
 </div>
 </div>
+</div>
+
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyDLWArfHEBERO2ehyhApk_zE0kWeM2tow8",
@@ -59,69 +83,72 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-const UPI_ID = "rohitpnd23-6@okaxis";
-const items = [
-{name:"Chole Bhature",price:120,img:"https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=400"},
-{name:"Rajma Chawal",price:100,img:"https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=400"},
-{name:"Veg Thali",price:180,img:"https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400"},
-{name:"Paneer Thali",price:220,img:"https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=400"},
-{name:"Dal Bafla",price:150,img:"https://images.unsplash.com/photo-1595755433128-d388cc074a4b?w=400"},
-{name:"Litti Chokha",price:130,img:"https://images.unsplash.com/photo-1505253758473-96b7015fcd40?w=400"},
-];
-let cart = [];
-let customerLocation = null;
-function renderMenu(){
-  const m = document.getElementById('menu');
-  m.innerHTML = items.map((it,i)=>`<div class="card"><img src="${it.img}"><h3>${it.name}</h3><p>₹${it.price}</p><button onclick="addToCart(${i})">+ Add</button></div>`).join('');
+const auth = firebase.auth();
+
+document.getElementById('custLink').innerText = window.location.href.replace('admin.html','index.html');
+
+function login(){
+  const e=document.getElementById('email').value.trim();
+  const p=document.getElementById('pass').value.trim();
+  if(!e||!p){document.getElementById('loginErr').innerText="Email password bharo";return;}
+  auth.signInWithEmailAndPassword(e,p)
+  .then(()=>{ showPanel(); })
+  .catch(err=>{ document.getElementById('loginErr').innerText=err.message; });
 }
-function addToCart(i){ cart.push(items[i]); updateCart(); }
-function updateCart(){
-  document.getElementById('count').innerText = `(${cart.length})`;
-  if(cart.length==0){ document.getElementById('cartItems').innerHTML = "Cart khali hai"; document.getElementById('orderForm').style.display='none'; return; }
-  document.getElementById('orderForm').style.display='block';
-  let total = 0; let html = "";
-  cart.forEach((c,idx)=>{ total+=c.price; html += `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px dashed #eee"><span>${c.name}</span><span>₹${c.price} <span onclick="removeItem(${idx})" style="color:red">✕</span></span></div>`; });
-  document.getElementById('cartItems').innerHTML = html;
-  document.getElementById('totalAmt').innerText = "₹"+total;
+function logout(){ auth.signOut().then(()=>location.reload()); }
+function showPanel(){
+  document.getElementById('loginBox').style.display='none';
+  document.getElementById('panel').style.display='block';
+  loadOrders();
 }
-function removeItem(idx){ cart.splice(idx,1); updateCart(); }
-function getLocation(){
-  const s = document.getElementById('locStatus'); s.innerText = "Location le rahe hain...";
-  navigator.geolocation.getCurrentPosition(pos=>{
-    customerLocation = {lat:pos.coords.latitude,lng:pos.coords.longitude};
-    document.getElementById('cLatLng').value = customerLocation.lat+", "+customerLocation.lng;
-    s.innerHTML = `✅ Location mil gaya! <a href="https://maps.google.com/?q=${customerLocation.lat},${customerLocation.lng}" target="_blank">Map pe dekho</a>`;
-  },err=>{ s.innerText = "Location allow karo: "+err.message; },{enableHighAccuracy:true});
+auth.onAuthStateChanged(user=>{ if(user) showPanel(); });
+
+function loadOrders(){
+  db.collection("orders").orderBy("createdAt","desc").onSnapshot(snap=>{
+    document.getElementById('orderCount').innerText=snap.size;
+    if(snap.empty){document.getElementById('orders').innerHTML="<div class='card'>Koi order nahi hai abhi</div>";return;}
+    let html="";
+    snap.forEach(doc=>{
+      const o=doc.data();
+      const date = o.createdAt ? o.createdAt.toDate().toLocaleString('hi-IN') : 'Just now';
+      html+=`<div class="card">
+        <div style="display:flex;justify-content:space-between">
+          <b>${o.customerName} - ${o.phone}</b>
+          <span class="badge ${o.paymentMode==='UPI'?'badge-paid':'badge-cod'}">${o.paymentMode} ₹${o.totalAmount}</span>
+        </div>
+        <p style="font-size:13px;margin:6px 0">📍 ${o.address}</p>
+        ${o.locationString?`<p style="font-size:11px;color:#666">GPS: ${o.locationString}</p>`:''}
+        ${o.mapsLink?`<a href="${o.mapsLink}" target="_blank" style="display:inline-block;background:#fef2f2;color:#b91c1c;padding:6px 10px;border-radius:8px;font-size:12px;font-weight:600;text-decoration:none;margin:6px 0">🗺️ Map Pe Dekho - Customer Location</a><br>`:''}
+        <p style="font-size:12px;margin:6px 0">🍛 ${o.items.map(i=>i.name+' (₹'+i.price+')').join(', ')}</p>
+        <p style="font-size:11px;color:#666">Status: <b style="color:#b91c1c">${o.status}</b> • ${date} • ID: ${doc.id.slice(0,6)}</p>
+        <div style="margin-top:10px">
+          <button class="btn-green" onclick="updateStatus('${doc.id}','Delivered')">✅ Delivered</button>
+          <button class="btn-green" style="background:#2563eb" onclick="updateStatus('${doc.id}','On the Way')">🛵 On The Way</button>
+          <button class="btn-red" onclick="updateStatus('${doc.id}','Cancelled')">❌ Cancel</button>
+        </div>
+      </div>`;
+    });
+    document.getElementById('orders').innerHTML=html;
+  });
 }
-function getTotal(){ return cart.reduce((a,b)=>a+b.price,0); }
-async function saveOrder(paymentMode){
-  const name = document.getElementById('cName').value.trim();
-  const phone = document.getElementById('cPhone').value.trim();
-  const addr = document.getElementById('cAddr').value.trim();
-  const loc = document.getElementById('cLatLng').value;
-  if(!name||!phone||!addr){ alert("Naam, Mobile, Address bharo"); return false; }
-  const orderData = {
-    customerName:name, phone:phone, address:addr, locationString:loc,
-    location: customerLocation || null, items: cart, totalAmount: getTotal(),
-    paymentMode: paymentMode, upiId: UPI_ID,
-    status: paymentMode==="UPI"?"Paid-Initiated":"COD-Pending",
-    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    mapsLink: customerLocation?`https://maps.google.com/?q=${customerLocation.lat},${customerLocation.lng}`:null
-  };
-  try{ const docRef = await db.collection("orders").add(orderData); return docRef.id; }catch(e){ alert("Firebase error: "+e.message); return false; }
+function updateStatus(id,status){
+  if(!confirm(status+" mark karna hai?")) return;
+  db.collection("orders").doc(id).update({status:status}).then(()=>{ /* auto update */ });
 }
-async function payAndOrder(){
-  const orderId = await saveOrder("UPI"); if(!orderId) return;
-  const amt = getTotal();
-  const upiLink = `upi://pay?pa=${UPI_ID}&pn=ShriBhog&am=${amt}&cu=INR&tn=Order ${orderId}`;
-  window.location.href = upiLink;
-  setTimeout(()=>{ if(confirm("Payment ho gaya? OK dabao.")){ alert("Dhanyavaad! Order ID: "+orderId); cart=[]; updateCart(); } },2500);
+function addMenu(){
+  const name=document.getElementById('mName').value.trim();
+  const price=parseInt(document.getElementById('mPrice').value);
+  const img=document.getElementById('mImg').value.trim();
+  if(!name||!price){alert("Naam aur Price bharo");return;}
+  db.collection("menu").add({
+    name:name, price:price,
+    img: img || "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400",
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  }).then(()=>{
+    alert("✅ Menu add ho gaya! Ab customer app me dikhega");
+    document.getElementById('mName').value=""; document.getElementById('mPrice').value=""; document.getElementById('mImg').value="";
+  });
 }
-async function placeOrderWithoutPay(){
-  const orderId = await saveOrder("COD");
-  if(orderId){ alert("Order Confirm! ID: "+orderId+" Total: ₹"+getTotal()); cart=[]; updateCart(); }
-}
-renderMenu();
 </script>
 </body>
 </html>
