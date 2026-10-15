@@ -3,120 +3,168 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Shri Bhog - Shop Owner</title>
+<title>Shri Bhog - No COD Only UPI</title>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
 body{background:#fffaf5}
-.header{background:#8b1a1a;color:#fff;padding:12px 14px;display:flex;justify-content:space-between;align-items:center}
-.roleBox{display:flex;gap:10px;padding:12px}
-.roleCard{flex:1;background:#fff;border:2px solid #fde68a;border-radius:16px;padding:12px;text-align:center;cursor:pointer}
-.statBox{display:flex;gap:8px;padding:0 12px}
-.statCard{flex:1;background:#fff;border:2px solid #fbbf24;border-radius:14px;padding:12px;text-align:center}
-.statCard.icon{width:50px;height:50px;border:2px solid #fbbf24;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:22px}
-.dashed{border:2px dashed #fbbf24;border-radius:12px;padding:18px;text-align:center;background:#fffbeb;cursor:pointer}
-.input{width:100%;padding:11px;border:1.5px solid #fbbf24;border-radius:10px;margin:4px 0;background:#fff}
-.btn-main{background:#7f1d1d;color:#fff;border:none;width:100%;padding:12px;border-radius:12px;font-weight:700;font-size:15px}
-.card{border:2px solid #fbbf24;border-radius:14px;background:#fff;padding:10px;margin-bottom:8px}
+.header{background:linear-gradient(135deg,#7f1d1d,#b91c1c);color:#fff;padding:14px;text-align:center;position:sticky;top:0;z-index:20;box-shadow:0 2px 10px rgba(0,0,0,.2)}
+.roleBox{display:flex;gap:12px;padding:14px}
+.roleCard{flex:1;background:#fff;border:2px solid #fde68a;border-radius:16px;padding:14px;text-align:center;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);border:1px solid #fff0e6}
+.menu{padding:10px;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding-bottom:100px}
+.menu.card img{width:100%;height:95px;object-fit:cover}
+.addBtn{background:#7f1d1d;color:#fff;border:none;width:100%;padding:6px;border-radius:8px;font-size:12px;font-weight:600;margin-top:4px}
+.input{width:100%;padding:11px;border:1.5px solid #fbbf24;border-radius:10px;margin:5px 0;background:#fff}
+.btn-main{background:#7f1d1d;color:#fff;border:none;width:100%;padding:12px;border-radius:12px;font-weight:700}
+.cart{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:2px solid #7f1d1d;padding:14px;max-height:75vh;overflow:auto;border-radius:20px 20px 0 0;box-shadow:0 -10px 30px rgba(0,0,0,.15);display:none;z-index:30}
+.statBox{display:flex;gap:8px;padding:10px}
+.statCard{flex:1;background:#fff;border:2px solid #fbbf24;border-radius:14px;padding:10px;text-align:center}
+.dashed{border:2px dashed #fbbf24;border-radius:12px;padding:16px;text-align:center;background:#fffbeb;cursor:pointer}
 .badge{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600}
-.menuGrid{padding:10px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.menuCard{background:#fff;border-radius:14px;overflow:hidden;border:1px solid #fde68a;box-shadow:0 2px 6px rgba(0,0,0,.05)}
-.menuCard img{width:100%;height:95px;object-fit:cover}
-.cart{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:2px solid #7f1d1d;padding:12px;max-height:70vh;overflow:auto;border-radius:20px 20px 0 0;display:none;z-index:30}
 </style>
 </head>
 <body>
 <div class="header">
-<div style="display:flex;align-items:center;gap:10px"><div style="width:38px;height:38px;border:2px solid #fff;border-radius:10px;display:flex;align-items:center;justify-content:center">🏪</div><div><b style="font-size:18px">Shop Owner</b><br><small style="font-size:11px;opacity:.9">Jora Mandir • Rohit</small></div></div>
-<div style="display:flex;gap:8px;align-items:center"><div style="width:36px;height:36px;background:#fbbf24;color:#7f1d1d;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700">R</div><span>🔔</span></div>
+<h2>🙏 Shri Bhog</h2>
+<p style="font-size:10px;opacity:.9">Shop + Delivery + Customer | ONLY UPI | UPI: rohitpnd23-6@okaxis</p>
 </div>
 
 <div id="roleSelect">
+<h3 style="text-align:center;margin:16px 0 6px;font-size:16px">Aap Kaun Ho?</h3>
 <div class="roleBox">
-<div class="roleCard" onclick="selectRole('customer')"><div style="font-size:28px">🍛</div><b style="font-size:12px">Customer</b><br><small style="font-size:10px;color:green">No Login</small></div>
-<div class="roleCard" onclick="selectRole('delivery')"><div style="font-size:28px">🛵</div><b style="font-size:12px">Delivery</b></div>
-<div class="roleCard" onclick="selectRole('shop')" style="border-color:#7f1d1d;background:#fef2f2"><div style="font-size:28px">🏪</div><b style="font-size:12px">Shop</b></div>
+<div class="roleCard" onclick="selectRole('customer')"><div style="font-size:32px">🍛</div><b style="font-size:13px">Customer</b><br><small style="color:#16a34a;font-size:10px">No Login - Only UPI</small></div>
+<div class="roleCard" onclick="selectRole('delivery')"><div style="font-size:32px">🛵</div><b style="font-size:13px">Delivery</b></div>
+<div class="roleCard" onclick="selectRole('shop')"><div style="font-size:32px">🏪</div><b style="font-size:13px">Shop Owner</b></div>
 </div>
 </div>
 
-<div id="loginBox" style="display:none;padding:14px"><div class="card"><h3>Shop / Delivery Login</h3><input id="lName" class="input" placeholder="Naam *"><input id="lPhone" class="input" placeholder="Mobile 10 digit"><input id="lPass" class="input" type="password" placeholder="Password 4 digit"><button class="btn-main" onclick="doLogin()">Login / Signup</button><p style="margin-top:6px"><a href="#" onclick="backToRole()" style="color:#7f1d1d;font-size:12px">← Back</a></p><p id="loginErr" style="color:red;font-size:12px"></p></div></div>
+<div id="loginBox" style="display:none;padding:14px"><div class="card" style="padding:14px"><h3 id="loginTitle">Login</h3><p style="font-size:11px;color:#666">Pehli baar hai to Signup ho jayega</p><input id="lName" class="input" placeholder="Naam *"><input id="lPhone" class="input" placeholder="Mobile 10 digit *" type="tel"><input id="lPass" class="input" placeholder="Password 4 digit *" type="password"><button class="btn-main" onclick="doLogin()">Signup / Login</button><p style="margin-top:8px"><a href="#" onclick="backToRole()" style="color:#7f1d1d;font-size:12px">← Back</a></p><p id="loginErr" style="color:red;font-size:12px"></p></div></div>
 
-<!-- CUSTOMER - SIMPLE MENU -->
+<!-- CUSTOMER -->
 <div id="customerApp" style="display:none">
-<div style="padding:8px 12px;display:flex;justify-content:space-between;font-size:11px"><span style="color:#7f1d1d">Kolkata • No Login</span><a href="#" onclick="backToRole()" style="color:#7f1d1d">Change Role</a></div>
-<div class="menuGrid" id="menu"></div>
-<div class="cart" id="cartBox"><h3 style="font-size:14px">🛒 Cart <span id="count"></span></h3><div id="cartItems" style="font-size:13px;margin:6px 0">Khali</div><div id="orderForm" style="display:none"><input id="cName" class="input" placeholder="Naam *"><input id="cPhone" class="input" placeholder="Mobile *"><textarea id="cAddr" class="input" placeholder="Address *"></textarea><button class="btn-main" style="background:#fff;border:1.5px dashed #7f1d1d;color:#7f1d1d;margin-bottom:6px" onclick="getLocation()">📍 Location Lo</button><p id="locStatus" style="font-size:11px;color:green"></p><input id="cLatLng" class="input" readonly style="font-size:10px"><p style="margin:8px 0">Total: <b id="totalAmt">₹0</b></p><button class="btn-main" onclick="payAndOrder()">💳 UPI Pay</button><button class="btn-main" style="background:#16a34a;margin-top:6px" onclick="placeOrderWithoutPay()">📦 COD</button></div></div>
+<div style="padding:8px 12px;display:flex;justify-content:space-between;font-size:11px;background:#fff7ed"><span style="color:#7f1d1d">Kolkata • ONLY UPI PAYMENT</span><span><a href="#" onclick="backToRole()" style="color:#7f1d1d">Change Role</a></span></div>
+<div class="menu" id="menu"></div>
+<div class="cart" id="cartBox">
+<h3 style="font-size:14px">🛒 Cart <span id="count" style="color:#7f1d1d">(0)</span></h3>
+<div id="cartItems" style="font-size:13px;color:#666;margin:6px 0">Khali</div>
+<div id="orderForm" style="display:none">
+<input id="cName" class="input" placeholder="Naam *">
+<input id="cPhone" class="input" placeholder="Mobile 10 digit *" type="tel">
+<textarea id="cAddr" class="input" placeholder="Pura Address *"></textarea>
+<button class="btn-main" style="background:#fff;border:1.5px dashed #7f1d1d;color:#7f1d1d;margin-bottom:6px" onclick="getLocation()">📍 Location Lo</button>
+<p id="locStatus" style="font-size:11px;color:green"></p>
+<input id="cLatLng" class="input" readonly style="font-size:10px;background:#f9f9f9">
+<p style="margin:8px 0;font-size:13px">Total: <b id="totalAmt">₹0</b></p>
+<button class="btn-main" onclick="payAndOrder()">💳 UPI Pay Karke Order Karo</button>
+<p style="font-size:10px;text-align:center;color:#666;margin-top:6px">⚠️ COD nahi hai - UPI Pay karna compulsory hai</p>
+</div>
+</div>
 </div>
 
-<!-- SHOP OWNER - SAME AS SCREENSHOT -->
-<div id="shopApp" style="display:none">
-<div class="statBox" style="margin-top:10px">
-<div class="statCard"><div class="icon">₹↗</div><small style="font-size:11px">Today Sale</small><br><b style="font-size:18px" id="todaySale">₹590</b></div>
-<div class="statCard"><div class="icon">👛</div><small style="font-size:11px">Net Earn</small><br><b style="font-size:18px" id="netEarn">₹470</b></div>
-<div class="statCard"><div class="icon">🕒</div><small style="font-size:11px">Pending Settlement</small><br><b style="font-size:18px;color:#999" id="pendingSettle">— ₹0</b></div>
+<!-- SHOP OWNER - PREMIUM DESIGN LIKE SCREENSHOT -->
+<div id="shopApp" style="display:none;padding-bottom:20px">
+<div style="padding:12px;display:flex;justify-content:space-between;align-items:center"><h3>🏪 Shop Owner<br><small style="font-size:11px" id="shopInfo"></small></h3><button style="background:#111;color:#fff;border:none;padding:6px 12px;border-radius:8px" onclick="backToRole()">Logout</button></div>
+
+<div class="statBox">
+<div class="statCard"><div style="font-size:20px">💰</div><small style="font-size:11px">Today Sale</small><br><b id="todaySale" style="font-size:16px">₹0</b></div>
+<div class="statCard"><div style="font-size:20px">👛</div><small style="font-size:11px">Net Earn (80%)</small><br><b id="netEarn" style="font-size:16px">₹0</b></div>
+<div class="statCard"><div style="font-size:20px">🕒</div><small style="font-size:11px">Pending</small><br><b id="pendingSettle" style="font-size:16px;color:#7f1d1d">₹0</b></div>
 </div>
 
-<div style="padding:14px">
-<h3 style="display:flex;align-items:center;gap:6px"><span style="background:#7f1d1d;color:#fff;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px">+</span> Add New Dish</h3>
-<div style="height:2px;width:120px;background:#7f1d1d;margin:4px 0 12px"></div>
-
-<div class="card" style="padding:12px">
+<div style="padding:12px">
+<h3>➕ Add New Dish (Photo ke saath - Auto Live)</h3>
+<div class="card" style="padding:12px;margin-top:8px">
 <div class="dashed" onclick="document.getElementById('mFile').click()">
 <div style="font-size:26px">📷</div>
 <input type="file" id="mFile" accept="image/*" style="display:none" onchange="previewImg(event)">
-<b style="font-size:13px">Tap to upload dish photo</b><br><small style="font-size:11px">JPG/PNG, up to 5MB</small>
+<b style="font-size:13px">Tap to upload dish photo</b><br><small style="font-size:11px">JPG/PNG max 5MB - auto compress</small>
 <img id="preview" style="display:none;width:100%;height:130px;object-fit:cover;border-radius:10px;margin-top:8px">
 <p id="fileStatus" style="font-size:10px;color:#666;margin-top:4px"></p>
 </div>
-<label style="font-size:12px;margin-top:10px;display:block">Dish Name</label>
-<input id="mName" class="input" placeholder="e.g. Veg Thali">
-<div style="display:flex;gap:8px"><div style="flex:1"><label style="font-size:12px">Price (₹)</label><input id="mPrice" type="number" class="input" placeholder="99"></div><div style="flex:1"><label style="font-size:12px">Image URL (optional)</label><input id="mImg" class="input" placeholder="https://..."></div></div>
-<button class="btn-main" style="margin-top:10px" onclick="addMenu()" id="addBtn">Submit for Approval</button>
-<p style="font-size:11px;color:#666;text-align:center;margin-top:6px">ⓘ Submission will be reviewed by Admin - Admin dekhega</p>
+<label style="font-size:12px;margin-top:8px;display:block">Dish Name *</label>
+<input id="mName" class="input" placeholder="e.g. Palak Paneer">
+<div style="display:flex;gap:8px"><div style="flex:1"><label style="font-size:12px">Price ₹ *</label><input id="mPrice" type="number" class="input" placeholder="90"></div><div style="flex:1"><label style="font-size:12px">Category</label><input id="mCat" class="input" placeholder="Thali"></div></div>
+<button class="btn-main" onclick="addMenu()" id="addBtn">Submit - Direct Live Hoga</button>
+<p style="font-size:10px;color:#16a34a;text-align:center;margin-top:6px">✅ Ab admin approval nahi - seedha live</p>
 </div>
 
-<div style="display:flex;justify-content:space-between;margin-top:18px"><h3>My Dishes</h3><a href="#" style="font-size:12px;color:#7f1d1d" onclick="loadMyDishes()">See all →</a></div>
-<div style="height:2px;width:80px;background:#7f1d1d;margin:2px 0 10px"></div>
-<div id="myDishes"></div>
+<div style="display:flex;justify-content:space-between;margin-top:18px"><h3>My Dishes</h3><a href="#" style="font-size:12px;color:#7f1d1d" onclick="loadMyDishes()">Refresh</a></div>
+<div id="myDishes" style="margin-top:8px"></div>
 
-<div style="display:flex;justify-content:space-between;margin-top:18px"><h3>Recent Orders</h3><a href="#" style="font-size:12px;color:#7f1d1d" onclick="loadShopOrders()">View all →</a></div>
-<div style="height:2px;width:110px;background:#7f1d1d;margin:2px 0 10px"></div>
-<div id="shopOrders"></div>
-<p style="text-align:center;font-size:11px;color:#666;margin:12px">Orders update live • Swipe to manage ↻</p>
+<div style="display:flex;justify-content:space-between;margin-top:18px"><h3>Recent Orders (Only UPI Paid)</h3></div>
+<div id="shopOrders" style="margin-top:8px"></div>
 </div>
 </div>
 
-<div id="deliveryApp" style="display:none;padding:14px"><h3>🛵 Delivery Panel <small id="delInfo"></small></h3><div id="deliveryOrders" style="margin-top:10px"></div></div>
+<!-- DELIVERY -->
+<div id="deliveryApp" style="display:none;padding:14px"><div style="display:flex;justify-content:space-between"><h3>🛵 Delivery<br><small style="font-size:11px" id="delInfo"></small></h3><button style="background:#111;color:#fff;border:none;padding:6px 12px;border-radius:8px" onclick="backToRole()">Logout</button></div><div id="deliveryOrders" style="margin-top:12px">Loading...</div></div>
 
 <script>
 const firebaseConfig={apiKey:"AIzaSyDLWArfHEBERO2ehyhApk_zE0kWeM2tow8",authDomain:"shri-bhog.firebaseapp.com",projectId:"shri-bhog",storageBucket:"shri-bhog.firebasestorage.app",messagingSenderId:"246826560255",appId:"1:246826560255:web:d1d409cf6d9d0ea854faca"};
 firebase.initializeApp(firebaseConfig);const db=firebase.firestore();
 const UPI_ID="rohitpnd23-6@okaxis";
 let selectedRole=null,loggedUser=null,cart=[],customerLocation=null,selectedBase64=null;
-const defaultItems=[{name:"Chole Bhature",price:120,img:"https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=400",status:"Approved • Live"},{name:"Veg Thali",price:99,img:"https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400",status:"Approved • Live"},{name:"Biryani",price:159,img:"https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=400",status:"Pending"}];
+const defaultItems=[{name:"Chole Bhature",price:120,img:"https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=400"},{name:"Rajma Chawal",price:100,img:"https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=400"},{name:"Palak Panir",price:90,img:"https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=400"},{name:"Veg Thali",price:180,img:"https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400"}];
 
-function selectRole(r){selectedRole=r;if(r==='customer'){roleSelect.style.display='none';customerApp.style.display='block';cartBox.style.display='block';renderMenu();return;}roleSelect.style.display='none';loginBox.style.display='block';}
-function backToRole(){roleSelect.style.display='block';loginBox.style.display='none';customerApp.style.display='none';shopApp.style.display='none';deliveryApp.style.display='none';cartBox.style.display='none';}
-async function doLogin(){const n=lName.value.trim(),p=lPhone.value.trim(),pass=lPass.value.trim();if(!n||p.length!=10||pass.length<4){loginErr.innerText="Naam + Mobile + Password";return;}const ref=db.collection("users").doc(p);const doc=await ref.get();if(doc.exists){if(doc.data().password!==pass){loginErr.innerText="Password galat";return;}loggedUser=doc.data();}else{await ref.set({name:n,phone:p,password:pass,role:selectedRole,createdAt:firebase.firestore.FieldValue.serverTimestamp()});loggedUser={name:n,phone:p,password:pass,role:selectedRole};}loginBox.style.display='none';if(selectedRole==='shop'){shopApp.style.display='block';loadMyDishes();loadShopOrders();calcSales();}else{deliveryApp.style.display='block';delInfo.innerText=loggedUser.name;loadDeliveryOrders();}}
+function selectRole(r){selectedRole=r;if(r==='customer'){roleSelect.style.display='none';customerApp.style.display='block';cartBox.style.display='block';renderMenu();return;}roleSelect.style.display='none';loginBox.style.display='block';loginTitle.innerText=r==='shop'?'🏪 Shop Login':'🛵 Delivery Login';}
+function backToRole(){roleSelect.style.display='block';loginBox.style.display='none';customerApp.style.display='none';deliveryApp.style.display='none';shopApp.style.display='none';cartBox.style.display='none';selectedRole=null;loggedUser=null;}
+async function doLogin(){const n=lName.value.trim(),p=lPhone.value.trim(),pass=lPass.value.trim();if(!n||p.length!=10||pass.length<4){loginErr.innerText="Naam + 10 digit + 4 digit password";return;}const ref=db.collection("users").doc(p);const doc=await ref.get();if(doc.exists){if(doc.data().password!==pass){loginErr.innerText="Password galat";return;}if(doc.data().role!==selectedRole){loginErr.innerText="Ye number "+doc.data().role+" me hai";return;}loggedUser=doc.data();}else{await ref.set({name:n,phone:p,password:pass,role:selectedRole,createdAt:firebase.firestore.FieldValue.serverTimestamp()});loggedUser={name:n,phone:p,password:pass,role:selectedRole};}loginBox.style.display='none';if(selectedRole==='shop'){shopApp.style.display='block';shopInfo.innerText=n+" - "+p;loadMyDishes();loadShopOrders();}else{deliveryApp.style.display='block';delInfo.innerText=n+" - "+p;loadDeliveryOrders();}}
 
-function renderMenu(){menu.innerHTML=defaultItems.filter(i=>i.status.includes("Approved")).map((it,i)=>`<div class="menuCard"><img src="${it.img}"><div style="padding:8px"><b style="font-size:12px">${it.name}</b><br><span style="color:#7f1d1d;font-weight:700;font-size:12px">₹${it.price}</span><button onclick="addToCart(${i})" style="background:#7f1d1d;color:#fff;border:none;width:100%;padding:5px;border-radius:6px;margin-top:4px;font-size:11px">+ Add</button></div></div>`).join('');db.collection("menu").get().then(s=>{if(!s.empty){let items=[];s.forEach(d=>items.push(d.data()));menu.innerHTML=items.map((it,i)=>`<div class="menuCard"><img src="${it.img}"><div style="padding:8px"><b style="font-size:12px">${it.name}</b><br><span style="color:#7f1d1d;font-weight:700;font-size:12px">₹${it.price}</span><button onclick="addToCart(${i})" style="background:#7f1d1d;color:#fff;border:none;width:100%;padding:5px;border-radius:6px;margin-top:4px;font-size:11px">+ Add</button></div></div>`).join('');window._items=items;}else window._items=defaultItems});}
-function addToCart(i){cart.push(window._items[i]);cartBox.style.display='block';updateCart();}
-function updateCart(){count.innerText=`(${cart.length})`;if(cart.length==0){cartItems.innerHTML="Khali";orderForm.style.display='none';return;}orderForm.style.display='block';let t=0,h="";cart.forEach((c,idx)=>{t+=c.price;h+=`<div style="display:flex;justify-content:space-between"><span>${c.name}</span><span>₹${c.price} <span onclick="cart.splice(${idx},1);updateCart()" style="color:red">✕</span></span></div>`;});cartItems.innerHTML=h;totalAmt.innerText="₹"+t;}
-function getLocation(){locStatus.innerText="Location...";navigator.geolocation.getCurrentPosition(p=>{customerLocation={lat:p.coords.latitude,lng:p.coords.longitude};cLatLng.value=customerLocation.lat+","+customerLocation.lng;locStatus.innerHTML=`✅ <a href="https://maps.google.com/?q=${customerLocation.lat},${customerLocation.lng}" target="_blank">Map</a>`;});}
+function renderMenu(){window._items=defaultItems;menu.innerHTML=defaultItems.map((it,i)=>`<div class="card"><img src="${it.img}"><div style="padding:8px"><h3 style="font-size:12px">${it.name}</h3><p style="color:#7f1d1d;font-weight:700;font-size:13px">₹${it.price}</p><button class="addBtn" onclick="addToCart(${i})">+ Add</button></div></div>`).join('');db.collection("menu").where("status","==","Approved. Live").get().then(s=>{if(!s.empty){let items=[];s.forEach(d=>items.push(d.data()));if(items.length>0){window._items=items;menu.innerHTML=items.map((it,i)=>`<div class="card"><img src="${it.img}"><div style="padding:8px"><h3 style="font-size:12px">${it.name}</h3><p style="color:#7f1d1d;font-weight:700;font-size:13px">₹${it.price}</p><button class="addBtn" onclick="addToCart(${i})">+ Add</button></div></div>`).join('');}}});db.collection("menu").get().then(s=>{if(!s.empty){let items=[];s.forEach(d=>{const data=d.data();if(data.status && data.status.includes("Approved")) items.push(data.data?data.data():data);});if(items.length===0){s.forEach(d=>items.push(d.data()));}if(items.length>0){window._items=items;menu.innerHTML=items.map((it,i)=>`<div class="card"><img src="${it.img}"><div style="padding:8px"><h3 style="font-size:12px">${it.name}</h3><p style="color:#7f1d1d;font-weight:700;font-size:13px">₹${it.price}</p><button class="addBtn" onclick="addToCart(${i})">+ Add</button></div></div>`).join('');}}});}
+function addToCart(i){if(i<0||!window._items[i]) return;cart.push(window._items[i]);updateCart();cartBox.style.display='block';}
+function updateCart(){count.innerText=`(${cart.length})`;if(cart.length==0){cartItems.innerHTML="Khali";orderForm.style.display='none';return;}orderForm.style.display='block';let t=0,h="";cart.forEach((c,idx)=>{t+=c.price;h+=`<div style="display:flex;justify-content:space-between;padding:2px 0"><span>${c.name}</span><span>₹${c.price} <span onclick="cart.splice(${idx},1);updateCart()" style="color:red">✕</span></span></div>`;});cartItems.innerHTML=h;totalAmt.innerText="₹"+t;}
+function getLocation(){locStatus.innerText="Location le rahe...";navigator.geolocation.getCurrentPosition(p=>{customerLocation={lat:p.coords.latitude,lng:p.coords.longitude};cLatLng.value=customerLocation.lat+","+customerLocation.lng;locStatus.innerHTML=`✅ Mil gaya <a href="https://maps.google.com/?q=${customerLocation.lat},${customerLocation.lng}" target="_blank">Map Dekho</a>`;},e=>locStatus.innerText=e.message,{enableHighAccuracy:true});}
 function getTotal(){return cart.reduce((a,b)=>a+b.price,0);}
-async function saveOrder(m){const n=cName.value.trim(),ph=cPhone.value.trim(),ad=cAddr.value.trim();if(!n||ph.length!=10||!ad){alert("Naam/Mobile/Address");return false;}const d={customerName:n,phone:ph,address:ad,location:customerLocation,locationString:cLatLng.value,items:cart,totalAmount:getTotal(),paymentMode:m,status:m==="UPI"?"Paid":"COD-Pending",createdAt:firebase.firestore.FieldValue.serverTimestamp(),mapsLink:customerLocation?`https://maps.google.com/?q=${customerLocation.lat},${customerLocation.lng}`:null,assignedTo:null,shopEarn:Math.round(getTotal()*0.8)};const r=await db.collection("orders").add(d);return r.id;}
-async function payAndOrder(){const id=await saveOrder("UPI");if(!id)return;window.location.href=`upi://pay?pa=${UPI_ID}&pn=ShriBhog&am=${getTotal()}&cu=INR&tn=Order ${id}`;setTimeout(()=>{if(confirm("Payment ho gaya?")){cart=[];updateCart();}},2000);}
-async function placeOrderWithoutPay(){const id=await saveOrder("COD");if(id){alert("Order ID:"+id);cart=[];updateCart();}}
+async function payAndOrder(){const name=cName.value.trim(),phone=cPhone.value.trim(),addr=cAddr.value.trim();if(!name||phone.length!=10||!addr){alert("Naam + 10 digit Mobile + Address bharo");return;}const total=getTotal();const orderData={customerName:name,phone:phone,address:addr,locationString:cLatLng.value,location:customerLocation||null,items:cart,totalAmount:total,paymentMode:"UPI",status:"Paid-Initiated",createdAt:firebase.firestore.FieldValue.serverTimestamp(),mapsLink:customerLocation?`https://maps.google.com/?q=${customerLocation.lat},${customerLocation.lng}`:null,assignedTo:null,shopEarn:Math.round(total*0.8)};const r=await db.collection("orders").add(orderData);window.location.href=`upi://pay?pa=${UPI_ID}&pn=ShriBhog&am=${total}&cu=INR&tn=Order ${r.id}`;setTimeout(()=>{alert("✅ Order ID: "+r.id+" | UPI Pay karo, order confirm hoga");cart=[];updateCart();},1500);}
 
-// PHOTO UPLOAD
-function previewImg(e){const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=ev=>{const img=new Image();img.onload=()=>{const canvas=document.createElement('canvas');const maxW=600;const sc=Math.min(maxW/img.width,1);canvas.width=img.width*sc;canvas.height=img.height*sc;canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);selectedBase64=canvas.toDataURL('image/jpeg',0.75);preview.src=selectedBase64;preview.style.display='block';fileStatus.innerText='✅ Ready '+Math.round(selectedBase64.length/1024)+'KB';};img.src=ev.target.result;};reader.readAsDataURL(file);}
-function addMenu(){const n=mName.value.trim(),p=parseInt(mPrice.value),url=mImg.value.trim();if(!n||!p){alert("Dish Name + Price");return;}const finalImg=selectedBase64||url||"https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400";addBtn.innerText='Submitting...';db.collection("menu").add({name:n,price:p,img:finalImg,status:"Pending",category:"Thali",createdAt:firebase.firestore.FieldValue.serverTimestamp()}).then(()=>{alert("✅ Submitted for Approval - Admin dekhega");mName.value="";mPrice.value="";mImg.value="";preview.style.display='none';selectedBase64=null;addBtn.innerText='Submit for Approval';loadMyDishes();});}
-function loadMyDishes(){db.collection("menu").orderBy("createdAt","desc").onSnapshot(s=>{let h="";if(s.empty){myDishes.innerHTML=defaultItems.map(it=>`<div class="card" style="display:flex;align-items:center;gap:10px"><div style="width:40px;height:40px;background:#e0f2d9;border-radius:10px;display:flex;align-items:center;justify-content:center">🥦</div><div style="flex:1"><b style="font-size:13px">${it.name}</b> <span style="color:#666;font-size:12px">₹${it.price}</span><br><small style="font-size:11px;color:#666">Category: Thali • Added 2 days ago</small></div><span class="badge" style="background:${it.status.includes('Approved')?'#dcfce7;color:#16a34a':'#fef9c3;color:#a16207'}">${it.status}</span></div>`).join('');return;}s.forEach(doc=>{const o=doc.data();h+=`<div class="card" style="display:flex;align-items:center;gap:10px"><img src="${o.img}" style="width:40px;height:40px;border-radius:10px;object-fit:cover"><div style="flex:1"><b style="font-size:13px">${o.name}</b> <span style="color:#666;font-size:12px">₹${o.price}</span><br><small style="font-size:11px;color:#666">Category: ${o.category||'Thali'} • Added today</small></div><span class="badge" style="background:${o.status==='Pending'?'#fef9c3;color:#a16207':'#dcfce7;color:#16a34a'}">${o.status||'Approved • Live'}</span></div>`;});myDishes.innerHTML=h;});}
-function loadShopOrders(){db.collection("orders").orderBy("createdAt","desc").limit(10).onSnapshot(s=>{let h=`<div class="card" style="padding:0;overflow:hidden"><div style="display:flex;font-size:11px;font-weight:600;padding:8px;background:#fffbeb;border-bottom:1px solid #fde68a"><span style="flex:1">Customer</span><span style="flex:1">Order</span><span>Total</span><span style="margin-left:10px">Shop Earn</span><span style="margin-left:10px">Status</span></div>`;if(s.empty){h+=`<div style="padding:10px;font-size:12px">Amit - Veg Thali x2 - ₹198 - ₹159 - Settlement Pending (demo)</div>`;}s.forEach(doc=>{const o=doc.data();h+=`<div style="display:flex;align-items:center;font-size:11px;padding:8px;border-bottom:1px solid #fef3c7"><b style="flex:1">${o.customerName}</b><span style="flex:1">${o.items.map(i=>i.name).join(', ').slice(0,15)} x${o.items.length}</span><b>₹${o.totalAmount}</b><b style="margin-left:10px;color:#7f1d1d">₹${o.shopEarn||Math.round(o.totalAmount*0.8)}</b><span class="badge" style="margin-left:10px;background:#fef9c3;color:#a16207">${o.status}</span></div>`;});h+=`</div>`;shopOrders.innerHTML=h;});}
-function calcSales(){db.collection("orders").get().then(s=>{let today=0,net=0;s.forEach(d=>{const o=d.data();today+=o.totalAmount||0;net+=o.shopEarn||Math.round((o.totalAmount||0)*0.8);});todaySale.innerText="₹"+today;netEarn.innerText="₹"+net;});}
-function loadDeliveryOrders(){db.collection("orders").orderBy("createdAt","desc").onSnapshot(s=>{let h="";s.forEach(doc=>{const o=doc.data();h+=`<div class="card"><b>${o.customerName} - ${o.phone}</b> ₹${o.totalAmount}<br><small>${o.address}</small><br><button style="background:#16a34a;color:#fff;border:none;padding:6px 10px;border-radius:6px;margin-top:5px" onclick="db.collection('orders').doc('${doc.id}').update({status:'Delivered'})">Delivered</button></div>`;});deliveryOrders.innerHTML=h||"No orders";});}
+// PHOTO UPLOAD - COMPRESS
+function previewImg(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  if(file.size > 5*1024*1024){ alert("Photo 5MB se bada hai"); return; }
+  const reader = new FileReader();
+  reader.onload = function(ev){
+    const img = new Image();
+    img.onload = function(){
+      const canvas = document.createElement('canvas');
+      const maxW = 600;
+      const scale = Math.min(maxW/img.width, 1);
+      canvas.width = img.width*scale;
+      canvas.height = img.height*scale;
+      canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
+      selectedBase64 = canvas.toDataURL('image/jpeg', 0.75);
+      document.getElementById('preview').src = selectedBase64;
+      document.getElementById('preview').style.display='block';
+      document.getElementById('fileStatus').innerText='✅ Ready '+Math.round(selectedBase64.length/1024)+'KB - Auto Live hoga';
+    }
+    img.src = ev.target.result;
+  }
+  reader.readAsDataURL(file);
+}
+
+function addMenu(){
+  const n=mName.value.trim(), p=parseInt(mPrice.value), cat=mCat.value.trim()||"Thali";
+  if(!n||!p){ alert("Dish Name aur Price bharo"); return; }
+  const finalImg = selectedBase64 || "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400";
+  addBtn.innerText='Adding...'; addBtn.disabled=true;
+  db.collection("menu").add({name:n,price:p,img:finalImg,category:cat,status:"Approved. Live",createdAt:firebase.firestore.FieldValue.serverTimestamp()}).then(()=>{
+    alert("✅ "+n+" Live Ho Gaya! Customer ko dikhega");
+    mName.value=""; mPrice.value=""; mCat.value="";
+    document.getElementById('preview').style.display='none';
+    selectedBase64=null; document.getElementById('mFile').value='';
+    addBtn.innerText='Submit - Direct Live Hoga'; addBtn.disabled=false;
+    fileStatus.innerText=''; loadMyDishes(); renderMenu();
+  });
+}
+
+function loadMyDishes(){db.collection("menu").orderBy("createdAt","desc").limit(20).onSnapshot(s=>{let h="";if(s.empty){myDishes.innerHTML="<div class='card' style='padding:10px'>Abhi koi dish nahi - Palak Panir add hai</div>";return;}s.forEach(doc=>{const o=doc.data();h+=`<div class="card" style="padding:10px;display:flex;gap:10px;align-items:center"><img src="${o.img}" style="width:50px;height:50px;border-radius:10px;object-fit:cover"><div style="flex:1"><b style="font-size:13px">${o.name}</b> ₹${o.price}<br><small style="color:#666">${o.category||'Thali'} • ${o.status||'Approved'}</small></div><span class="badge" style="background:#dcfce7;color:#16a34a">Live</span></div>`;});myDishes.innerHTML=h;});}
+function loadShopOrders(){db.collection("orders").orderBy("createdAt","desc").limit(20).onSnapshot(s=>{let h="";let total=0,net=0;if(s.empty){shopOrders.innerHTML="<div class='card' style='padding:10px'>Koi order nahi</div>";todaySale.innerText="₹0";netEarn.innerText="₹0";pendingSettle.innerText="₹0";return;}s.forEach(doc=>{const o=doc.data();total+=o.totalAmount||0;net+=o.shopEarn||Math.round((o.totalAmount||0)*0.8);h+=`<div class="card" style="padding:10px;margin-bottom:8px"><b style="font-size:13px">${o.customerName} - ${o.phone}</b> ₹${o.totalAmount} <span style="background:#dcfce7;color:#16a34a;padding:2px 6px;border-radius:10px;font-size:10px">${o.status}</span><br><small>${o.address}</small><br>${o.mapsLink?`<a href="${o.mapsLink}" target="_blank" style="color:#7f1d1d;font-size:12px">🗺️ Map Dekho</a> `:''}<small style="color:#666">${o.items.map(i=>i.name).join(', ').slice(0,30)}</small><br><button style="background:#16a34a;color:#fff;border:none;padding:5px 8px;border-radius:6px;margin-top:4px" onclick="updStatus('${doc.id}','Accepted')">Accept</button><button style="background:#111;color:#fff;border:none;padding:5px 8px;border-radius:6px;margin-left:4px" onclick="updStatus('${doc.id}','Delivered')">Delivered</button></div>`;});shopOrders.innerHTML=h;todaySale.innerText="₹"+total;netEarn.innerText="₹"+net;pendingSettle.innerText="₹"+net;});}
+function loadDeliveryOrders(){db.collection("orders").orderBy("createdAt","desc").onSnapshot(s=>{let h="";if(s.empty){deliveryOrders.innerHTML="<div class='card' style='padding:10px'>Koi order nahi</div>";return;}s.forEach(doc=>{const o=doc.data();h+=`<div class="card" style="padding:10px;margin-bottom:8px"><b style="font-size:13px">${o.customerName} - ${o.phone}</b> ₹${o.totalAmount} ${o.status}<br><small>${o.address}</small><br>${o.mapsLink?`<a href="${o.mapsLink}" target="_blank" style="color:#7f1d1d">🗺️ Map</a><br>`:''}<small>${o.items.map(i=>i.name).join(', ')}</small><br>${!o.assignedTo?`<button style="background:#16a34a;color:#fff;border:none;padding:6px 10px;border-radius:6px;margin-top:5px" onclick="assignOrder('${doc.id}')">✅ Accept</button>`:o.assignedTo===loggedUser.phone?`<button style="background:#0f172a;color:#fff;border:none;padding:5px 8px;border-radius:6px;margin-top:5px" onclick="updStatus('${doc.id}','Delivered')">Delivered</button>`:`<small>Assigned:${o.assignedTo}</small>`}<button style="background:#111;color:#fff;border:none;padding:5px 8px;border-radius:6px;margin-left:4px" onclick="window.open('tel:${o.phone}')">📞 Call</button></div>`;});deliveryOrders.innerHTML=h;});}
+function assignOrder(id){db.collection("orders").doc(id).update({assignedTo:loggedUser.phone,status:"Accepted by "+loggedUser.name});}
+function updStatus(id,st){db.collection("orders").doc(id).update({status:st});}
 </script>
 </body>
 </html>
