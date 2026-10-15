@@ -1,71 +1,122 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>ShriBhog - Jora Mandir LIVE</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700;800&display=swap" rel="stylesheet">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShriBhog - Jora Mandir</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
-body{background:#fffbeb;color:#1f2937;min-height:100vh}
-.top{background:#111827;color:#fff;padding:14px 4%;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:20}
-.loginBox{max-width:380px;margin:60px auto;background:#fff;padding:24px;border-radius:20px;box-shadow:0 15px 40px rgba(0,0,0,.15);border:2px solid #facc15;text-align:center}
-.input{width:100%;padding:12px;border-radius:12px;border:1.5px solid #fde68a;background:#fefce8;margin:7px 0;outline:none;font-size:14px}
-.btn{padding:12px 16px;border-radius:12px;border:none;font-weight:800;cursor:pointer;font-size:13px}
-.btn-red{background:#b91c1c;color:#fff;width:100%}.btn-green{background:#16a34a;color:#fff;width:100%}.btn-yellow{background:#fef9c3;border:1.5px solid #facc15;flex:1}
-.tabs{display:flex;gap:8px;padding:12px 4%;background:#fff7d6;position:sticky;top:52px;z-index:10}
-.card{background:#fff;border-radius:16px;padding:14px;margin:12px 4%;box-shadow:0 4px 14px rgba(0,0,0,.06);border:1px solid #fef3c7}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:10px 4%}
-.dish{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 14px rgba(0,0,0,.08);border:1px solid #fff7d6;display:flex;flex-direction:column}
-.dish img{width:100%;height:140px;object-fit:cover;background:#fef3c7;display:block}
-.dish-body{padding:10px;flex:1;display:flex;flex-direction:column}
-.price{color:#b91c1c;font-weight:800;font-size:15px}
-.delt{margin-top:8px;background:#fee2e2;border:none;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700}
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui}
+body{background:#fff7ed}
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.card{background:white;padding:28px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.1);width:100%;max-width:380px}
+input{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;margin:8px 0}
+.btn{width:100%;padding:12px;background:#ea580c;color:white;border:none;border-radius:8px;font-weight:700;cursor:pointer}
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:white;box-shadow:0 2px 8px rgba(0,0,0,.06);position:sticky;top:0;z-index:10}
+.tabs{display:flex;gap:8px;padding:12px 16px}
+.tab{padding:8px 16px;border-radius:20px;border:1px solid #fed7aa;background:white;cursor:pointer}
+.tab.active{background:#ea580c;color:white;border-color:#ea580c}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;padding:16px;max-width:1100px;margin:auto}
+.dish{background:white;border-radius:14px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.06)}
+.dish img{width:100%;height:180px;object-fit:cover;background:#fef3c7}
+.dish-body{padding:12px}
+.row{display:flex;gap:8px;margin-top:10px}
+.row button{flex:1;padding:8px;border-radius:8px;border:none;cursor:pointer;font-weight:600}
+.edit{background:#e0f2fe;color:#0369a1}.del{background:#fee2e2;color:#991b1b}
+.form-wrap{max-width:500px;margin:20px auto;background:white;padding:20px;border-radius:14px}
+#preview{width:100%;height:200px;object-fit:cover;border-radius:10px;display:none;margin-top:10px;border:1px dashed #ddd}
+.small{font-size:12px;color:green;display:none}
 </style>
 </head>
 <body>
-<div class="top"><b>ShriBhog - Jora Mandir</b><button id="logoutBtn" onclick="logout()" style="display:none;background:#ffffff22;color:#fff;border:1px solid #ffffff44;padding:6px 12px;border-radius:20px;font-size:11px;cursor:pointer">Logout</button></div>
-<div id="loginDiv" class="loginBox">
-<h2 style="color:#7f1d1d;margin-bottom:6px">Jai Shri Ram 🙏</h2>
-<p style="font-size:12px;color:#555;line-height:1.6;margin-bottom:12px">Bhabhi: <b>joramandir / jora123</b><br>Admin: <b>admin / admin123</b><br>Raju: <b>raju / raju123</b></p>
-<input id="loginId" class="input" placeholder="Login ID" value="joramandir">
-<input id="password" type="password" class="input" placeholder="Password" value="jora123">
-<button onclick="login()" class="btn btn-red" style="margin-top:8px">Login Karo →</button>
-<div id="msg" style="margin-top:12px;font-size:12px"></div>
+<div id="loginPage" class="login-wrap">
+<div class="card">
+<h2 style="text-align:center;color:#ea580c">🙏 Jai Shri Ram</h2><p style="text-align:center;margin:8px 0 16px">ShriBhog - Jora Mandir</p>
+<input id="uid" placeholder="Login ID - joramandir"><input id="pwd" type="password" placeholder="Password - jora123"><button class="btn" onclick="doLogin()">Login Karo</button>
+<p style="font-size:12px;margin-top:12px;color:#666">Demo: joramandir/jora123, admin/admin123, raju/raju123</p>
+</div></div>
+
+<div id="mainPage" style="display:none">
+<div class="topbar"><b>ShriBhog</b><div><span id="uname"></span> <button onclick="doLogout()" style="margin-left:10px;padding:6px 10px;border-radius:6px;border:1px solid #ddd;background:white;cursor:pointer">Logout</button></div></div>
+<div class="tabs"><div id="t1" class="tab active" onclick="showTab('dishes')">Dishes</div><div id="t2" class="tab" onclick="showTab('add')">+ Add</div><div id="t3" class="tab" onclick="showTab('orders')">Orders</div></div>
+<div id="dishesSec" class="grid"></div>
+<div id="addSec" style="display:none"><div class="form-wrap">
+<h3 id="formTitle">Naya Dish Add Karo</h3>
+<input id="dname" placeholder="Name - jaise Puri Sabji"><input id="dprice" type="number" placeholder="Price - 40">
+<input id="durl" placeholder="Image URL (optional)">
+<div style="margin:8px 0">Ya <input type="file" id="dfile" accept="image/*" onchange="handleFile(this)"></div>
+<div id="fileOk" class="small">✓ Photo select ho gayi</div>
+<img id="preview"><button class="btn" style="margin-top:12px" id="saveBtn" onclick="saveDish()">Save Dish</button>
+<button id="cancelEdit" style="display:none;width:100%;margin-top:8px;padding:10px;border:1px solid #ddd;background:white;border-radius:8px;cursor:pointer" onclick="cancelEdit()">Cancel Edit</button>
+</div></div>
+<div id="ordersSec" style="display:none;padding:16px;text-align:center;color:#666">Abhi koi order nahi</div>
 </div>
-<div id="mainDiv" style="display:none">
-<div class="tabs"><button class="btn btn-yellow" onclick="showTab('dishes')">🍛 Dishes</button><button class="btn btn-yellow" onclick="showTab('add')">➕ Add</button><button class="btn btn-yellow" onclick="showTab('orders')">📦 Orders</button></div>
-<div id="addDiv" class="card" style="display:none">
-<h3 style="color:#7f1d1d">Naya Bhog Add Karo</h3>
-<input id="dishName" class="input" placeholder="Dish Name - ex: Panir Kadahi">
-<input id="dishPrice" type="number" class="input" placeholder="Price - ex: 210">
-<input id="dishImg" class="input" placeholder="Image URL - Google se copy karo (khali chhodo to auto)">
-<input type="file" id="dishFile" accept="image/*" class="input" style="background:#fff">
-<textarea id="dishDesc" class="input" placeholder="Description" style="height:60px"></textarea>
-<button onclick="saveDish()" class="btn btn-green">💾 Save Dish</button>
-<div id="addMsg" style="font-size:12px;margin-top:8px"></div>
-</div>
-<div id="dishesDiv"><div id="dishesGrid" class="grid"></div></div>
-<div id="ordersDiv" style="display:none"><div class="card" style="text-align:center"><div style="font-size:36px">📦</div><b>Abhi koi order nahi</b></div></div>
-</div>
+
 <script>
-let dishes=JSON.parse(localStorage.getItem('shribhog_dishes')||'[]');
-const users={
-  'joramandir':{p:'jora123',n:'Jora Bhabhi'},
-  'admin':{p:'admin123',n:'Admin Rohit'},
-  'raju':{p:'raju123',n:'Raju Delivery'},
-  'ram':{p:'ram123',n:'Ram Bhai'}, // <-- Naya
-  'shyam':{p:'shyam@2026',n:'Shyam Customer'} // <-- Naya
-};
-let currentImgBase64='';
-document.getElementById('dishFile').addEventListener('change',e=>{const file=e.target.files[0];if(!file)return;const r=new FileReader();r.onload=ev=>{currentImgBase64=ev.target.result;document.getElementById('addMsg').innerHTML='<span style=color:green>✓ Photo select ho gayi</span>';};r.readAsDataURL(file);});
-function login(){const id=(document.getElementById('loginId').value||'').trim().toLowerCase();const pass=(document.getElementById('password').value||'').trim();const u=users[id];if(u&&u.p===pass){localStorage.setItem('shribhog_user',JSON.stringify({id,name:u.n}));document.getElementById('loginDiv').style.display='none';document.getElementById('mainDiv').style.display='block';document.getElementById('logoutBtn').style.display='block';showTab('dishes');render();}else{document.getElementById('msg').innerHTML='<b style=color:#b91c1c>❌ Galat ID</b>';}}
-function showTab(t){document.getElementById('addDiv').style.display=t==='add'?'block':'none';document.getElementById('dishesDiv').style.display=t==='dishes'?'block':'none';document.getElementById('ordersDiv').style.display=t==='orders'?'block':'none';}
-function saveDish(){const name=document.getElementById('dishName').value.trim();const price=parseInt(document.getElementById('dishPrice').value||'0');const url=document.getElementById('dishImg').value.trim();if(!name||!price){document.getElementById('addMsg').innerHTML='<span style=color:red>Naam aur Price likho</span>';return;}let finalImg='';if(currentImgBase64)finalImg=currentImgBase64;else if(url&&url.startsWith('http'))finalImg=url;else finalImg=`https://picsum.photos/seed/${Date.now()}/400/300`;const nd={id:Date.now(),name,price,image:finalImg,desc:document.getElementById('dishDesc').value.trim()};dishes.unshift(nd);localStorage.setItem('shribhog_dishes',JSON.stringify(dishes));document.getElementById('dishName').value='';document.getElementById('dishPrice').value='';document.getElementById('dishImg').value='';document.getElementById('dishDesc').value='';document.getElementById('dishFile').value='';currentImgBase64='';document.getElementById('addMsg').innerHTML='<b style=color:green>✓ Save ho gaya!</b>';render();showTab('dishes');}
-function render(){const g=document.getElementById('dishesGrid');if(dishes.length===0){g.innerHTML='<div class=card style=grid-column:1/-1;text-align:center;color:#888>Koi dish nahi</div>';return;}g.innerHTML=dishes.map(d=>`<div class="dish"><img src="${d.image}" onerror="this.src='https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=400&h=300&fit=crop'"><div class="dish-body"><b style="font-size:13px">${d.name}</b><span style="font-size:11px;color:#666">${d.desc||''}</span><div style="display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:6px"><span class="price">₹${d.price}</span><button class="delt" onclick="delDish(${d.id})">🗑️ Delete</button></div></div></div>`).join('');}
-function delDish(id){if(!confirm('Delete?'))return;dishes=dishes.filter(x=>x.id!=id);localStorage.setItem('shribhog_dishes',JSON.stringify(dishes));render();}
-function logout(){localStorage.removeItem('shribhog_user');location.reload();}
-window.onload=()=>{const s=localStorage.getItem('shribhog_user');if(s){document.getElementById('loginDiv').style.display='none';document.getElementById('mainDiv').style.display='block';document.getElementById('logoutBtn').style.display='block';showTab('dishes');render();}}
+const users={'joramandir':{p:'jora123',n:'Jora Bhabhi'},'admin':{p:'admin123',n:'Admin'},'raju':{p:'raju123',n:'Raju'}};
+let dishes=JSON.parse(localStorage.getItem('shribhog_v3')||'[]');
+let currentImg=''; let editIndex=-1;
+
+if(dishes.length===0){dishes=[{name:'Puri Sabji',price:40,img:'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=400'}]; saveLocal();}
+
+function saveLocal(){localStorage.setItem('shribhog_v3',JSON.stringify(dishes));}
+function doLogin(){
+ let u=document.getElementById('uid').value.trim().toLowerCase();
+ let p=document.getElementById('pwd').value.trim();
+ if(users[u] && users[u].p===p){localStorage.setItem('sb_user',u);initApp();}else alert('Galat ID / Password');
+}
+function initApp(){
+ let u=localStorage.getItem('sb_user'); if(!u ||!users[u]) return;
+ document.getElementById('loginPage').style.display='none'; document.getElementById('mainPage').style.display='block';
+ document.getElementById('uname').innerText=users[u].n; renderDishes();
+}
+function doLogout(){localStorage.removeItem('sb_user'); location.reload();}
+function showTab(t){
+ document.getElementById('dishesSec').style.display=t==='dishes'?'grid':'none';
+ document.getElementById('addSec').style.display=t==='add'?'block':'none';
+ document.getElementById('ordersSec').style.display=t==='orders'?'block':'none';
+ document.getElementById('t1').classList.toggle('active',t==='dishes');
+ document.getElementById('t2').classList.toggle('active',t==='add');
+ document.getElementById('t3').classList.toggle('active',t==='orders');
+}
+function handleFile(inp){
+ let f=inp.files[0]; if(!f) return;
+ let r=new FileReader(); r.onload=e=>{
+   currentImg=e.target.result;
+   document.getElementById('preview').src=currentImg; document.getElementById('preview').style.display='block';
+   document.getElementById('fileOk').style.display='block';
+ }; r.readAsDataURL(f);
+}
+function saveDish(){
+ let n=document.getElementById('dname').value.trim();
+ let pr=document.getElementById('dprice').value.trim();
+ let url=document.getElementById('durl').value.trim();
+ if(!n ||!pr) return alert('Naam aur Price bhare');
+ let finalImg = currentImg || url || 'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=400';
+ if(editIndex>=0){dishes[editIndex]={name:n,price:pr,img:finalImg}; editIndex=-1;}
+ else dishes.push({name:n,price:pr,img:finalImg});
+ saveLocal(); resetForm(); showTab('dishes'); renderDishes();
+}
+function renderDishes(){
+ let g=document.getElementById('dishesSec'); g.innerHTML='';
+ dishes.forEach((d,i)=>{
+  g.innerHTML+=`<div class="dish"><img src="${d.img}" onerror="this.src='https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=400'"><div class="dish-body"><div style="display:flex;justify-content:space-between"><b>${d.name}</b><b style="color:#ea580c">₹${d.price}</b></div><div class="row"><button class="edit" onclick="editDish(${i})">Edit</button><button class="del" onclick="delDish(${i})">Delete</button></div></div></div>`;
+ });
+}
+function delDish(i){if(confirm('Delete karna hai?')){dishes.splice(i,1); saveLocal(); renderDishes();}}
+function editDish(i){
+ editIndex=i; let d=dishes[i];
+ document.getElementById('dname').value=d.name; document.getElementById('dprice').value=d.price;
+ document.getElementById('durl').value=d.img.startsWith('data:')?'':d.img;
+ currentImg=d.img; document.getElementById('preview').src=d.img; document.getElementById('preview').style.display='block';
+ document.getElementById('formTitle').innerText='Edit Dish'; document.getElementById('saveBtn').innerText='Update Dish';
+ document.getElementById('cancelEdit').style.display='block'; showTab('add');
+}
+function cancelEdit(){editIndex=-1; resetForm();}
+function resetForm(){
+ document.getElementById('dname').value=''; document.getElementById('dprice').value=''; document.getElementById('durl').value=''; document.getElementById('dfile').value='';
+ currentImg=''; document.getElementById('preview').style.display='none'; document.getElementById('fileOk').style.display='none';
+ document.getElementById('formTitle').innerText='Naya Dish Add Karo'; document.getElementById('saveBtn').innerText='Save Dish'; document.getElementById('cancelEdit').style.display='none';
+}
+if(localStorage.getItem('sb_user')) initApp();
 </script>
 </body>
 </html>
