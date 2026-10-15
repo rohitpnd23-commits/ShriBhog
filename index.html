@@ -1,135 +1,147 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ShriBhog</title>
+<title>ShriBhog - Final Panel</title>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, addDoc, onSnapshot, updateDoc, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 const firebaseConfig = {
-  apiKey: "PASTE_YOUR_API_KEY",
-  authDomain: "PASTE_YOUR_AUTH_DOMAIN",
-  projectId: "PASTE_YOUR_PROJECT_ID",
-  storageBucket: "PASTE_YOUR_STORAGE_BUCKET",
-  messagingSenderId: "PASTE_YOUR_SENDER_ID",
-  appId: "PASTE_YOUR_APP_ID"
+  apiKey: "AIzaSy...PASTE_YOURS",
+  authDomain: "PASTE_YOURS",
+  projectId: "PASTE_YOURS",
+  storageBucket: "PASTE_YOURS",
+  messagingSenderId: "PASTE_YOURS",
+  appId: "PASTE_YOURS"
 };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const dishesRef = collection(db, "dishes");
-window.dbTools = { db, dishesRef, addDoc, onSnapshot, updateDoc, doc, deleteDoc };
+window.dbTools = { db, dishesRef: collection(db, "dishes"), ordersRef: collection(db, "orders"), addDoc, onSnapshot, updateDoc, doc, deleteDoc };
 </script>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:'Segoe UI',sans-serif;background:#fff6ec}
-.topbar{background:#ffe0b2;padding:15px 20px;display:flex;justify-content:space-between}
-.brand{font-weight:800;color:#e65100;font-size:22px}
-.container{max-width:1100px;margin:20px auto;padding:0 15px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.card{background:white;border-radius:16px;padding:18px;box-shadow:0 4px 20px #0001}
-.btn{background:#ff6a00;color:white;border:none;padding:10px 16px;border-radius:10px;font-weight:600;cursor:pointer}
-.btn-green{background:#2e7d32}.btn-red{background:#c62828}
-.dish{border:1px solid #eee;border-radius:12px;padding:10px;margin:8px 0;display:flex;gap:10px}
-.dish img{width:70px;height:70px;object-fit:cover;border-radius:10px}
-.loginBox{max-width:380px;margin:80px auto;background:white;padding:25px;border-radius:16px;box-shadow:0 8px 30px #0002;text-align:center}
-@media(max-width:700px){.container{grid-template-columns:1fr}}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+*{box-sizing:border-box}body{margin:0;font-family:Inter;background:#fef7f0}
+.topbar{position:sticky;top:0;z-index:9;background:linear-gradient(90deg,#ffe2b8,#fffaf0);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #ffcc8a}
+.logo{font-weight:800;font-size:26px;color:#e65100;line-height:1}.logo i{font-style:normal;font-size:11px;color:#ff6a00;display:block;font-weight:600;letter-spacing:.4px}
+.badge{background:#fff;border:1px solid #ffcc8a;color:#e65100;padding:6px 12px;border-radius:20px;font-size:11px;font-weight:800}
+.container{max-width:1250px;margin:18px auto;padding:0 14px;display:grid;grid-template-columns:350px 1fr;gap:16px}
+.card{background:#fff;border-radius:20px;padding:18px;box-shadow:0 10px 30px rgba(230,81,0,.07);border:1px solid #fff0dc;margin-bottom:14px}
+.card h3{margin:0 0 4px 0;color:#bf360c;font-size:17px}.sub{color:#8d6e63;font-size:12px;margin-bottom:12px}
+input,select{width:100%;padding:12px;border-radius:12px;border:1.5px solid #ffdfb5;background:#fffaf5;outline:none}
+input:focus,select:focus{border-color:#ff6a00;background:#fff}
+.btn{border:none;padding:11px 14px;border-radius:12px;font-weight:700;cursor:pointer;font-size:13px}
+.btn-o{background:linear-gradient(90deg,#ff6a00,#ff8f00);color:#fff;box-shadow:0 6px 18px rgba(255,106,0,.25)}
+.btn-g{background:#e8f5e9;color:#2e7d32;border:1px solid #a5d6a7}.btn-r{background:#ffebee;color:#c62828;border:1px solid #ef9a9a}
+.item{display:flex;gap:10px;padding:12px;border:1px solid #ffecda;border-radius:14px;margin:8px 0;background:linear-gradient(180deg,#fff,#fffaf6)}
+.item img{width:58px;height:58px;border-radius:10px;object-fit:cover}
+.payBox{background:linear-gradient(180deg,#fffaf0,#fff);border:1.5px dashed #ff8f00;border-radius:16px;padding:14px;text-align:center}
+.loginWrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at top,#ffe2b8,#fef7f0)}
+.loginBox{width:380px;background:#fff;padding:26px;border-radius:22px;box-shadow:0 20px 60px rgba(230,81,0,.15);text-align:center}
+.custBox{background:#f3e5f5;border:1px solid #ce93d8;border-radius:12px;padding:10px;margin-top:8px}
+@media(max-width:900px){.container{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<div id="loginBox" class="loginBox">
-<div class="brand">ShriBhog</div><br>
-<input id="u" placeholder="username"><br><br>
+<div id="loginPage" class="loginWrap">
+<div class="loginBox">
+<div class="logo">ShriBhog <i>Final Panel - Payment + Location Flow</i></div><br>
+<input id="u" placeholder="joramandir / admin / raju"><br><br>
 <input id="p" type="password" placeholder="password"><br><br>
-<button class="btn" onclick="login()" style="width:100%">Login</button>
-<small><br>joramandir/jora123 = Shop<br>admin/admin123 = Owner<br>raju/raju123 = Delivery Boy</small>
+<button class="btn btn-o" style="width:100%" onclick="login()">Login</button>
+<p style="font-size:11px;color:#8d6e63;margin-top:10px">joramandir/jora123 = SHOP<br>admin/admin123 = ADMIN<br>raju/raju123 = DELIVERY</p>
+</div>
 </div>
 
-<div id="mainBox" style="display:none">
-<div class="topbar"><div class="brand"><span id="who"></span> - <span id="role"></span></div><button class="btn btn-red" onclick="location.reload()">Logout</button></div>
+<div id="main" style="display:none">
+<div class="topbar"><div class="logo">ShriBhog <i id="whoLine">Welcome</i></div><div style="display:flex;gap:8px;align-items:center"><span class="badge" id="roleBadge">ROLE</span><button class="btn btn-r" onclick="location.reload()">Logout</button></div></div>
 
 <div class="container">
-<!-- SHOP WALA CARD -->
+<div>
 <div class="card" id="addCard">
-<h3 style="color:#e65100">Add New Dish (Shop)</h3>
-<input id="dname" placeholder="Dish Name"><br><br>
+<h3>Add Dish ✨</h3><div class="sub">Shop - Jora Mandir</div>
+<input id="dname" placeholder="Dish name"><br><br>
 <input id="dprice" type="number" placeholder="Price ₹"><br><br>
+<select id="pm"><option value="COD">COD</option><option value="UPI">UPI Paid</option><option value="BOTH">COD + UPI</option></select><br><br>
 <input type="file" id="dimg" accept="image/*"><br><br>
-<button class="btn" onclick="addDish()" style="width:100%">Submit for Approval</button>
-<p id="status" style="color:green"></p>
+<button class="btn btn-o" style="width:100%" onclick="addDish()">Submit for Approval</button>
+<p id="dstatus" style="color:green;font-weight:700;font-size:12px"></p>
+</div>
+
+<div class="card payBox">
+<h3>💰 UPI Payment</h3><div class="sub">ID: <b>rohitpnd23-6@okaxis</b></div>
+<img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=rohitpnd23-6@okaxis%26pn=ShriBhog%26cu=INR" style="border-radius:12px;border:4px solid #fff"><br>
+<a href="upi://pay?pa=rohitpnd23-6@okaxis&pn=ShriBhog&cu=INR" style="text-decoration:none" class="btn btn-o">Pay via UPI</a>
+</div>
+
+<div class="card" id="shopOrderCard">
+<h3>🔔 Customer Orders - Shop</h3><div class="sub">Confirm hone par Shop ko, Ready ke baad Delivery ko jayega</div>
+<div id="shopOrders"></div>
+</div>
 </div>
 
 <div>
-<div class="card" id="pendingCard"><h3>Pending for Approval</h3><div id="pendingList"></div></div>
-<div class="card" id="approvedCard" style="margin-top:15px"><h3 id="approvedTitle">Approved Dishes</h3><div id="approvedList"></div></div>
+<div class="card" id="pendingCard"><h3>Pending Dishes ⏳</h3><div id="pendingList"></div></div>
+<div class="card"><h3 id="approvedTitle">Approved Dishes ✅</h3><div id="approvedList"></div></div>
+<div class="card" id="deliveryCard"><h3>🛵 Delivery - Raju</h3><div class="sub">Sirf Ready Orders me Customer Name / Phone / Location dikhega</div><div id="deliveryList"></div></div>
 </div>
 </div>
 </div>
 
 <script>
-let currentUser=null,currentRole=null;
+let CUR=null,ROLE=null; const UPI="rohitpnd23-6@okaxis";
 function login(){
- const u=document.getElementById('u').value.trim();
- const p=document.getElementById('p').value.trim();
- const users={joramandir:{pass:'jora123',role:'SHOP'},admin:{pass:'admin123',role:'ADMIN'},raju:{pass:'raju123',role:'DELIVERY'}};
- if(users[u] && users[u].pass==p){
-   currentUser=u; currentRole=users[u].role;
-   document.getElementById('loginBox').style.display='none';
-   document.getElementById('mainBox').style.display='block';
-   document.getElementById('who').innerText=u;
-   document.getElementById('role').innerText=currentRole;
-
-   // ROLE WISE HIDE/SHOW
-   if(currentRole==='ADMIN'){
-     document.getElementById('addCard').style.display='none'; // Admin add nahi karega
-   }
-   if(currentRole==='DELIVERY'){
-     document.getElementById('addCard').style.display='none'; // Delivery add nahi karega
-     document.getElementById('pendingCard').style.display='none'; // Pending nahi dekhega
-     document.getElementById('approvedTitle').innerText='Orders for Delivery';
-   }
-   if(currentRole==='SHOP'){
-     // Shop wala Approve nahi kar sakta, isliye button hide hoga listen me
-   }
-   listenDishes();
- } else alert('Wrong login');
+ const u=document.getElementById('u').value.trim(), p=document.getElementById('p').value.trim();
+ const US={joramandir:{ps:'jora123',r:'SHOP'},admin:{ps:'admin123',r:'ADMIN'},raju:{ps:'raju123',r:'DELIVERY'}};
+ if(!US[u]||US[u].ps!==p) return alert('Wrong login');
+ CUR=u; ROLE=US[u].r;
+ document.getElementById('loginPage').style.display='none'; document.getElementById('main').style.display='block';
+ document.getElementById('whoLine').innerText=CUR+' • '+UPI; document.getElementById('roleBadge').innerText=ROLE;
+ if(ROLE==='ADMIN'){document.getElementById('addCard').style.display='none'; document.getElementById('shopOrderCard').style.display='none';}
+ if(ROLE==='SHOP'){document.getElementById('deliveryCard').style.display='none';}
+ if(ROLE==='DELIVERY'){document.getElementById('addCard').style.display='none'; document.getElementById('pendingCard').style.display='none'; document.getElementById('shopOrderCard').style.display='none'; document.getElementById('approvedTitle').innerText='Menu (Read Only)';}
+ listenDishes(); listenOrders();
 }
-
-function compressImage(file){
- return new Promise(res=>{
-  const img=new Image(); img.onload=()=>{
-   const c=document.createElement('canvas'); const max=400; let w=img.width,h=img.height;
-   if(w>h){if(w>max){h*=max/w;w=max}} else {if(h>max){w*=max/h;h=max}}
-   c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);res(c.toDataURL('image/jpeg',0.6));
-  }; img.src=URL.createObjectURL(file);
- });
-}
-
+function compress(f){return new Promise(r=>{const i=new Image();i.onload=()=>{const c=document.createElement('canvas');let w=i.width,h=i.height,m=500;if(w>m||h>m){if(w>h){h*=m/w;w=m}else{w*=m/h;h=m}}c.width=w;c.height=h;c.getContext('2d').drawImage(i,0,0,w,h);r(c.toDataURL('image/jpeg',0.6));};i.src=URL.createObjectURL(f);});}
 async function addDish(){
- if(currentRole!=='SHOP') return alert('Only Shop can add');
- const name=document.getElementById('dname').value;
- const price=Number(document.getElementById('dprice').value);
- const file=document.getElementById('dimg').files[0];
- if(!name||!price) return alert('Name Price bharo');
- document.getElementById('status').innerText='Uploading...';
- let imgData=''; if(file) imgData=await compressImage(file);
- const {addDoc,dishesRef}=window.dbTools;
- await addDoc(dishesRef,{name,price,img:imgData,status:'pending',seller:currentUser,created:Date.now()});
- document.getElementById('status').innerText='Sent for Approval!';
- document.getElementById('dname').value='';
+ const n=document.getElementById('dname').value, pr=Number(document.getElementById('dprice').value), pay=document.getElementById('pm').value, file=document.getElementById('dimg').files[0];
+ if(!n||!pr) return alert('Name Price bharo'); document.getElementById('dstatus').innerText='Uploading...';
+ let img=''; if(file) img=await compress(file);
+ const{addDoc,dishesRef}=window.dbTools; await addDoc(dishesRef,{name:n,price:pr,paymentMethod:pay,upiId:UPI,status:'pending',seller:CUR,img,created:Date.now()});
+ document.getElementById('dstatus').innerText='✅ Sent for Approval';
 }
-
 function listenDishes(){
- const {onSnapshot,dishesRef}=window.dbTools;
- onSnapshot(dishesRef,(snap)=>{
-  const p=document.getElementById('pendingList'); const a=document.getElementById('approvedList'); p.innerHTML='';a.innerHTML='';
-  snap.forEach(d=>{
-   const data=d.data();const id=d.id;
-   const isAdmin=currentRole==='ADMIN';
-   const html=`<div class="dish"><img src="${data.img||'https://via.placeholder.com/70'}"><div style="flex:1"><b>${data.name}</b><br>₹${data.price}<br><small>${data.seller} - ${data.status}</small></div><div>${isAdmin && data.status==='pending'?`<button class="btn btn-green" onclick="approveDish('${id}')">Approve</button> <button class="btn btn-red" onclick="deleteDish('${id}')">Reject</button>`:''} ${currentRole==='DELIVERY'&&data.status==='approved'?`<button class="btn btn-green">Deliver</button>`:''}</div></div>`;
-   if(data.status==='pending'){p.innerHTML+=html;} else {a.innerHTML+=html;}
+ const{onSnapshot,dishesRef}=window.dbTools;
+ onSnapshot(dishesRef,s=>{const p=document.getElementById('pendingList'),a=document.getElementById('approvedList');p.innerHTML='';a.innerHTML='';
+  s.forEach(d=>{const D=d.data(),id=d.id;
+   const h=`<div class="item"><img src="${D.img||'https://via.placeholder.com/80'}"><div style="flex:1"><b>${D.name}</b><br><span style="color:#ff6a00;font-weight:700">₹${D.price}</span> <small>${D.paymentMethod}</small><br><small>${D.seller} • ${D.status}</small></div><div>${ROLE==='ADMIN'&&D.status==='pending'?`<button class="btn btn-g" onclick="approveDish('${id}')">Approve</button> <button class="btn btn-r" onclick="delDish('${id}')">Reject</button>`:''}</div></div>`;
+   if(D.status==='pending') p.innerHTML+=h; else a.innerHTML+=h;
   });
  });
 }
+function listenOrders(){
+ const{onSnapshot,ordersRef}=window.dbTools;
+ onSnapshot(ordersRef,snap=>{
+  const shopDiv=document.getElementById('shopOrders'), delDiv=document.getElementById('deliveryList');
+  shopDiv.innerHTML=''; delDiv.innerHTML='';
+  snap.forEach(docSnap=>{const o=docSnap.data(), id=docSnap.id;
+   const cust=`<div class="custBox"><b>👤 ${o.customerName||'Customer'}</b><br>📞 ${o.phone||''}<br>📍 ${o.address||''}<br>${o.location?`<a href="https://www.google.com/maps?q=${o.location}" target="_blank">Open Location in Map</a>`:''}<br>🍽 ${o.dish} - ₹${o.price} - ${o.paymentMethod} ${o.paymentMethod!=='COD'?`(${UPI})`:''}</div>`;
+   if(o.status==='pending_shop' && (ROLE==='SHOP'||ROLE==='ADMIN')){
+     shopDiv.innerHTML+=`<div class="item"><div style="flex:1">${cust}<small>Status: ${o.status}</small></div><div><button class="btn btn-g" onclick="updateOrder('${id}','shop_confirmed')">Confirm</button></div></div>`;
+   }
+   if(o.status==='shop_confirmed' && (ROLE==='SHOP'||ROLE==='ADMIN')){
+     shopDiv.innerHTML+=`<div class="item"><div style="flex:1">${cust}<small>Status: Shop Confirmed - Ready karo</small></div><div><button class="btn btn-o" onclick="updateOrder('${id}','ready')">Ready for Delivery</button></div></div>`;
+   }
+   if(o.status==='ready' && (ROLE==='DELIVERY'||ROLE==='ADMIN')){
+     delDiv.innerHTML+=`<div class="item"><div style="flex:1">${cust}<br><small style="background:#e8f5e9;padding:3px 8px;border-radius:10px">READY - Deliver Now</small></div><div><a href="tel:${o.phone}" class="btn btn-g">Call</a><br><br><button class="btn btn-o" onclick="updateOrder('${id}','delivered')">Delivered</button></div></div>`;
+   }
+  });
+  if(ROLE==='SHOP'&&shopDiv.innerHTML==='') shopDiv.innerHTML='<small>No new orders</small>';
+  if(ROLE==='DELIVERY'&&delDiv.innerHTML==='') delDiv.innerHTML='<small>No ready orders - Shop Ready karega tab aayega</small>';
+ });
+}
 window.approveDish=async(id)=>{const{updateDoc,doc,db}=window.dbTools;await updateDoc(doc(db,'dishes',id),{status:'approved'})}
-window.deleteDish=async(id)=>{if(confirm('Reject/Delete?')){const{deleteDoc,doc,db}=window.dbTools;await deleteDoc(doc(db,'dishes',id))}}
+window.delDish=async(id)=>{if(confirm('Delete?')){const{deleteDoc,doc,db}=window.dbTools;await deleteDoc(doc(db,'dishes',id))}}
+window.updateOrder=async(id,st)=>{const{updateDoc,doc,db}=window.dbTools;await updateDoc(doc(db,'orders',id),{status:st})}
 </script>
 </body>
 </html>
