@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShriBhog - Order Karo</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui}
+body{background:#fff7ed}
+.header{background:white;padding:14px 16px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.06);position:sticky;top:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;padding:16px;max-width:1100px;margin:auto}
+.dish{background:white;border-radius:14px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.06)}
+.dish img{width:100%;height:200px;object-fit:cover}
+.body{padding:12px}
+.btn{width:100%;padding:10px;background:#16a34a;color:white;border:none;border-radius:8px;font-weight:700;cursor:pointer;margin-top:8px}
+.cart{position:fixed;bottom:0;left:0;right:0;background:white;padding:12px 16px;box-shadow:0 -4px 12px rgba(0,0,0,.1);display:none}
+</style>
+</head>
+<body>
+<div class="header"><h2 style="color:#ea580c">🙏 ShriBhog - Jora Mandir</h2><p style="font-size:13px;color:#666">Ghar jaisa khana, ghar tak</p></div>
+<div id="menu" class="grid"></div>
+
+<div id="cartBar" class="cart">
+<div style="display:flex;justify-content:space-between"><b id="cartCount">0 item</b><b id="cartTotal">₹0</b></div>
+<button class="btn" style="background:#25D366" onclick="orderWhatsApp()">WhatsApp Pe Order Karo</button>
+</div>
+
+<script>
+let defaultDishes=[
+{name:'Puri Sabji',price:40,img:'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=400'},
+{name:'Roti Sabji',price:30,img:'https://images.unsplash.com/photo-1595755438278-d6f907df095f?w=400'},
+{name:'Dal Chawal',price:80,img:'https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=400'}
+];
+// Jo admin ne apne phone me add kiya hai wo bhi dikhane ki koshish karo
+let saved=JSON.parse(localStorage.getItem('shribhog_v3')||'[]');
+let dishes = saved.length>0? saved : defaultDishes;
+
+let cart=[];
+function render(){
+let g=document.getElementById('menu'); g.innerHTML='';
+dishes.forEach((d,i)=>{
+ g.innerHTML+=`<div class="dish"><img src="${d.img}"><div class="body"><div style="display:flex;justify-content:space-between"><b>${d.name}</b><b style="color:#ea580c">₹${d.price}</b></div><button class="btn" onclick="addToCart(${i})">+ Add to Cart</button></div></div>`;
+});
+}
+function addToCart(i){cart.push(dishes[i]); updateCart();}
+function updateCart(){
+if(cart.length===0){document.getElementById('cartBar').style.display='none'; return;}
+document.getElementById('cartBar').style.display='block';
+let total=cart.reduce((s,x)=>s+Number(x.price),0);
+document.getElementById('cartCount').innerText=cart.length+' item';
+document.getElementById('cartTotal').innerText='₹'+total;
+}
+function orderWhatsApp(){
+let total=cart.reduce((s,x)=>s+Number(x.price),0);
+let msg='Jai Shri Ram 🙏 ShriBhog Order:%0A';
+cart.forEach((c,i)=>{msg+=`${i+1}. ${c.name} - ₹${c.price}%0A`});
+msg+=`%0ATotal: ₹${total}%0AAddress: `;
+let phone='919999999999'; // YAHAN APNA NUMBER DALO
+window.open(`https://wa.me/${phone}?text=${msg}`,'_blank');
+}
+render();
+</script>
+</body>
+</html>
