@@ -50,7 +50,13 @@ body{background:#fffbeb;color:#1f2937;min-height:100vh}
 </div>
 <script>
 let dishes=JSON.parse(localStorage.getItem('shribhog_dishes')||'[]');
-const users={'joramandir':{p:'jora123',n:'Jora Bhabhi'},'admin':{p:'admin123',n:'Admin'},'raju':{p:'raju123',n:'Raju'}};
+const users={
+  'joramandir':{p:'jora123',n:'Jora Bhabhi'},
+  'admin':{p:'admin123',n:'Admin Rohit'},
+  'raju':{p:'raju123',n:'Raju Delivery'},
+  'ram':{p:'ram123',n:'Ram Bhai'}, // <-- Naya
+  'shyam':{p:'shyam@2026',n:'Shyam Customer'} // <-- Naya
+};
 let currentImgBase64='';
 document.getElementById('dishFile').addEventListener('change',e=>{const file=e.target.files[0];if(!file)return;const r=new FileReader();r.onload=ev=>{currentImgBase64=ev.target.result;document.getElementById('addMsg').innerHTML='<span style=color:green>✓ Photo select ho gayi</span>';};r.readAsDataURL(file);});
 function login(){const id=(document.getElementById('loginId').value||'').trim().toLowerCase();const pass=(document.getElementById('password').value||'').trim();const u=users[id];if(u&&u.p===pass){localStorage.setItem('shribhog_user',JSON.stringify({id,name:u.n}));document.getElementById('loginDiv').style.display='none';document.getElementById('mainDiv').style.display='block';document.getElementById('logoutBtn').style.display='block';showTab('dishes');render();}else{document.getElementById('msg').innerHTML='<b style=color:#b91c1c>❌ Galat ID</b>';}}
