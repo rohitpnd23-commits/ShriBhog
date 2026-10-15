@@ -6,7 +6,6 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, addDoc, onSnapshot, updateDoc, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
 const firebaseConfig = {
   apiKey: "PASTE_YOUR_API_KEY",
   authDomain: "PASTE_YOUR_AUTH_DOMAIN",
@@ -15,103 +14,94 @@ const firebaseConfig = {
   messagingSenderId: "PASTE_YOUR_SENDER_ID",
   appId: "PASTE_YOUR_APP_ID"
 };
-
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const dishesRef = collection(db, "dishes");
 window.dbTools = { db, dishesRef, addDoc, onSnapshot, updateDoc, doc, deleteDoc };
 </script>
-<style>body{font-family:sans-serif;padding:10px;background:#fff8f0}.card{border:1px solid #ddd;padding:10px;margin:10px 0;border-radius:8px;background:white}.pending{border-left:5px solid orange}.approved{border-left:5px solid green} button{padding:6px 12px;margin:3px;cursor:pointer}</style>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:'Segoe UI',sans-serif;background:#fff6ec;color:#333}
+.topbar{background:linear-gradient(90deg,#ffe0b2,#fff);padding:15px 20px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 10px #0001}
+.brand{font-size:24px;font-weight:800;color:#e65100}.brand span{font-size:13px;color:#ff6a00;display:block;font-weight:400}
+.container{max-width:1100px;margin:20px auto;padding:0 15px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.card{background:white;border-radius:16px;padding:18px;box-shadow:0 4px 20px #0001}
+.card h3{margin-top:0;color:#e65100}
+input{width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;margin-top:5px}
+.btn{background:#ff6a00;color:white;border:none;padding:10px 16px;border-radius:10px;font-weight:600;cursor:pointer}
+.btn-green{background:#2e7d32}.btn-red{background:#c62828}
+.dish{border:1px solid #eee;border-radius:12px;padding:10px;margin:8px 0;display:flex;gap:10px;align-items:center}
+.dish img{width:70px;height:70px;object-fit:cover;border-radius:10px}
+.loginBox{max-width:400px;margin:80px auto;background:white;padding:25px;border-radius:16px;box-shadow:0 8px 30px #0002;text-align:center}
+@media(max-width:700px){.container{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
-<div id="loginBox">
-<h2>ShriBhog Login</h2>
-<input id="u" placeholder="username"><br><br>
+<div id="loginBox" class="loginBox">
+<div class="brand">ShriBhog<span>Jora Mandir • Admin Panel</span></div><br>
+<input id="u" placeholder="username (admin/joramandir/raju)"><br><br>
 <input id="p" type="password" placeholder="password"><br><br>
-<button onclick="login()">Login</button>
-<p style="font-size:12px">Seller: joramandir/jora123, raju/raju123 | Admin: admin/admin123</p>
+<button class="btn" onclick="login()" style="width:100%">Login</button>
 </div>
 
 <div id="mainBox" style="display:none">
-<h3>Welcome <span id="who"></span> (<span id="role"></span>) <button onclick="location.reload()">Logout</button></h3>
+<div class="topbar"><div class="brand">ShriBhog <span id="who"></span> - <span id="role"></span></div><button class="btn btn-red" onclick="location.reload()">Logout</button></div>
 
+<div class="container">
 <div class="card">
-<h4>Add New Dish (Photo auto 100KB me compress hoga)</h4>
-<input id="dname" placeholder="Dish Name e.g. Samosa"><br><br>
-<input id="dprice" type="number" placeholder="Price"><br><br>
-<input type="file" id="dimg" accept="image/*"><br><br>
-<button onclick="addDish()">Add for Approval</button>
-<p id="status"></p>
+<h3>Add New Dish ✨</h3>
+<label>Dish Name</label><input id="dname" placeholder="e.g. Paneer Tikka Roll"><br><br>
+<label>Price (₹)</label><input id="dprice" type="number" placeholder="e.g. 180"><br><br>
+<label>Photo (Auto 100KB compress)</label><input type="file" id="dimg" accept="image/*"><br><br>
+<button class="btn" onclick="addDish()" style="width:100%">Submit for Approval</button>
+<p id="status" style="color:green"></p>
 </div>
 
-<h3>Pending Dishes (Admin hi approve karega)</h3>
-<div id="pendingList"></div>
-
-<h3>Approved Dishes (Customer ko dikh raha hai)</h3>
-<div id="approvedList"></div>
+<div>
+<div class="card"><h3>Pending Dishes <small id="pcount"></small></h3><div id="pendingList">Loading...</div></div>
+<div class="card" style="margin-top:15px"><h3>Approved Dishes <small id="acount"></small></h3><div id="approvedList"></div></div>
+</div>
+</div>
 </div>
 
 <script>
-let currentUser=null, isAdmin=false;
+let currentUser=null,isAdmin=false;
 function login(){
-  const u=document.getElementById('u').value.trim();
-  const p=document.getElementById('p').value.trim();
-  const users={joramandir:'jora123', raju:'raju123', admin:'admin123'};
-  if(users[u] && users[u]==p){
-    currentUser=u; isAdmin=(u==='admin');
-    document.getElementById('loginBox').style.display='none';
-    document.getElementById('mainBox').style.display='block';
-    document.getElementById('who').innerText=u;
-    document.getElementById('role').innerText=isAdmin?'ADMIN':'SELLER';
-    listenDishes();
-  } else alert('Wrong login');
+ const u=document.getElementById('u').value.trim(); const p=document.getElementById('p').value.trim();
+ const users={joramandir:'jora123',raju:'raju123',admin:'admin123'};
+ if(users[u]&&users[u]==p){currentUser=u;isAdmin=(u==='admin');document.getElementById('loginBox').style.display='none';document.getElementById('mainBox').style.display='block';document.getElementById('who').innerText=u;document.getElementById('role').innerText=isAdmin?'ADMIN':'SELLER';listenDishes();} else alert('Wrong login');
 }
-
 function compressImage(file){
-  return new Promise(res=>{
-    const img=new Image();
-    img.onload=()=>{
-      const canvas=document.createElement('canvas');
-      const max=400; let w=img.width, h=img.height;
-      if(w>h){ if(w>max){h*=max/w; w=max} } else { if(h>max){w*=max/h; h=max} }
-      canvas.width=w; canvas.height=h;
-      canvas.getContext('2d').drawImage(img,0,0,w,h);
-      res(canvas.toDataURL('image/jpeg',0.6));
-    };
-    img.src=URL.createObjectURL(file);
-  });
+ return new Promise(res=>{
+  const img=new Image(); img.onload=()=>{
+   const c=document.createElement('canvas'); const max=400; let w=img.width,h=img.height;
+   if(w>h){if(w>max){h*=max/w;w=max}} else {if(h>max){w*=max/h;h=max}}
+   c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);res(c.toDataURL('image/jpeg',0.6));
+  }; img.src=URL.createObjectURL(file);
+ });
 }
-
 async function addDish(){
-  const name=document.getElementById('dname').value;
-  const price=Number(document.getElementById('dprice').value);
-  const file=document.getElementById('dimg').files[0];
-  if(!name ||!price) return alert('Name Price bharo');
-  document.getElementById('status').innerText='Uploading...';
-  let imgData='';
-  if(file) imgData=await compressImage(file);
-  const { addDoc, dishesRef } = window.dbTools;
-  await addDoc(dishesRef, { name, price, img: imgData, status: isAdmin?'approved':'pending', seller: currentUser, created: Date.now() });
-  document.getElementById('status').innerText='Saved as '+(isAdmin?'Approved':'Pending');
-  document.getElementById('dname').value=''; document.getElementById('dprice').value='';
+ const name=document.getElementById('dname').value; const price=Number(document.getElementById('dprice').value);
+ const file=document.getElementById('dimg').files[0]; if(!name||!price) return alert('Name Price bharo');
+ document.getElementById('status').innerText='Compress & Uploading...';
+ let imgData=''; if(file) imgData=await compressImage(file);
+ const {addDoc,dishesRef}=window.dbTools; await addDoc(dishesRef,{name,price,img:imgData,status:isAdmin?'approved':'pending',seller:currentUser,created:Date.now()});
+ document.getElementById('status').innerText='Saved!'; document.getElementById('dname').value=''; document.getElementById('dprice').value='';
 }
-
 function listenDishes(){
-  const { onSnapshot, dishesRef, updateDoc, doc, deleteDoc } = window.dbTools;
-  onSnapshot(dishesRef, (snap)=>{
-    const pending=document.getElementById('pendingList'); const approved=document.getElementById('approvedList');
-    pending.innerHTML=''; approved.innerHTML='';
-    snap.forEach(d=>{
-      const data=d.data(); const id=d.id;
-      const el=`<div class="card ${data.status}"><b>${data.name}</b> - Rs ${data.price}<br><small>Seller:${data.seller} | ${data.status}</small><br>${data.img?`<img src="${data.img}" style="width:100px;height:100px;object-fit:cover">`:''}<br>
-      ${isAdmin && data.status==='pending'? `<button onclick="approveDish('${id}')">✅ Approve</button>`:''}
-      ${isAdmin? `<button onclick="deleteDish('${id}')">❌ Delete</button>`:''}</div>`;
-      if(data.status==='pending') pending.innerHTML+=el; else approved.innerHTML+=el;
-    });
+ const {onSnapshot,dishesRef}=window.dbTools;
+ onSnapshot(dishesRef,(snap)=>{
+  const p=document.getElementById('pendingList'); const a=document.getElementById('approvedList'); p.innerHTML='';a.innerHTML='';
+  let pc=0,ac=0;
+  snap.forEach(d=>{const data=d.data();const id=d.id;
+   const html=`<div class="dish"><img src="${data.img||'https://via.placeholder.com/70'}"><div style="flex:1"><b>${data.name}</b><br>₹${data.price} • ${data.seller}<br><small>${data.status}</small></div><div>${isAdmin&&data.status==='pending'?`<button class="btn btn-green" onclick="approveDish('${id}')">Approve</button>`:''} ${isAdmin?`<button class="btn btn-red" onclick="deleteDish('${id}')">X</button>`:''}</div></div>`;
+   if(data.status==='pending'){p.innerHTML+=html;pc++;} else {a.innerHTML+=html;ac++;}
   });
+  document.getElementById('pcount').innerText='('+pc+')'; document.getElementById('acount').innerText='('+ac+')';
+  if(pc==0) p.innerHTML='No pending'; if(ac==0) a.innerHTML='No approved';
+ });
 }
-window.approveDish=async(id)=>{ const {updateDoc, doc, db}=window.dbTools; await updateDoc(doc(db,'dishes',id), {status:'approved'}) }
-window.deleteDish=async(id)=>{ if(confirm('Delete?')){ const {deleteDoc, doc, db}=window.dbTools; await deleteDoc(doc(db,'dishes',id)) } }
+window.approveDish=async(id)=>{const{updateDoc,doc,db}=window.dbTools;await updateDoc(doc(db,'dishes',id),{status:'approved'})}
+window.deleteDish=async(id)=>{if(confirm('Delete?')){const{deleteDoc,doc,db}=window.dbTools;await deleteDoc(doc(db,'dishes',id))}}
 </script>
 </body>
 </html>
