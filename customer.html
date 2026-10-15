@@ -1,1 +1,177 @@
-<!DOCTYPE html><html lang="hi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Shri Bhog</title><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet"><style>*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}body{background:#fff8f0;padding-bottom:220px}.header{background:#b91c1c;color:#fff;padding:18px;text-align:center;position:sticky;top:0;z-index:10}.loginBox{background:#fff;margin:12px;padding:14px;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.08);border:1px solid #fee2e2}.menu{padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px}.card{background:#fff;border-radius:16px;padding:12px;box-shadow:0 4px 12px rgba(0,0,0,.1);border:1px solid #fee2e2}.card img{width:100%;height:115px;object-fit:cover;border-radius:12px}.card h3{margin:8px 0 4px;font-size:15px}.card p{color:#b91c1c;font-weight:700}.card button{background:#b91c1c;color:#fff;border:none;width:100%;padding:8px;border-radius:8px;margin-top:6px;font-weight:600}.cart{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:2px solid #b91c1c;padding:12px;max-height:82vh;overflow:auto;border-radius:20px 20px 0 0}.input{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:6px 0}.btn-main{background:#b91c1c;color:#fff;border:none;width:100%;padding:14px;border-radius:12px;font-weight:700;font-size:16px;margin-top:8px}.btn-loc{background:#fff;border:1.5px dashed #b91c1c;color:#b91c1c;width:100%;padding:10px;border-radius:10px;font-weight:600}</style></head><body><div class="header"><h1>🙏 Shri Bhog</h1><p style="font-size:13px">Shuddh • Satvik • Ghar Jaisa - UPI: rohitpnd23-6@okaxis <a href="admin.html" style="color:#fff;float:right;font-size:11px">Admin→</a></p></div><div class="loginBox" id="loginBox"><h4>👤 Customer Login</h4><input id="lName" class="input" placeholder="Naam *"><input id="lPhone" class="input" placeholder="Mobile 10 digit *" type="tel"><button class="btn-main" style="padding:10px" onclick="doLogin()">Login Karke Menu Dekho</button></div><div class="menu" id="menu"></div><div class="cart" id="cartBox"><h3>🛒 Order <span id="count" style="color:#b91c1c">(0)</span> <span id="userShow" style="font-size:12px"></span></h3><div id="cartItems" style="font-size:14px;color:#666">Pehle login karo</div><div id="orderForm" style="display:none;margin-top:12px"><textarea id="cAddr" class="input" placeholder="Pura Address *"></textarea><button class="btn-loc" onclick="getLocation()">📍 Live Location Lo</button><p id="locStatus" style="font-size:12px;color:green"></p><input id="cLatLng" class="input" readonly placeholder="Location auto" style="background:#f9f9f9;font-size:12px"><div style="background:#fff7ed;padding:10px;border-radius:10px;margin:8px 0;border:1px solid #fed7aa">Total: <b id="totalAmt">₹0</b></div><button class="btn-main" onclick="payAndOrder()">💳 UPI Pay & Order</button><button class="btn-main" style="background:#16a34a" onclick="placeOrderWithoutPay()">📦 Cash on Delivery</button></div></div><script>const firebaseConfig={apiKey:"AIzaSyDLWArfHEBERO2ehyhApk_zE0kWeM2tow8",authDomain:"shri-bhog.firebaseapp.com",projectId:"shri-bhog",storageBucket:"shri-bhog.firebasestorage.app",messagingSenderId:"246826560255",appId:"1:246826560255:web:d1d409cf6d9d0ea854faca"};firebase.initializeApp(firebaseConfig);const db=firebase.firestore();const UPI_ID="rohitpnd23-6@okaxis";let loggedUser=null,cart=[],customerLocation=null;const defaultItems=[{name:"Chole Bhature",price:120,img:"https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=400"},{name:"Rajma Chawal",price:100,img:"https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=400"},{name:"Veg Thali",price:180,img:"https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400"},{name:"Paneer Thali",price:220,img:"https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=400"},{name:"Dal Bafla",price:150,img:"https://images.unsplash.com/photo-1595755433128-d388cc074a4b?w=400"},{name:"Litti Chokha",price:130,img:"https://images.unsplash.com/photo-1505253758473-96b7015fcd40?w=400"}];function doLogin(){const n=document.getElementById('lName').value.trim(),p=document.getElementById('lPhone').value.trim();if(!n||p.length!=10){alert("Naam + 10 digit mobile");return;}loggedUser={name:n,phone:p};document.getElementById('userShow').innerText=" - "+n;document.getElementById('loginBox').style.display='none';renderMenu();}function renderMenu(){db.collection("menu").get().then(snap=>{let items=defaultItems;if(!snap.empty){items=[];snap.forEach(d=>items.push(d.data()));}window._items=items;document.getElementById('menu').innerHTML=items.map((it,i)=>`<div class="card"><img src="${it.img}"><h3>${it.name}</h3><p>₹${it.price}</p><button onclick="addToCart(${i})">+ Add</button></div>`).join('');}).catch(()=>{window._items=defaultItems;document.getElementById('menu').innerHTML=defaultItems.map((it,i)=>`<div class="card"><img src="${it.img}"><h3>${it.name}</h3><p>₹${it.price}</p><button onclick="addToCart(${i})">+ Add</button></div>`).join('');});}function addToCart(i){if(!loggedUser){alert("Login karo");return;}cart.push(window._items[i]);updateCart();}function updateCart(){document.getElementById('count').innerText=`(${cart.length})`;if(cart.length==0){document.getElementById('cartItems').innerHTML="Cart khali";document.getElementById('orderForm').style.display='none';return;}document.getElementById('orderForm').style.display='block';let t=0,h="";cart.forEach((c,idx)=>{t+=c.price;h+=`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px dashed #eee"><span>${c.name}</span><span>₹${c.price} <span onclick="removeItem(${idx})" style="color:red">✕</span></span></div>`;});document.getElementById('cartItems').innerHTML=h;document.getElementById('totalAmt').innerText="₹"+t;}function removeItem(i){cart.splice(i,1);updateCart();}function getLocation(){const s=document.getElementById('locStatus');s.innerText="Location...";navigator.geolocation.getCurrentPosition(p=>{customerLocation={lat:p.coords.latitude,lng:p.coords.longitude};document.getElementById('cLatLng').value=customerLocation.lat+","+customerLocation.lng;s.innerHTML=`✅ Mil gaya! <a href="https://maps.google.com/?q=${customerLocation.lat},${customerLocation.lng}" target="_blank">Map</a>`;},e=>s.innerText=e.message,{enableHighAccuracy:true});}function getTotal(){return cart.reduce((a,b)=>a+b.price,0);}async function saveOrder(m){const addr=document.getElementById('cAddr').value.trim();if(!addr||!loggedUser){alert("Address + Login");return false;}const d={customerName:loggedUser.name,phone:loggedUser.phone,address:addr,locationString:document.getElementById('cLatLng').value,location:customerLocation||null,items:cart,totalAmount:getTotal(),paymentMode:m,upiId:UPI_ID,status:m==="UPI"?"Paid-Initiated":"COD-Pending",createdAt:firebase.firestore.FieldValue.serverTimestamp(),mapsLink:customerLocation?`https://maps.google.com/?q=${customerLocation.lat},${customerLocation.lng}`:null};try{const r=await db.collection("orders").add(d);return r.id;}catch(e){alert(e.message);return false;}}async function payAndOrder(){const id=await saveOrder("UPI");if(!id)return;window.location.href=`upi://pay?pa=${UPI_ID}&pn=ShriBhog&am=${getTotal()}&cu=INR&tn=Order ${id}`;setTimeout(()=>{if(confirm("Payment ho gaya?")){alert("Thanks! ID:"+id);cart=[];updateCart();}},2500);}async function placeOrderWithoutPay(){const id=await saveOrder("COD");if(id){alert("Order Confirm! ID:"+id);cart=[];updateCart();}}renderMenu();</script></body></html>
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Shri Bhog - Shop | Delivery | Customer</title>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+body{background:#fff8f0}
+.header{background:#b91c1c;color:#fff;padding:16px;text-align:center;position:sticky;top:0;z-index:20}
+.roleBox{display:flex;gap:10px;padding:14px;flex-wrap:wrap}
+.roleCard{flex:1;min-width:100px;background:#fff;border:2px solid #fee2e2;border-radius:16px;padding:16px;text-align:center;cursor:pointer}
+.roleCard.active{border-color:#b91c1c;background:#fef2f2}
+.card{background:#fff;border-radius:14px;padding:12px;box-shadow:0 4px 12px rgba(0,0,0,.08);border:1px solid #fee2e2;margin-bottom:10px}
+.menu{padding:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.menu.card img{width:100%;height:110px;object-fit:cover;border-radius:10px}
+.input{width:100%;padding:11px;border:1px solid #ddd;border-radius:10px;margin:5px 0}
+.btn-main{background:#b91c1c;color:#fff;border:none;width:100%;padding:12px;border-radius:10px;font-weight:700;cursor:pointer}
+.btn{padding:7px 10px;border-radius:8px;border:none;font-weight:600;margin-right:6px;cursor:pointer}
+.cart{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:2px solid #b91c1c;padding:12px;max-height:80vh;overflow:auto;border-radius:20px 20px 0 0;display:none}
+</style>
+</head>
+<body>
+<div class="header">
+<h1>🙏 Shri Bhog</h1>
+<p style="font-size:11px">Shop + Delivery + Customer - 1 App | UPI: rohitpnd23-6@okaxis</p>
+</div>
+
+<!-- STEP 1: ROLE SELECT -->
+<div id="roleSelect">
+<h3 style="text-align:center;margin:14px 0 4px">Aap Kaun Ho?</h3>
+<div class="roleBox">
+<div class="roleCard" onclick="selectRole('customer')"><div style="font-size:36px">🍛</div><b>Customer</b><br><small style="color:#666">No Login Needed</small></div>
+<div class="roleCard" onclick="selectRole('delivery')"><div style="font-size:36px">🛵</div><b>Delivery</b><br><small style="color:#666">Signup/Login</small></div>
+<div class="roleCard" onclick="selectRole('shop')"><div style="font-size:36px">🏪</div><b>Shop</b><br><small style="color:#666">Signup/Login</small></div>
+</div>
+</div>
+
+<!-- STEP 2: LOGIN FOR SHOP/DELIVERY ONLY -->
+<div id="loginBox" style="display:none;padding:14px">
+<div class="card">
+<h3 id="loginTitle">Login</h3>
+<p style="font-size:11px;color:#666" id="loginSub">Pehli baar ho to same details se Signup ho jayega</p>
+<input id="lName" class="input" placeholder="Naam *">
+<input id="lPhone" class="input" placeholder="Mobile 10 digit *" type="tel">
+<input id="lPass" class="input" placeholder="Password (4 digit) *" type="password">
+<button class="btn-main" onclick="doLogin()">Signup / Login</button>
+<p style="font-size:11px;margin-top:8px"><a href="#" onclick="backToRole()" style="color:#b91c1c">← Back</a></p>
+<p id="loginErr" style="color:red;font-size:12px;margin-top:6px"></p>
+</div>
+</div>
+
+<!-- CUSTOMER APP - NO LOGIN -->
+<div id="customerApp" style="display:none">
+<div style="padding:8px 14px;display:flex;justify-content:space-between;font-size:11px">
+<span style="background:#fef2f2;color:#b91c1c;padding:4px 10px;border-radius:20px">Kolkata • No Login Required</span>
+<span><a href="#" onclick="backToRole()" style="color:#b91c1c">Change Role</a></span>
+</div>
+<div class="menu" id="menu"></div>
+<div class="cart" id="cartBox">
+<h3>🛒 Cart <span id="count" style="color:#b91c1c">(0)</span></h3>
+<div id="cartItems" style="font-size:14px;color:#666">Khali</div>
+<div id="orderForm" style="display:none;margin-top:10px">
+<input id="cName" class="input" placeholder="Aapka Naam *">
+<input id="cPhone" class="input" placeholder="Mobile * (10 digit)" type="tel">
+<textarea id="cAddr" class="input" placeholder="Pura Address *"></textarea>
+<button class="btn-main" style="background:#fff;border:1.5px dashed #b91c1c;color:#b91c1c" onclick="getLocation()">📍 Live Location Lo</button>
+<p id="locStatus" style="font-size:12px;color:green"></p>
+<input id="cLatLng" class="input" readonly style="background:#f9f9f9;font-size:11px">
+<p style="margin:8px 0">Total: <b id="totalAmt">₹0</b></p>
+<button class="btn-main" onclick="payAndOrder()">💳 UPI Pay</button>
+<button class="btn-main" style="background:#16a34a" onclick="placeOrderWithoutPay()">📦 COD Order</button>
+</div>
+</div>
+</div>
+
+<!-- DELIVERY APP -->
+<div id="deliveryApp" style="display:none;padding:14px">
+<div style="display:flex;justify-content:space-between"><h3>🛵 Delivery<br><small style="font-size:11px" id="delInfo"></small></h3><button class="btn" style="background:#111;color:#fff" onclick="backToRole()">Logout</button></div>
+<div id="deliveryOrders" style="margin-top:12px">Loading...</div>
+</div>
+
+<!-- SHOP APP -->
+<div id="shopApp" style="display:none;padding:14px">
+<div style="display:flex;justify-content:space-between"><h3>🏪 Shop Owner<br><small style="font-size:11px" id="shopInfo"></small></h3><button class="btn" style="background:#111;color:#fff" onclick="backToRole()">Logout</button></div>
+<div style="display:flex;gap:8px;margin:12px 0"><button class="btn-main" style="padding:8px;background:#16a34a" onclick="loadShopOrders()">Orders</button><button class="btn-main" style="padding:8px;background:#fff;border:1px solid #ddd;color:#333" onclick="document.getElementById('menuAdd').scrollIntoView()">+ Menu Add</button></div>
+<div id="shopOrders">Loading orders...</div>
+<hr style="margin:16px 0">
+<div class="card" id="menuAdd"><h3>➕ Menu Add Karo</h3><input id="mName" class="input" placeholder="Dish Name"><input id="mPrice" type="number" class="input" placeholder="Price"><input id="mImg" class="input" placeholder="Image URL (optional)"><button class="btn-main" onclick="addMenu()">Add Menu</button></div>
+</div>
+
+<script>
+const firebaseConfig={apiKey:"AIzaSyDLWArfHEBERO2ehyhApk_zE0kWeM2tow8",authDomain:"shri-bhog.firebaseapp.com",projectId:"shri-bhog",storageBucket:"shri-bhog.firebasestorage.app",messagingSenderId:"246826560255",appId:"1:246826560255:web:d1d409cf6d9d0ea854faca"};
+firebase.initializeApp(firebaseConfig);const db=firebase.firestore();
+const UPI_ID="rohitpnd23-6@okaxis";
+let selectedRole=null,loggedUser=null,cart=[],customerLocation=null;
+const defaultItems=[{name:"Chole Bhature",price:120,img:"https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=400"},{name:"Rajma Chawal",price:100,img:"https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=400"},{name:"Veg Thali",price:180,img:"https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400"},{name:"Paneer Thali",price:220,img:"https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=400"}];
+
+function selectRole(r){
+selectedRole=r;
+if(r==='customer'){
+roleSelect.style.display='none';
+customerApp.style.display='block';
+cartBox.style.display='block';
+renderMenu();
+return;
+}
+roleSelect.style.display='none';
+loginBox.style.display='block';
+loginTitle.innerText=r==='shop'?'🏪 Shop Signup/Login':'🛵 Delivery Boy Signup/Login';
+loginSub.innerText=r==='shop'?'Shop owner ka account banega':'Delivery boy ka account banega';
+}
+function backToRole(){
+roleSelect.style.display='block';
+loginBox.style.display='none';
+customerApp.style.display='none';
+deliveryApp.style.display='none';
+shopApp.style.display='none';
+cartBox.style.display='none';
+selectedRole=null;loggedUser=null;
+}
+
+async function doLogin(){
+const n=lName.value.trim(),p=lPhone.value.trim(),pass=lPass.value.trim();
+if(!n||p.length!=10||pass.length<4){loginErr.innerText="Naam + 10 digit mobile + 4 digit password bharo";return;}
+const userRef=db.collection("users").doc(p);
+const doc=await userRef.get();
+if(doc.exists){
+if(doc.data().password!==pass){loginErr.innerText="Password galat hai";return;}
+if(doc.data().role!==selectedRole){loginErr.innerText="Ye number "+doc.data().role+" ke roop me registered hai";return;}
+loggedUser=doc.data();
+}else{
+await userRef.set({name:n,phone:p,password:pass,role:selectedRole,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+loggedUser={name:n,phone:p,password:pass,role:selectedRole};
+}
+loginBox.style.display='none';
+if(selectedRole==='shop'){
+shopApp.style.display='block';
+shopInfo.innerText=n+" - "+p;
+loadShopOrders();
+}else{
+deliveryApp.style.display='block';
+delInfo.innerText=n+" - "+p;
+loadDeliveryOrders();
+}
+}
+
+function renderMenu(){
+window._items=defaultItems;
+menu.innerHTML=defaultItems.map((it,i)=>`<div class="card"><img src="${it.img}"><h3>${it.name}</h3><p style="color:#b91c1c;font-weight:700">₹${it.price}</p><button onclick="addToCart(${i})" style="background:#b91c1c;color:#fff;border:none;width:100%;padding:8px;border-radius:8px;margin-top:6px">+ Add</button></div>`).join('');
+db.collection("menu").get().then(s=>{if(!s.empty){let items=[];s.forEach(d=>items.push(d.data()));window._items=items;menu.innerHTML=items.map((it,i)=>`<div class="card"><img src="${it.img}"><h3>${it.name}</h3><p style="color:#b91c1c;font-weight:700">₹${it.price}</p><button onclick="addToCart(${i})" style="background:#b91c1c;color:#fff;border:none;width:100%;padding:8px;border-radius:8px;margin-top:6px">+ Add</button></div>`).join('');}});
+updateCart();
+}
+function addToCart(i){cart.push(window._items[i]);cartBox.style.display='block';updateCart();}
+function updateCart(){count.innerText=`(${cart.length})`;if(cart.length==0){cartItems.innerHTML="Cart khali";orderForm.style.display='none';return;}orderForm.style.display='block';let t=0,h="";cart.forEach((c,idx)=>{t+=c.price;h+=`<div style="display:flex;justify-content:space-between;padding:3px 0"><span>${c.name}</span><span>₹${c.price} <span onclick="cart.splice(${idx},1);updateCart()" style="color:red;cursor:pointer">✕</span></span></div>`;});cartItems.innerHTML=h;totalAmt.innerText="₹"+t;}
+function getLocation(){locStatus.innerText="Location...";navigator.geolocation.getCurrentPosition(p=>{customerLocation={lat:p.coords.latitude,lng:p.coords.longitude};cLatLng.value=customerLocation.lat+","+customerLocation.lng;locStatus.innerHTML=`✅ Mil gaya <a href="https://maps.google.com/?q=${customerLocation.lat},${customerLocation.lng}" target="_blank">Map</a>`;},e=>locStatus.innerText=e.message,{enableHighAccuracy:true});}
+function getTotal(){return cart.reduce((a,b)=>a+b.price,0);}
+async function saveOrder(m){
+const name=cName.value.trim(),phone=cPhone.value.trim(),addr=cAddr.value.trim();
+if(!name||phone.length!=10||!addr){alert("Naam + 10 digit mobile + Address bharo");return false;}
+const d={customerName:name,phone:phone,address:addr,locationString:cLatLng.value,location:customerLocation||null,items:cart,totalAmount:getTotal(),paymentMode:m,status:m==="UPI"?"Paid-Initiated":"COD-Pending",createdAt:firebase.firestore.FieldValue.serverTimestamp(),mapsLink:customerLocation?`https://maps.google.com/?q=${customerLocation.lat},${customerLocation.lng}`:null,assignedTo:null};
+const r=await db.collection("orders").add(d);return r.id;
+}
+async function payAndOrder(){const id=await saveOrder("UPI");if(!id)return;window.location.href=`upi://pay?pa=${UPI_ID}&pn=ShriBhog&am=${getTotal()}&cu=INR&tn=Order ${id}`;setTimeout(()=>{if(confirm("Payment ho gaya?")){alert("ID:"+id);cart=[];updateCart();}},2500);}
+async function placeOrderWithoutPay(){const id=await saveOrder("COD");if(id){alert("Order Confirm ID:"+id);cart=[];updateCart();cName.value="";cPhone.value="";cAddr.value="";}}
+
+function loadShopOrders(){db.collection("orders").orderBy("createdAt","desc").onSnapshot(s=>{let h="";if(s.empty){shopOrders.innerHTML="<div class='card'>Koi order nahi</div>";return;}s.forEach(doc=>{const o=doc.data();h+=`<div class="card"><b>${o.customerName} - ${o.phone}</b> ₹${o.totalAmount} ${o.status}<br><small>📍 ${o.address}</small><br>${o.mapsLink?`<a href="${o.mapsLink}" target="_blank">🗺️ Map</a> `:''}<small>${o.items.map(i=>i.name).join(', ')}</small><br><div style="margin-top:6px"><button class="btn" style="background:#16a34a;color:#fff" onclick="updStatus('${doc.id}','Accepted')">Accept</button><button class="btn" style="background:#2563eb;color:#fff" onclick="updStatus('${doc.id}','On the Way')">On Way</button><button class="btn" style="background:#111;color:#fff" onclick="updStatus('${doc.id}','Delivered')">Delivered</button><button class="btn" style="background:#ef4444;color:#fff" onclick="updStatus('${doc.id}','Cancelled')">Cancel</button></div>${o.assignedTo?`<small>Assigned: ${o.assignedTo}</small>`:''}</div>`;});shopOrders.innerHTML=h;});}
+function loadDeliveryOrders(){db.collection("orders").orderBy("createdAt","desc").onSnapshot(s=>{let h="";if(s.empty){deliveryOrders.innerHTML="<div class='card'>Koi order nahi</div>";return;}s.forEach(doc=>{const o=doc.data();h+=`<div class="card"><b>${o.customerName} - ${o.phone}</b> ₹${o.totalAmount}<br><small>📍 ${o.address}</small><br>${o.mapsLink?`<a href="${o.mapsLink}" target="_blank" style="color:#b91c1c">🗺️ Map Dekho</a><br>`:''}<small>${o.items.map(i=>i.name).join(', ')} | ${o.status}</small><br><div style="margin-top:6px">${!o.assignedTo?`<button class="btn" style="background:#16a34a;color:#fff" onclick="assignOrder('${doc.id}')">✅ Accept Order</button>`:o.assignedTo===loggedUser.phone?`<button class="btn" style="background:#2563eb;color:#fff" onclick="updStatus('${doc.id}','On the Way')">On Way</button><button class="btn" style="background:#16a34a;color:#fff" onclick="updStatus('${doc.id}','Delivered')">Delivered</button>`:`<small>Assigned: ${o.assignedTo}</small>`}<button class="btn" style="background:#111;color:#fff" onclick="window.open('tel:${o.phone}')">📞 Call</button></div></div>`;});deliveryOrders.innerHTML=h;});}
+function assignOrder(id){db.collection("orders").doc(id).update({assignedTo:loggedUser.phone,status:"Accepted by "+loggedUser.name});}
+function updStatus(id,st){db.collection("orders").doc(id).update({status:st});}
+function addMenu(){const n=mName.value.trim(),p=parseInt(mPrice.value),im=mImg.value.trim();if(!n||!p){alert("Naam price");return;}db.collection("menu").add({name:n,price:p,img:im||"https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400",createdAt:firebase.firestore.FieldValue.serverTimestamp()}).then(()=>{alert("Added");mName.value="";mPrice.value="";});}
+</script>
+</body>
+</html>
