@@ -3,104 +3,131 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ShriBhog</title>
+<title>ShriBhog - Reseller Demo</title>
 <style>
-body{font-family:sans-serif;background:#fff7ed;margin:0}
-header{background:#ff6b00;color:white;padding:15px;display:flex;justify-content:space-between;align-items:center}
-.btn{padding:8px 14px;border:none;border-radius:8px;cursor:pointer}
-.tabs{display:flex;gap:8px;padding:10px}
-.tab{padding:10px 15px;background:#ffe4cc;border-radius:20px;cursor:pointer}
-.tab.active{background:#ff6b00;color:white}
-.card{background:white;margin:10px;padding:12px;border-radius:12px;box-shadow:0 2px 8px #0001;display:flex;gap:12px}
-.card img{width:80px;height:80px;object-fit:cover;border-radius:10px}
-#addBox{background:white;margin:10px;padding:15px;border-radius:12px;display:none}
-input{width:100%;padding:10px;margin:6px 0;border:1px solid #ccc;border-radius:8px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:system-ui;background:#fff}
+.header{background:#111827;color:white;padding:18px 15px}
+.header h1{font-size:26px;line-height:1.3;font-weight:800}
+.tabs{background:#1f2937;display:flex;gap:8px;padding:12px 10px;overflow-x:auto;white-space:nowrap}
+.tab-pill{padding:10px 16px;border-radius:25px;background:#374151;color:#cbd5e1;border:none;font-size:14px;font-weight:600;cursor:pointer}
+.tab-pill.active{background:#f97316;color:white}
+.sub-header{padding:14px 12px}
+.sub-header h2{color:#b91c1c;font-size:20px}
+.sub-header h2 span{color:#7c2d12;font-size:16px}
+.select-box{background:#fef9c3;border:2px solid #facc15;border-radius:12px;padding:12px;margin:0 12px;display:flex;justify-content:space-between;align-items:center;font-weight:700}
+.orange-bg{background:#f97316;padding:14px 10px;min-height:100vh}
+.shop-title{color:white;font-size:20px;font-weight:800;margin-bottom:12px}
+.add-card{background:#fffbeb;border:2px dashed #fbbf24;border-radius:18px;padding:14px}
+.add-card h3{font-size:18px;margin-bottom:4px}
+.add-card p{font-size:13px;color:#57534e;margin-bottom:12px;line-height:1.4}
+.inp{width:100%;padding:13px;border:2px solid #fde68a;border-radius:12px;margin-bottom:10px;background:white;font-size:14px}
+.btn-green{width:100%;background:#16a34a;color:white;padding:14px;border:none;border-radius:12px;font-weight:700;font-size:16px;cursor:pointer}
+.status-title{color:white;font-weight:700;margin:18px 0 10px 2px}
+.table-card{background:white;border-radius:14px;overflow:hidden}
+.table-head{display:flex;background:#f8fafc;padding:12px 8px;font-weight:800;font-size:13px;border-bottom:1px solid #e5e7eb}
+.col-photo{flex:0.8}.col-name{flex:1.5}.col-rate{flex:0.7;text-align:center}
+.row{display:flex;align-items:center;padding:10px 8px;border-bottom:1px solid #f1f5f9}
+.row img{width:50px;height:50px;border-radius:8px;object-fit:cover}
+.badge{font-size:11px;padding:3px 7px;border-radius:10px;margin-top:4px;display:inline-block}
+.pending{background:#fef3c7;color:#92400e}
+.approved{background:#dcfce7;color:#166534}
+.btn-small{padding:6px 10px;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;margin:2px}
+.btn-approve{background:#22c55e;color:white}
+.btn-reject{background:#ef4444;color:white}
 </style>
 </head>
 <body>
-<header>
-<div><b>ShriBhog</b></div>
-<div>
-<button class="btn" style="background:#fff;color:#ff6b00" onclick="if(confirm('Sab data delete karna hai?')){localStorage.clear();location.reload()}">🗑️ Reset</button>
-</div>
-</header>
-
+<div class="header"><h1>ShriBhog - Reseller<br>Demo</h1></div>
 <div class="tabs">
-<div class="tab active" onclick="switchRole('customer',this)">Customer</div>
-<div class="tab" onclick="switchRole('owner',this)">Shop Owner</div>
-<div class="tab" onclick="switchRole('admin',this)">Admin Rohit</div>
+<button class="tab-pill" id="t-customer" onclick="switchRole('customer')">🛒 Customer</button>
+<button class="tab-pill active" id="t-owner" onclick="switchRole('owner')">🏪 Shop Owner</button>
+<button class="tab-pill" id="t-delivery" onclick="switchRole('delivery')">🛵 Delivery Boy</button>
+<button class="tab-pill" id="t-admin" onclick="switchRole('admin')">👑 Admin</button>
 </div>
-
-<div id="addBox">
-<h3>Dish Add Karo</h3>
-<input id="dName" placeholder="Dish ka naam - ex: Panir Masala">
-<input id="dPrice" type="number" placeholder="Price - ex: 100">
-<input id="dImg" type="file" accept="image/*">
-<button class="btn" style="background:#ff6b00;color:white;width:100%;margin-top:8px" onclick="addDish()">Add Dish</button>
+<div class="sub-header"><h2>श्री ShriBhog <span>- Jora Mandir - Rohit</span></h2></div>
+<div class="select-box"><span>Jora Mandir - Rohit (Tumhara)</span><span>▼</span></div>
+<div class="orange-bg">
+<div class="shop-title">🏪 Shop Panel - Jora Mandir - Rohit</div>
+<div id="ownerPanel">
+<div class="add-card">
+<h3>🍛 Nayi Thali / Dish Add Karo</h3>
+<p>Aap photo aur rate dalo, Admin Rohit approve karega tab customer ko dikhega</p>
+<input type="file" id="fImg" accept="image/*" class="inp">
+<input type="text" id="fName" placeholder="Dish naam - Veg Thali Special" class="inp">
+<input type="number" id="fRate" placeholder="Rate - 99" class="inp">
+<button class="btn-green" onclick="addDish()">✅ Admin ko Approval ke liye bhejo</button>
 </div>
-
-<div id="list"></div>
-
+<div class="status-title">📋 Aapke Dishes ka Status</div>
+<div class="table-card" id="ownerList"></div>
+</div>
+<div id="otherPanel" style="display:none"><div class="table-card" id="otherList"></div></div>
+<div style="text-align:center;padding:20px"><button onclick="if(confirm('Reset?')){localStorage.clear();location.href=location.pathname+'?clear=1'}" style="background:#fff;color:#f97316;border:none;padding:8px 14px;border-radius:20px;font-weight:700">🗑️ Data Reset (3 dish fix)</button></div>
+</div>
 <script>
-// Auto clear if?clear in url
-if(location.search.includes('clear')){localStorage.clear();alert('Data clear ho gaya!');location.href=location.pathname}
-
-let dishes = JSON.parse(localStorage.getItem('shri_dishes')||'[]');
-let role = 'customer';
-
-function save(){localStorage.setItem('shri_dishes',JSON.stringify(dishes))}
-
-function switchRole(r,el){
+if(location.search.includes('clear')){localStorage.clear();history.replaceState(null,'',location.pathname)}
+let dishes = JSON.parse(localStorage.getItem('shri_dishes_v2')||'[]');
+let role = 'owner';
+function save(){ localStorage.setItem('shri_dishes_v2', JSON.stringify(dishes)) }
+function switchRole(r){
 role=r;
-document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-el.classList.add('active');
-document.getElementById('addBox').style.display = (r==='owner')?'block':'none';
+document.querySelectorAll('.tab-pill').forEach(b=>b.classList.remove('active'));
+document.getElementById('t-'+(r==='owner'?'owner':r==='customer'?'customer':r==='admin'?'admin':'delivery')).classList.add('active');
+document.getElementById('ownerPanel').style.display = (r==='owner')?'block':'none';
+document.getElementById('otherPanel').style.display = (r==='owner')?'none':'block';
 render();
 }
-
 function addDish(){
-let name=document.getElementById('dName').value.trim();
-let price=document.getElementById('dPrice').value.trim();
-let file=document.getElementById('dImg').files[0];
-if(!name||!price){alert('Naam aur Price likho');return;}
-if(!file){alert('Photo chuno');return;}
-
+let name=document.getElementById('fName').value.trim();
+let rate=document.getElementById('fRate').value.trim();
+let file=document.getElementById('fImg').files[0];
+if(!name||!rate){alert('Naam aur Rate bharo');return}
+if(!file){alert('Photo chuno');return}
 let reader=new FileReader();
 reader.onload=function(e){
-// Compress image to small size
 let img=new Image();
 img.onload=function(){
 let canvas=document.createElement('canvas');
-let max=300;
-let w=img.width,h=img.height;
+let max=400;let w=img.width,h=img.height;
 if(w>max||h>max){if(w>h){h=h*max/w;w=max}else{w=w*max/h;h=max}}
 canvas.width=w;canvas.height=h;
 canvas.getContext('2d').drawImage(img,0,0,w,h);
 let small=canvas.toDataURL('image/jpeg',0.6);
-dishes.push({id:Date.now(),name,price,img:small,status:'pending'});
-save();render();
-document.getElementById('dName').value='';document.getElementById('dPrice').value='';document.getElementById('dImg').value='';
-alert('Add ho gaya! Admin se Approve karwao');
-}
+dishes.push({id:Date.now(),name,rate,img:small,status:'pending'});
+save();
+document.getElementById('fName').value='';document.getElementById('fRate').value='';document.getElementById('fImg').value='';
+render();alert('Bhej diya! Ab Admin me jaake Approve karo');
+};
 img.src=e.target.result;
-}
+};
 reader.readAsDataURL(file);
 }
-
 function approve(id){let d=dishes.find(x=>x.id===id);if(d){d.status='approved';save();render()}}
-function reject(id){dishes=dishes.filter(x=>x.id!==id);save();render()}
-
+function removeDish(id){if(confirm('Delete?')){dishes=dishes.filter(x=>x.id!==id);save();render()}}
 function render(){
-let div=document.getElementById('list');
-div.innerHTML='';
-let show = role==='customer'? dishes.filter(d=>d.status==='approved') : dishes;
-if(show.length===0){div.innerHTML='<p style="text-align:center;padding:20px">Koi dish nahi hai</p>';return;}
-show.forEach(d=>{
-let action='';
-if(role==='admin'&&d.status==='pending'){action=`<div style="margin-top:6px"><button class="btn" style="background:#22c55e;color:white" onclick="approve(${d.id})">✅ Approve</button> <button class="btn" style="background:#ef4444;color:white" onclick="reject(${d.id})">❌ Reject</button></div>`}
-if(role==='owner'){action=`<div style="margin-top:6px;font-size:12px;color:${d.status==='approved'?'green':'orange'}">Status: ${d.status}</div>`}
-div.innerHTML+=`<div class="card"><img src="${d.img}"><div><b>${d.name}</b><br>₹${d.price}${action}</div></div>`;
-})
+if(role==='owner'){
+let box=document.getElementById('ownerList');
+let html='<div class="table-head"><div class="col-photo">PHOTO</div><div class="col-name">NAME</div><div class="col-rate">RATE</div></div>';
+if(dishes.length===0) html+='<div style="padding:20px;text-align:center;color:#888">Koi dish nahi</div>';
+dishes.forEach(d=>{
+html+=`<div class="row"><div class="col-photo"><img src="${d.img}"></div><div class="col-name">${d.name}<br><span class="badge ${d.status}">${d.status}</span></div><div class="col-rate">₹${d.rate}<br><button class="btn-small" style="background:#eee" onclick="removeDish(${d.id})">🗑️</button></div></div>`;
+});
+box.innerHTML=html;
+} else {
+let box=document.getElementById('otherList');
+let list = role==='customer'? dishes.filter(d=>d.status==='approved') : dishes;
+let title = role==='customer'?'Customer - Approved Dishes': role==='admin'?'Admin Panel - Approve Karo':'Delivery Boy';
+let html=`<div style="padding:12px;font-weight:800;background:#fffbeb">${title} (${list.length})</div>`;
+html+='<div class="table-head"><div class="col-photo">PHOTO</div><div class="col-name">NAME</div><div class="col-rate">RATE</div></div>';
+if(list.length===0) html+='<div style="padding:20px;text-align:center;color:#888">Koi dish nahi. Shop Owner se add karo aur Admin se approve karo</div>';
+list.forEach(d=>{
+let btns='';
+if(role==='admin'&&d.status==='pending'){btns=`<br><button class="btn-small btn-approve" onclick="approve(${d.id})">✅ Approve</button><br><button class="btn-small btn-reject" onclick="removeDish(${d.id})">Reject</button>`}
+if(role==='admin'&&d.status==='approved'){btns=`<br><span class="badge approved">approved</span>`}
+html+=`<div class="row"><div class="col-photo"><img src="${d.img}"></div><div class="col-name">${d.name}${btns}</div><div class="col-rate">₹${d.rate}</div></div>`;
+});
+box.innerHTML=html;
+}
 }
 render();
 </script>
