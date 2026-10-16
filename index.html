@@ -1,213 +1,108 @@
+<!DOCTYPE html>
 <html lang="hi">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
-<title>ShriBhog - Owner Upload + Admin Approval</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700;800&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShriBhog</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
-body{background:#fdf6ea}
-.top-black{background:#0f0f0f;color:white;padding:14px 5%;display:flex;justify-content:space-between;position:sticky;top:0;z-index:50}
-.logo-bar{background:white;padding:12px 5%;box-shadow:0 2px 10px rgba(0,0,0,0.05);position:sticky;top:48px;z-index:40}
-.logo{color:#b91c1c;font-weight:800;font-size:21px}
-.logo span{color:#7c2d12;font-size:14px}
-.shop-select{width:100%;margin-top:10px;padding:12px;border-radius:12px;border:2px solid #facc15;background:#fef9c3;font-weight:700}
-.hero{background:#fdf6ea;padding:15px 5% 10px}
-.badge-red{background:#b91c1c;color:white;padding:7px 16px;border-radius:20px;font-size:13px;display:inline-block}
-.hero h2{font-size:28px;color:#7c2d12;margin-top:12px;font-weight:800}
-.hero h2 span{color:#b91c1c}
-.upi-bar{background:#eef9f0;padding:8px 12px;border-radius:8px;display:inline-block;font-size:11px;border:1px solid #bbf7d0}
-.card-order{background:white;border-radius:20px;padding:16px;box-shadow:0 8px 25px rgba(0,0,0,0.06);margin:10px 5%}
-.input{width:100%;padding:12px;border-radius:12px;border:1.5px solid #fde68a;background:#fefce8;margin:6px 0;font-size:13px}
-.btn-loc{width:100%;padding:12px;border-radius:12px;border:2px solid #facc15;background:#fef9c3;font-weight:700;color:#92400e;margin:8px 0;cursor:pointer}
-.btn-pay{background:#16a34a;color:white;width:100%;padding:12px;border-radius:12px;border:none;font-weight:700;margin:6px 0;cursor:pointer}
-.btn-order-main{background:#b91c1c;color:white;width:100%;padding:14px;border-radius:12px;border:none;font-weight:700;cursor:pointer}
-.menu{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px 5% 30px}
-.dish{background:white;border-radius:14px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.05);border:1px solid #fef3c7;display:flex;flex-direction:column}
-.dish img{width:100%;height:125px;object-fit:contain;background:#ffffff;padding:6px;border-bottom:1px solid #fff7ed}
-.dish-info{padding:8px}
-.qty-btn{width:26px;height:26px;border-radius:50%;border:1.5px solid #facc15;background:white;font-weight:800;cursor:pointer}
-.role-bar{background:#1f2937;padding:8px 5%;display:flex;gap:6px;overflow:auto;position:sticky;top:0;z-index:60}
-.role-btn{padding:6px 12px;border-radius:20px;border:none;font-size:11px;font-weight:700;white-space:nowrap;cursor:pointer}
-.active{background:#f97316;color:white}.inactive{background:#374151;color:#ccc}
-.table-wrap{background:white;border-radius:12px;overflow:auto;margin:10px 0}
-table{width:100%;border-collapse:collapse;font-size:11px;min-width:600px}th{background:#f8fafc;padding:8px}td{padding:8px;border-top:1px solid #f1f5f9}
-.view{display:none}.view.active{display:block}
-.pending-badge{background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:12px;font-size:10px}
-.approved-badge{background:#dcfce7;color:#166534;padding:2px 8px;border-radius:12px;font-size:10px}
+body{font-family:sans-serif;background:#fff7ed;margin:0}
+header{background:#ff6b00;color:white;padding:15px;display:flex;justify-content:space-between;align-items:center}
+.btn{padding:8px 14px;border:none;border-radius:8px;cursor:pointer}
+.tabs{display:flex;gap:8px;padding:10px}
+.tab{padding:10px 15px;background:#ffe4cc;border-radius:20px;cursor:pointer}
+.tab.active{background:#ff6b00;color:white}
+.card{background:white;margin:10px;padding:12px;border-radius:12px;box-shadow:0 2px 8px #0001;display:flex;gap:12px}
+.card img{width:80px;height:80px;object-fit:cover;border-radius:10px}
+#addBox{background:white;margin:10px;padding:15px;border-radius:12px;display:none}
+input{width:100%;padding:10px;margin:6px 0;border:1px solid #ccc;border-radius:8px}
 </style>
 </head>
 <body>
-
-<div class="top-black"><h1>ShriBhog - Reseller Demo</h1><span>⋮</span></div>
-
-<div class="role-bar">
-<button class="role-btn active" onclick="switchRole('customer')">🛒 Customer</button>
-<button class="role-btn inactive" onclick="switchRole('shop')">🏪 Shop Owner</button>
-<button class="role-btn inactive" onclick="switchRole('delivery')">🛵 Delivery Boy</button>
-<button class="role-btn inactive" onclick="switchRole('admin')">👑 Admin Rohit</button>
-<span style="margin-left:auto;color:#facc15;font-size:10px">APPROVAL SYSTEM ON</span>
+<header>
+<div><b>ShriBhog</b></div>
+<div>
+<button class="btn" style="background:#fff;color:#ff6b00" onclick="if(confirm('Sab data delete karna hai?')){localStorage.clear();location.reload()}">🗑️ Reset</button>
 </div>
+</header>
 
-<div class="logo-bar">
-<div class="logo">श्री ShriBhog <span>- Jora Mandir - Rohit</span></div>
-<select id="shopSwitcher" class="shop-select" onchange="changeShop()">
-<option value="jora">Jora Mandir - Rohit (Tumhara)</option>
-<option value="baidyabati">Baidyabati Biryani House</option>
-<option value="rishra">Rishra Tiffin Center</option>
-</select>
+<div class="tabs">
+<div class="tab active" onclick="switchRole('customer',this)">Customer</div>
+<div class="tab" onclick="switchRole('owner',this)">Shop Owner</div>
+<div class="tab" onclick="switchRole('admin',this)">Admin Rohit</div>
 </div>
 
-<div id="customerView" class="view active">
-<div class="hero">
-<div class="badge-red">🔥 Jora Mandir Ka Famous</div>
-<h2>Ghar Ka Swad,<br><span>Maa Ke Haath Jaisa</span></h2>
-<p>Jora Mandir me sabse sasta tiffin - 30 min delivery</p>
-<div class="upi-bar">💳 UPI: <b>rohitpnd23-6@okaxis</b> | 📞 8013640306</div>
-</div>
-<div class="card-order">
-<h3>🛒 Aapka Order - <span id="custShopName">Jora Mandir</span></h3>
-<div style="font-size:12px;color:#999" id="cartItems">Niche se select kijiye</div>
-<div style="border-top:1px dashed #facc15;margin:12px 0"></div>
-<div style="display:flex;justify-content:space-between;font-weight:800"><span>Total</span><span id="total">₹0</span></div>
-<div style="font-size:10px;color:#888;background:#f8fafc;padding:6px;border-radius:6px;margin:6px 0">Comm: <span id="commPreview">₹0</span> | Shop Earn: <b id="shopEarnPreview">₹0</b></div>
-<input id="cName" class="input" placeholder="Aapka Naam"><input id="cPhone" class="input" placeholder="Mobile"><textarea id="cAddress" class="input" placeholder="Address" rows="2"></textarea>
-<button class="btn-loc" onclick="getLocation()">📍 Current Location</button><p id="locStatus" style="font-size:11px;text-align:center"></p><input type="hidden" id="cMapLink">
-<div style="background:#f0fdf4;border:1.5px solid #16a34a;border-radius:12px;padding:10px">
-<button class="btn-pay" onclick="payNow()">📲 ₹<span id="payAmount">0</span> Pay - rohitpnd23-6@okaxis pe</button>
-<img id="qrImg" style="width:130px;margin:8px auto;display:none"><input id="txnId" class="input" placeholder="Txn ID likho" style="border-color:#16a34a">
-</div>
-<button class="btn-order-main" onclick="placeOrder()">Order Confirm 🙏</button><p id="orderMsg" style="font-size:11px;text-align:center;margin-top:6px"></p>
-</div>
-<div class="menu" id="menu"></div>
+<div id="addBox">
+<h3>Dish Add Karo</h3>
+<input id="dName" placeholder="Dish ka naam - ex: Panir Masala">
+<input id="dPrice" type="number" placeholder="Price - ex: 100">
+<input id="dImg" type="file" accept="image/*">
+<button class="btn" style="background:#ff6b00;color:white;width:100%;margin-top:8px" onclick="addDish()">Add Dish</button>
 </div>
 
-<div id="shopView" class="view" style="padding:10px 5%">
-<h3>🏪 Shop Panel - <span id="shopOwnerName">Jora Mandir</span></h3>
-<div class="card-order" style="margin:12px 0;border:2px dashed #facc15;background:#fefce8">
-<h3 style="font-size:14px">🍛 Nayi Thali / Dish Add Karo</h3>
-<p style="font-size:11px;color:#666;margin:4px 0">Aap photo aur rate dalo, Admin Rohit approve karega tab customer ko dikhega</p>
-<input type="file" id="dishPhoto" accept="image/*" class="input" style="background:white">
-<input id="dishName" placeholder="Dish naam - Veg Thali Special" class="input">
-<input id="dishPrice" type="number" placeholder="Rate - 99" class="input">
-<button onclick="ownerAddDish()" style="background:#16a34a;color:white;width:100%;padding:12px;border:none;border-radius:12px;font-weight:700;margin-top:6px;cursor:pointer">✅ Admin ko Approval ke liye bhejo</button>
-<p id="dishMsg" style="font-size:11px;text-align:center;margin-top:6px"></p>
-</div>
-<h4 style="margin:12px 0;font-size:14px">📋 Aapke Dishes ka Status</h4>
-<div class="table-wrap"><table><thead><tr><th>PHOTO</th><th>NAME</th><th>RATE</th><th>STATUS</th><th>ACTION</th></tr></thead><tbody id="ownerDishTable"></tbody></table></div>
-<h4 style="margin:15px 0 8px;font-size:14px">📦 Aapke Orders (Sirf Aapka)</h4>
-<div class="table-wrap"><table><thead><tr><th>TIME</th><th>CUST</th><th>ITEMS</th><th>TOTAL</th><th>SHOP EARN</th><th>SETTLE</th></tr></thead><tbody id="ownerOrderTable"></tbody></table></div>
-</div>
-
-<div id="deliveryView" class="view" style="padding:10px 5%">
-<div style="background:#1f2937;color:white;padding:12px;border-radius:12px;display:flex;justify-content:space-between"><div>🛵 <b id="boyName">Raju</b><br><span style="font-size:11px">Earn: <b id="boyEarn">₹0</b></span></div><select id="boySwitcher" onchange="changeBoy()"><option value="0">Raju</option><option value="1">Amit</option></select></div>
-<div id="deliveryOrders" style="margin-top:10px"></div>
-</div>
-
-<div id="adminView" class="view" style="padding:10px 5%">
-<h3>👑 Admin - Approval + Settlement</h3>
-<div style="background:#fef3c7;border:1.5px solid #facc15;border-radius:12px;padding:12px;margin:12px 0">
-<h4 style="font-size:14px">⏳ Pending Dishes - Approval Ke Liye</h4>
-<p style="font-size:11px;color:#666">Shop owner ne jo naya dala hai, yaha se approve karo tab customer ko dikhega</p>
-<div class="table-wrap"><table><thead><tr><th>SHOP</th><th>PHOTO</th><th>NAME</th><th>RATE</th><th>ACTION</th></tr></thead><tbody id="adminApprovalTable"></tbody></table></div>
-</div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0">
-<div style="background:white;padding:10px;border-radius:12px;border-left:4px solid #f97316"><p style="font-size:10px">Total IN (UPI pe)</p><h3 id="adminTotalIn">₹0</h3></div>
-<div style="background:white;padding:10px;border-radius:12px;border-left:4px solid #16a34a"><p style="font-size:10px">Comm 10%</p><h3 id="adminComm">₹0</h3></div>
-<div style="background:white;padding:10px;border-radius:12px;border-left:4px solid #eab308"><p style="font-size:10px">Delivery Dena</p><h3 id="adminDelPay">₹0</h3></div>
-<div style="background:white;padding:10px;border-radius:12px;border-left:4px solid #dc2626"><p style="font-size:10px">Shop ko Dena</p><h3 id="adminShopPay">₹0</h3></div>
-</div>
-<div class="table-wrap"><table><thead><tr><th>SHOP</th><th>IN</th><th>COMM</th><th>SHOP DENA</th><th>ACTION</th></tr></thead><tbody id="adminSettleTable"></tbody></table></div>
-</div>
+<div id="list"></div>
 
 <script>
-const ADMIN_UPI="rohitpnd23-6@okaxis";
-const shops={jora:{name:"Jora Mandir - Rohit",phone:"8013640306",menu:[{n:"Veg Thali",p:99,i:"https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=400",status:"APPROVED"},{n:"Biryani",p:159,i:"https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a?w=400",status:"APPROVED"}]},baidyabati:{name:"Baidyabati Biryani House",phone:"9000011111",menu:[{n:"Chicken Biryani",p:180,i:"https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a?w=400",status:"APPROVED"}]},rishra:{name:"Rishra Tiffin Center",phone:"9000022222",menu:[{n:"Roti Sabzi",p:79,i:"https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=400",status:"APPROVED"}]}};
-let pendingDishes=[];let currentShop='jora',cart=[],total=0;
-let deliveryBoys=[{name:"Raju",earn:0},{name:"Amit",earn:0}];let currentBoy=0;
-let allOrders=[{id:101,time:"10:32 AM",shop:"jora",shopName:"Jora Mandir - Rohit",cust:"Amit",amt:198,comm:19,del:20,shopEarn:159,status:"PAID",settle:"PENDING",items:"Veg Thali x2"}];
+// Auto clear if?clear in url
+if(location.search.includes('clear')){localStorage.clear();alert('Data clear ho gaya!');location.href=location.pathname}
 
-function switchRole(r){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.querySelectorAll('.role-btn').forEach(b=>{b.classList.remove('active');b.classList.add('inactive')});document.getElementById(r+'View').classList.add('active');event.target.classList.remove('inactive');event.target.classList.add('active');renderAll();}
-function changeShop(){currentShop=document.getElementById('shopSwitcher').value;document.getElementById('custShopName').innerText=shops[currentShop].name;renderMenu();renderAll();}
+let dishes = JSON.parse(localStorage.getItem('shri_dishes')||'[]');
+let role = 'customer';
 
-function ownerAddDish(){
- let name=document.getElementById('dishName').value.trim();
- let price=document.getElementById('dishPrice').value;
- let fileInput=document.getElementById('dishPhoto');
- if(!name||!price){alert('Naam aur Rate likho');return;}
- let priceInt=parseInt(price);
- if(priceInt<10){alert('Rate kam se kam ₹10');return;}
- let handleDish=function(imgData){
-   let dish={id:Date.now(),shop:currentShop,shopName:shops[currentShop].name,n:name,p:priceInt,i:imgData,status:"PENDING",time:new Date().toLocaleTimeString()};
-   pendingDishes.push(dish);
-   document.getElementById('dishMsg').innerText='✅ Admin ko bhej diya! Approve hote hi customer ko dikhega';
-   document.getElementById('dishMsg').style.color='green';
-   document.getElementById('dishName').value='';document.getElementById('dishPrice').value='';fileInput.value='';
-   renderAll();
- };
- if(fileInput.files[0]){
-   let reader=new FileReader();
-   reader.onload=e=>handleDish(e.target.result);
-   reader.readAsDataURL(fileInput.files[0]);
- } else {
-   handleDish("https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=400");
- }
+function save(){localStorage.setItem('shri_dishes',JSON.stringify(dishes))}
+
+function switchRole(r,el){
+role=r;
+document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+el.classList.add('active');
+document.getElementById('addBox').style.display = (r==='owner')?'block':'none';
+render();
 }
-function approveDish(id){
- let dish=pendingDishes.find(d=>d.id==id);
- if(!dish) return;
- shops[dish.shop].menu.push({n:dish.n,p:dish.p,i:dish.i,status:"APPROVED"});
- pendingDishes=pendingDishes.filter(d=>d.id!=id);
- currentShop = dish.shop;
- document.getElementById('shopSwitcher').value = dish.shop;
- document.getElementById('custShopName').innerText = shops[currentShop].name;
- alert(`✅ ${dish.n} Approved! Ab ${shops[dish.shop].name} me customer ko dikhega`);
- renderAll();
+
+function addDish(){
+let name=document.getElementById('dName').value.trim();
+let price=document.getElementById('dPrice').value.trim();
+let file=document.getElementById('dImg').files[0];
+if(!name||!price){alert('Naam aur Price likho');return;}
+if(!file){alert('Photo chuno');return;}
+
+let reader=new FileReader();
+reader.onload=function(e){
+// Compress image to small size
+let img=new Image();
+img.onload=function(){
+let canvas=document.createElement('canvas');
+let max=300;
+let w=img.width,h=img.height;
+if(w>max||h>max){if(w>h){h=h*max/w;w=max}else{w=w*max/h;h=max}}
+canvas.width=w;canvas.height=h;
+canvas.getContext('2d').drawImage(img,0,0,w,h);
+let small=canvas.toDataURL('image/jpeg',0.6);
+dishes.push({id:Date.now(),name,price,img:small,status:'pending'});
+save();render();
+document.getElementById('dName').value='';document.getElementById('dPrice').value='';document.getElementById('dImg').value='';
+alert('Add ho gaya! Admin se Approve karwao');
 }
-function rejectDish(id){if(confirm('Reject karna hai?')){pendingDishes=pendingDishes.filter(d=>d.id!=id);renderAll();}}
-function add(name,price){let ex=cart.find(c=>c.name===name);if(ex) ex.qty+=1; else cart.push({name,price,qty:1});renderCart();}
-function increase(i){cart[i].qty+=1;renderCart();}
-function decrease(i){if(cart[i].qty>1) cart[i].qty-=1; else cart.splice(i,1);renderCart();}
-function removeItem(i){cart.splice(i,1);renderCart();}
-function renderCart(){
- let h='';total=0;
- cart.forEach((c,i)=>{let it=c.price*c.qty;total+=it;h+=`<div style="display:flex;justify-content:space-between;align-items:center;background:#fffbeb;border:1px solid #fde68a;padding:8px 10px;border-radius:12px;margin:6px 0"><div><div style="font-size:13px;font-weight:700">${c.name}</div><div style="font-size:11px">₹${c.price} × ${c.qty}=₹${it}</div></div><div style="display:flex;align-items:center;gap:6px"><button class="qty-btn" onclick="decrease(${i})">-</button><span style="font-weight:800">${c.qty}</span><button class="qty-btn" onclick="increase(${i})" style="background:#fef9c3">+</button><button onclick="removeItem(${i})" style="background:#fee2e2;border:none;padding:5px 8px;border-radius:8px">🗑️</button></div></div>`;});
- document.getElementById('cartItems').innerHTML=h||'Niche se select kijiye';
- document.getElementById('total').innerText='₹'+total;document.getElementById('payAmount').innerText=total;
- let comm=Math.round(total*0.10);let earn=total-comm-20;if(total==0)earn=0;
- document.getElementById('commPreview').innerText='₹'+comm;document.getElementById('shopEarnPreview').innerText='₹'+(earn>0?earn:0);
- renderMenu();
+img.src=e.target.result;
 }
-function renderMenu(){
- let h='';(shops[currentShop].menu || []).filter(m=>m.status==="APPROVED").forEach(m=>{
-   let inCart=cart.find(c=>c.name===m.n);let qty=inCart?inCart.qty:0;let idx=cart.findIndex(c=>c.name===m.n);
-   h+=`<div class=dish><img src="${m.i}"><div class=dish-info><div style="font-size:13px;font-weight:700">${m.n}</div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px"><span style="font-weight:800;color:#b91c1c">₹${m.p}</span>${qty===0?`<button onclick="add('${m.n}',${m.p})" style="background:#fef9c3;border:1.5px solid #facc15;padding:5px 14px;border-radius:12px;font-size:12px;font-weight:700">Add</button>`:`<div style="display:flex;align-items:center;gap:4px;background:#fef9c3;border:1.5px solid #facc15;border-radius:12px;padding:3px 6px"><button class="qty-btn" onclick="decrease(${idx})">-</button><span style="font-size:12px;font-weight:800">${qty}</span><button class="qty-btn" onclick="increase(${idx})" style="background:white">+</button></div>`}</div></div></div>`;
- });
- document.getElementById('menu').innerHTML=h||'<p style="text-align:center;color:#999;padding:20px">Koi dish approved nahi hai</p>';
+reader.readAsDataURL(file);
 }
-function getLocation(){navigator.geolocation.getCurrentPosition(p=>{let link=`https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;document.getElementById('cMapLink').value=link;document.getElementById('locStatus').innerText='✅ Location mil gaya';});}
-function payNow(){if(total==0){alert('Khana select karo');return;}let link=`upi://pay?pa=${ADMIN_UPI}&pn=ShriBhog&am=${total}&cu=INR`;document.getElementById('qrImg').src=`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(link)}`;document.getElementById('qrImg').style.display='block';window.location.href=link;}
-function placeOrder(){let txn=document.getElementById('txnId').value;if(cart.length==0||txn.length<4){document.getElementById('orderMsg').innerText='Txn ID likho';return;}let s=shops[currentShop];let comm=Math.round(total*0.10);let del=20;let earn=total-comm-del;let itemsText=cart.map(c=>`${c.name} x${c.qty}`).join(', ');allOrders.push({id:Date.now(),time:new Date().toLocaleTimeString(),shop:currentShop,shopName:s.name,cust:document.getElementById('cName').value||'Customer',amt:total,comm,del,shopEarn:earn,status:'PAID',settle:'PENDING',items:itemsText,txn});window.open(`https://wa.me/918013640306?text=NEW PAID ${s.name} - ${itemsText} ₹${total} Txn:${txn}`);document.getElementById('orderMsg').innerText='✅ Order Admin ko gaya';cart=[];total=0;renderCart();renderAll();}
-function changeBoy(){currentBoy=document.getElementById('boySwitcher').value;document.getElementById('boyName').innerText=deliveryBoys[currentBoy].name;}
-function renderAll(){
- document.getElementById('shopOwnerName').innerText=shops[currentShop].name;
- let odh='';let ownerDishes=[...shops[currentShop].menu.map(m=>({...m,shop:currentShop})),...pendingDishes.filter(d=>d.shop==currentShop)];
- ownerDishes.forEach(d=>{
-   odh+=`<tr><td><img src="${d.i}" style="width:50px;height:38px;object-fit:contain;background:#fff;border:1px solid #fde68a;border-radius:4px;padding:2px"></td><td>${d.n}</td><td>₹${d.p}</td><td>${d.status==='APPROVED'?'<span class=approved-badge>Approved</span>':'<span class=pending-badge>Pending</span>'}</td><td>${d.status==='PENDING'?'Waiting':'✅ Live'}</td></tr>`;
- });
- document.getElementById('ownerDishTable').innerHTML=odh||'<tr><td colspan=5 style="text-align:center;color:#999">Koi dish nahi</td></tr>';
- let ownerOrders=allOrders.filter(o=>o.shop==currentShop);let oh='';ownerOrders.forEach(o=>{oh+=`<tr><td>${o.time}</td><td>${o.cust}</td><td>${o.items}</td><td>₹${o.amt}</td><td style="color:#16a34a;font-weight:700">₹${o.shopEarn}</td><td>${o.settle}</td></tr>`});document.getElementById('ownerOrderTable').innerHTML=oh||'<tr><td colspan=6 style="text-align:center;color:#999">Koi order nahi</td></tr>';
- let ah='';pendingDishes.forEach(d=>{
-   ah+=`<tr><td>${d.shopName}</td><td><img src="${d.i}" style="width:60px;height:40px;object-fit:contain;background:#fff;border:1px solid #fde68a;border-radius:6px;padding:2px"></td><td>${d.n}</td><td>₹${d.p}</td><td><button onclick="approveDish(${d.id})" style="background:#16a34a;color:white;border:none;padding:6px 12px;border-radius:8px;font-weight:700;margin-right:4px;cursor:pointer">✅ Approve</button><button onclick="rejectDish(${d.id})" style="background:#fee2e2;color:#b91c1c;border:none;padding:6px 10px;border-radius:8px;cursor:pointer">❌ Reject</button></td></tr>`;
- });
- document.getElementById('adminApprovalTable').innerHTML=ah||'<tr><td colspan=5 style="text-align:center;color:#999;padding:15px">✅ Koi pending nahi</td></tr>';
- let totalIn=allOrders.reduce((a,b)=>a+b.amt,0);let totalComm=allOrders.reduce((a,b)=>a+b.comm,0);let totalDel=allOrders.reduce((a,b)=>a+b.del,0);let totalShop=allOrders.reduce((a,b)=>a+b.shopEarn,0);
- document.getElementById('adminTotalIn').innerText='₹'+totalIn;document.getElementById('adminComm').innerText='₹'+totalComm;document.getElementById('adminDelPay').innerText='₹'+totalDel;document.getElementById('adminShopPay').innerText='₹'+totalShop;
- let sh='';Object.keys(shops).forEach(k=>{let sa=allOrders.filter(o=>o.shop==k);let sIn=sa.reduce((a,b)=>a+b.amt,0);let sCo=sa.reduce((a,b)=>a+b.comm,0);let sEarn=sa.reduce((a,b)=>a+b.shopEarn,0);sh+=`<tr><td>${shops[k].name}</td><td>₹${sIn}</td><td>₹${sCo}</td><td>₹${sEarn}</td><td><button onclick="settleShop('${k}')" style="background:#16a34a;color:white;border:none;padding:5px 10px;border-radius:6px">Settle</button></td></tr>`});document.getElementById('adminSettleTable').innerHTML=sh;
- let dh='';allOrders.filter(o=>o.status!=='DELIVERED').forEach(o=>{dh+=`<div style="background:white;border-radius:12px;padding:10px;margin:8px 0;border-left:4px solid #f97316"><b>#${o.shopName}</b> ₹${o.amt} - ${o.cust}<br><button onclick="assignBoy(${o.id})" style="background:#16a34a;color:white;border:none;padding:6px 10px;border-radius:8px;margin-top:6px">Accept ₹${o.del}</button></div>`});document.getElementById('deliveryOrders').innerHTML=dh;
+
+function approve(id){let d=dishes.find(x=>x.id===id);if(d){d.status='approved';save();render()}}
+function reject(id){dishes=dishes.filter(x=>x.id!==id);save();render()}
+
+function render(){
+let div=document.getElementById('list');
+div.innerHTML='';
+let show = role==='customer'? dishes.filter(d=>d.status==='approved') : dishes;
+if(show.length===0){div.innerHTML='<p style="text-align:center;padding:20px">Koi dish nahi hai</p>';return;}
+show.forEach(d=>{
+let action='';
+if(role==='admin'&&d.status==='pending'){action=`<div style="margin-top:6px"><button class="btn" style="background:#22c55e;color:white" onclick="approve(${d.id})">✅ Approve</button> <button class="btn" style="background:#ef4444;color:white" onclick="reject(${d.id})">❌ Reject</button></div>`}
+if(role==='owner'){action=`<div style="margin-top:6px;font-size:12px;color:${d.status==='approved'?'green':'orange'}">Status: ${d.status}</div>`}
+div.innerHTML+=`<div class="card"><img src="${d.img}"><div><b>${d.name}</b><br>₹${d.price}${action}</div></div>`;
+})
 }
-function assignBoy(id){let o=allOrders.find(x=>x.id==id);o.status='ASSIGNED';deliveryBoys[currentBoy].earn+=o.del;document.getElementById('boyEarn').innerText='₹'+deliveryBoys[currentBoy].earn;renderAll();}
-function settleShop(k){let sa=allOrders.filter(o=>o.shop==k && o.settle=='PENDING');if(sa.length==0){alert('Koi pending nahi');return;}if(confirm(`₹${sa.reduce((a,b)=>a+b.shopEarn,0)} settlement?`)){sa.forEach(o=>o.settle='PAID');alert('Settlement ho gaya');renderAll();}}
-renderMenu();renderAll();
+render();
 </script>
 </body>
 </html>
