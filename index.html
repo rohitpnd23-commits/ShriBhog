@@ -9,32 +9,32 @@
 body{font-family:system-ui;background:#fff;padding-bottom:85px}
 .header{background:#111827;color:white;padding:18px 15px}
 .tabs{background:#1f2937;display:flex;gap:8px;padding:12px 10px;overflow-x:auto;position:sticky;top:0;z-index:10}
-.tab-pill{padding:10px 16px;border-radius:25px;background:#374151;color:#cbd5e1;border:none;font-size:14px;font-weight:600;cursor:pointer}
+.tab-pill{padding:10px 16px;border-radius:25px;background:#374151;color:#cbd5e1;border:none;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
 .tab-pill.active{background:#f97316;color:white}
 .orange-bg{background:#f97316;padding:14px 10px;min-height:100vh}
-.shop-title{color:white;font-size:20px;font-weight:800;margin-bottom:12px}
+.shop-title{color:white;font-size:19px;font-weight:800;margin-bottom:12px}
 .add-card{background:#fffbeb;border:2px dashed #fbbf24;border-radius:18px;padding:14px}
-.inp{width:100%;padding:13px;border:2px solid #fde68a;border-radius:12px;margin-bottom:10px;background:white;font-size:14px}
-.btn-green{width:100%;background:#16a34a;color:white;padding:14px;border:none;border-radius:12px;font-weight:700;font-size:16px;cursor:pointer}
+.inp{width:100%;padding:12px;border:2px solid #fde68a;border-radius:12px;margin-bottom:10px;background:white;font-size:14px}
+.btn-green{width:100%;background:#16a34a;color:white;padding:14px;border:none;border-radius:12px;font-weight:700;font-size:15px;cursor:pointer}
 .table-card{background:white;border-radius:14px;overflow:hidden;margin-top:10px}
-.table-head{display:flex;background:#f8fafc;padding:12px 8px;font-weight:800;font-size:13px;border-bottom:1px solid #e5e7eb}
-.col-photo{flex:0.8}.col-name{flex:1.5}.col-rate{flex:0.7;text-align:center}
+.table-head{display:flex;background:#f8fafc;padding:10px 8px;font-weight:800;font-size:12px;border-bottom:1px solid #e5e7eb}
+.col-photo{flex:0.7}.col-name{flex:1.8}.col-rate{flex:0.7;text-align:center}
 .row{display:flex;align-items:center;padding:10px 8px;border-bottom:1px solid #f1f5f9}
-.row img{width:50px;height:50px;border-radius:8px;object-fit:cover}
-.badge{font-size:11px;padding:4px 8px;border-radius:10px;display:inline-block;font-weight:700}
-.pending{background:#fef3c7;color:#92400e}.approved{background:#dcfce7;color:#166534}.ready{background:#dbeafe;color:#1e40af}.paid{background:#f3e8ff;color:#6b21a8}
-.btn-small{padding:7px 11px;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;margin:2px}
+.row img{width:45px;height:45px;border-radius:8px;object-fit:cover}
+.badge{font-size:10px;padding:3px 7px;border-radius:8px;display:inline-block;font-weight:700;margin-top:3px}
+.pending{background:#fef3c7;color:#92400e}.approved{background:#dcfce7;color:#166534}.ready{background:#dbeafe;color:#1e40af}.paid{background:#f3e8ff;color:#6b21a8}.delivered{background:#dcfce7;color:#065f46}
+.btn-small{padding:6px 10px;border:none;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;margin:2px}
 .btn-approve{background:#22c55e;color:white}.btn-ready{background:#3b82f6;color:white}.btn-pick{background:#f97316;color:white}
-.btn-add{background:#f97316;color:white;padding:6px 12px;border-radius:20px;border:none;font-weight:700;cursor:pointer}
+.btn-add{background:#f97316;color:white;padding:5px 10px;border-radius:20px;border:none;font-weight:700;cursor:pointer;font-size:12px}
 .cart-bar{position:fixed;bottom:0;left:0;right:0;background:#111827;color:white;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;z-index:20}
 .cart-bar button{background:#f97316;color:white;border:none;padding:10px 18px;border-radius:25px;font-weight:800}
 .modal{position:fixed;top:0;left:0;right:0;bottom:0;background:#0009;display:none;justify-content:center;align-items:flex-end;z-index:50}
 .modal.active{display:flex}
-.modal-box{background:white;width:100%;max-width:500px;border-radius:20px 20px 0 0;padding:18px;max-height:90vh;overflow:auto}
-.btn-loc{background:#fef3c3;border:1px solid #fbbf24;padding:10px;border-radius:10px;width:100%;margin-bottom:10px;font-weight:700}
-.upi-box{background:#f0fdf4;border:2px solid #22c55e;border-radius:14px;padding:14px;text-align:center;margin:12px 0}
-.pulse{animation:pulse 1s infinite}
-@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
+.modal-box{background:white;width:100%;max-width:500px;border-radius:20px 20px 0 0;padding:18px;max-height:92vh;overflow:auto}
+.btn-loc{background:#fef3c7;border:1px solid #fbbf24;padding:9px;border-radius:10px;width:100%;margin-bottom:10px;font-weight:700;font-size:13px}
+.upi-box{background:#f0fdf4;border:2px solid #22c55e;border-radius:14px;padding:12px;text-align:center;margin:10px 0}
+.otp-big{background:#111827;color:#facc15;font-size:28px;font-weight:900;letter-spacing:6px;padding:10px;border-radius:10px;text-align:center;margin:10px 0}
+.pulse{animation:pulse 1s infinite}@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.04)}100%{transform:scale(1)}}
 </style>
 </head>
 <body>
@@ -49,14 +49,14 @@ body{font-family:system-ui;background:#fff;padding-bottom:85px}
 <div class="shop-title" id="panelTitle">🏪 Shop Panel</div>
 <div id="ownerPanel">
 <div class="add-card">
-<h3>🍛 Nayi Dish Add Karo</h3>
+<h3>🍛 Nayi Dish</h3>
 <input type="file" id="fImg" accept="image/*" class="inp">
 <input type="text" id="fName" placeholder="Dish naam" class="inp">
 <input type="number" id="fRate" placeholder="Rate" class="inp">
-<button class="btn-green" onclick="addDish()">✅ Approval ke liye bhejo</button>
+<button class="btn-green" onclick="addDish()">✅ Approval bhejo</button>
 </div>
-<div style="color:white;font-weight:700;margin:18px 0 10px">📋 Dishes</div><div class="table-card" id="ownerList"></div>
-<div style="color:white;font-weight:700;margin:18px 0 10px">📦 Orders</div><div class="table-card" id="ownerOrders"></div>
+<div style="color:white;font-weight:700;margin:15px 0 8px">📋 Dishes</div><div class="table-card" id="ownerList"></div>
+<div style="color:white;font-weight:700;margin:15px 0 8px">📦 Orders</div><div class="table-card" id="ownerOrders"></div>
 </div>
 <div id="otherPanel" style="display:none"><div class="table-card" id="otherList"></div></div>
 </div>
@@ -64,76 +64,78 @@ body{font-family:system-ui;background:#fff;padding-bottom:85px}
 
 <div class="modal" id="checkoutModal">
 <div class="modal-box">
-<h3>📍 Delivery + UPI Payment</h3>
-<input id="cName" class="inp" style="margin-top:12px" placeholder="Naam">
+<h3>📍 Delivery + UPI</h3>
+<input id="cName" class="inp" style="margin-top:10px" placeholder="Naam">
 <input id="cPhone" class="inp" placeholder="Phone">
-<textarea id="cAddr" class="inp" placeholder="Pura Address"></textarea>
-<button class="btn-loc" onclick="getLocation()">📍 Current Location Lo</button>
-<p id="locStatus" style="font-size:12px;color:green;margin-bottom:10px"></p>
+<textarea id="cAddr" class="inp" placeholder="Address"></textarea>
+<button class="btn-loc" onclick="getLocation()">📍 Current Location</button>
+<p id="locStatus" style="font-size:11px;color:green;margin-bottom:8px"></p>
 <div id="upiSection" style="display:none">
 <div class="upi-box">
-<b>💳 UPI Payment - Pehle Pay Karo</b><br><span style="font-size:13px">UPI: <b id="upiIdText"></b></span><br><br>
-<img id="qrImg" src="" style="width:180px;height:180px;border-radius:10px"><br><br>
-<b>Amount: ₹<span id="payAmount">0</span></b><br><br>
-<button onclick="payUPI()" style="background:#16a34a;color:white;border:none;padding:12px 20px;border-radius:25px;font-weight:800;width:100%">📲 UPI App se Pay Karo</button>
+<b>💳 UPI Pay First</b><br><span style="font-size:12px">UPI: <b id="upiIdText"></b></span><br><br>
+<img id="qrImg" src="" style="width:170px;height:170px;border-radius:10px"><br><br>
+<b>₹<span id="payAmount">0</span></b><br>
+<button onclick="payUPI()" style="background:#16a34a;color:white;border:none;padding:10px 18px;border-radius:20px;font-weight:800;width:100%;margin-top:8px">📲 UPI App se Pay</button>
 </div>
-<label style="font-size:13px;display:flex;gap:6px;align-items:center;margin-top:10px"><input type="checkbox" id="paidCheck"> Maine Payment Kar Diya</label>
-<input id="txnId" class="inp" style="margin-top:8px" placeholder="Transaction ID last 4 digit">
+<label style="font-size:12px;display:flex;gap:6px;align-items:center"><input type="checkbox" id="paidCheck"> Maine Payment Kar Diya</label>
+<input id="txnId" class="inp" style="margin-top:6px" placeholder="Txn ID last 4 digit">
 </div>
-<button class="btn-green" id="finalOrderBtn" style="display:none;margin-top:12px" onclick="confirmOrder()">✅ Payment Done - Order Confirm</button>
-<button onclick="closeCheckout()" style="background:#eee;border:none;padding:10px;width:100%;border-radius:10px;margin-top:8px">Cancel</button>
+<button class="btn-green" id="finalOrderBtn" style="display:none;margin-top:10px" onclick="confirmOrder()">✅ Confirm Order</button>
+<button onclick="closeCheckout()" style="background:#eee;border:none;padding:9px;width:100%;border-radius:10px;margin-top:6px">Cancel</button>
+</div>
+</div>
+
+<div class="modal" id="otpModal">
+<div class="modal-box" style="text-align:center">
+<h3>✅ Order Confirmed!</h3>
+<p style="font-size:13px;margin:8px 0">Ye OTP Delivery Boy ko dena</p>
+<div class="otp-big" id="showOtp">----</div>
+<p style="font-size:12px;color:#666">Delivery Boy OTP maangega tab ye batana</p>
+<button class="btn-green" style="margin-top:12px" onclick="closeOtpModal()">OK Samajh Gaya</button>
+</div>
+</div>
+
+<div class="modal" id="deliveryOtpModal">
+<div class="modal-box">
+<h3>🔐 Delivery OTP Daalo</h3>
+<p style="font-size:13px;margin:8px 0">Customer se OTP lo aur yahan daalo</p>
+<p id="otpCustomerInfo" style="font-size:12px;background:#fef3c7;padding:8px;border-radius:8px"></p>
+<input id="inputOtp" type="number" class="inp" style="margin-top:12px;letter-spacing:8px;font-size:22px;text-align:center;font-weight:800" placeholder="1234">
+<button class="btn-green" onclick="verifyDeliveryOtp()">✅ OTP Verify - Delivery Confirm</button>
+<button onclick="document.getElementById('deliveryOtpModal').classList.remove('active')" style="background:#eee;border:none;padding:9px;width:100%;border-radius:10px;margin-top:6px">Cancel</button>
+<p id="otpError" style="color:red;font-size:12px;margin-top:6px;display:none">❌ Galat OTP! Customer se sahi OTP lo</p>
 </div>
 </div>
 
 <script>
-const UPI_ID = "rohitpnd23@okaxis";
-const MERCHANT_NAME = "ShriBhog";
-
+const UPI_ID="rohitpnd23@okaxis"; const MERCHANT_NAME="ShriBhog";
 if(location.search.includes('clear')){localStorage.clear();history.replaceState(null,'',location.pathname)}
-let dishes = JSON.parse(localStorage.getItem('shri_dishes_v2')||'[]');
-let orders = JSON.parse(localStorage.getItem('shri_orders')||'[]');
+let dishes=JSON.parse(localStorage.getItem('shri_dishes_v2')||'[]');
+let orders=JSON.parse(localStorage.getItem('shri_orders')||'[]');
 let cart=[];let role='owner';let currentLoc="";let lastNotifiedId=Number(localStorage.getItem('last_delivery_notify')||0);
-let audioCtx;
+let audioCtx;let currentDeliveryOrderId=null;
 
-// Notification permission
-if('Notification' in window && Notification.permission==='default'){Notification.requestPermission()}
-
+if('Notification' in window && Notification.permission==='default') Notification.requestPermission();
 function playTone(){
 try{
 if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();
-let osc=audioCtx.createOscillator(),gain=audioCtx.createGain();
-osc.connect(gain);gain.connect(audioCtx.destination);
-osc.frequency.value=800;gain.gain.value=0.5;
-osc.start();gain.gain.exponentialRampToValueAtTime(0.01,audioCtx.currentTime+0.6);
-osc.stop(audioCtx.currentTime+0.6);
+let osc=audioCtx.createOscillator(),g=audioCtx.createGain();osc.connect(g);g.connect(audioCtx.destination);osc.frequency.value=800;g.gain.value=0.5;osc.start();g.gain.exponentialRampToValueAtTime(0.01,audioCtx.currentTime+0.6);osc.stop(audioCtx.currentTime+0.6);
 setTimeout(()=>{let o2=audioCtx.createOscillator(),g2=audioCtx.createGain();o2.connect(g2);g2.connect(audioCtx.destination);o2.frequency.value=1000;g2.gain.value=0.5;o2.start();g2.gain.exponentialRampToValueAtTime(0.01,audioCtx.currentTime+0.6);o2.stop(audioCtx.currentTime+0.6)},300);
 }catch(e){}
-if(navigator.vibrate){navigator.vibrate([300,100,300,100,500])}
+if(navigator.vibrate) navigator.vibrate([300,100,300,100,500]);
 }
-
-function notifyDelivery(order){
-if(role!=='delivery') return;
-if(order.id<=lastNotifiedId) return;
-playTone();
-if('Notification' in window && Notification.permission==='granted'){
-new Notification('🔥 New Pickup! ShriBhog', {body:`${order.customer} - ₹${order.total} - ${order.address.substring(0,50)}`, icon:'https://cdn-icons-png.flaticon.com/512/3699/3699516.png'});
+function notifyDelivery(o){
+if(o.id<=lastNotifiedId) return; playTone();
+if('Notification' in window && Notification.permission==='granted'){new Notification('🔥 NEW PICKUP! ShriBhog', {body:`${o.customer} - ₹${o.total} - OTP: ${o.otp}`});}
+lastNotifiedId=o.id;localStorage.setItem('last_delivery_notify',lastNotifiedId);
 }
-let box=document.getElementById('otherList');
-if(box){box.insertAdjacentHTML('afterbegin',`<div style="background:#3b82f6;color:white;padding:12px;text-align:center;font-weight:800" class="pulse">🔔 NEW PICKUP! ${order.customer} - ₹${order.total}</div>`)}
-lastNotifiedId=order.id;
-localStorage.setItem('last_delivery_notify',lastNotifiedId);
-}
-
 function save(){localStorage.setItem('shri_dishes_v2',JSON.stringify(dishes));localStorage.setItem('shri_orders',JSON.stringify(orders))}
 function switchRole(r){
 role=r;cart=[];updateCart();
-document.querySelectorAll('.tab-pill').forEach(b=>b.classList.remove('active'));
-document.getElementById('t-'+r).classList.add('active');
-document.getElementById('ownerPanel').style.display=(r==='owner')?'block':'none';
-document.getElementById('otherPanel').style.display=(r==='owner')?'none':'block';
-document.getElementById('panelTitle').innerText=r==='customer'?'🛒 Customer':r==='admin'?'👑 Admin':r==='delivery'?'🛵 Delivery Boy - Pickup Notifications ON':'🏪 Shop Panel';
-render();
-if(r==='delivery'){if('Notification' in window && Notification.permission!=='granted') Notification.requestPermission(); playTone(); alert('🔔 Delivery Mode ON - Shop Ready karega to yahan Sound + Vibration + Notification ayega');}
+document.querySelectorAll('.tab-pill').forEach(b=>b.classList.remove('active'));document.getElementById('t-'+r).classList.add('active');
+document.getElementById('ownerPanel').style.display=(r==='owner')?'block':'none';document.getElementById('otherPanel').style.display=(r==='owner')?'none':'block';
+document.getElementById('panelTitle').innerText=r==='customer'?'🛒 Customer':r==='admin'?'👑 Admin - Delivered Orders':r==='delivery'?'🛵 Delivery - OTP se Delivery':r==='owner'?'🏪 Shop Panel':'';
+render();if(r==='delivery'){playTone()}
 }
 function addDish(){
 let n=document.getElementById('fName').value.trim(),rt=document.getElementById('fRate').value.trim(),fi=document.getElementById('fImg').files[0];
@@ -152,81 +154,104 @@ function approve(id){let d=dishes.find(x=>x.id===id);if(d){d.status='approved';s
 function removeDish(id){if(confirm('Delete?')){dishes=dishes.filter(x=>x.id!==id);save();render()}}
 function addToCart(id){let d=dishes.find(x=>x.id===id);cart.push(d);updateCart();}
 function updateCart(){let tot=cart.reduce((s,x)=>s+Number(x.rate),0);document.getElementById('cartCount').innerText=cart.length;document.getElementById('cartTotal').innerText=tot;document.getElementById('cartBar').style.display=(role==='customer'&&cart.length>0)?'flex':'none';}
-function openCheckout(){if(cart.length===0)return;document.getElementById('checkoutModal').classList.add('active');let tot=cart.reduce((s,x)=>s+Number(x.rate),0);document.getElementById('payAmount').innerText=tot;document.getElementById('upiIdText').innerText=UPI_ID;let upiUrl=`upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(MERCHANT_NAME)}&am=${tot}&cu=INR&tn=ShriBhog Order`;document.getElementById('qrImg').src=`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiUrl)}`;document.getElementById('qrImg').dataset.upi=upiUrl;document.getElementById('upiSection').style.display='block';document.getElementById('finalOrderBtn').style.display='block';}
+function openCheckout(){if(cart.length===0)return;document.getElementById('checkoutModal').classList.add('active');let tot=cart.reduce((s,x)=>s+Number(x.rate),0);document.getElementById('payAmount').innerText=tot;document.getElementById('upiIdText').innerText=UPI_ID;let upiUrl=`upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(MERCHANT_NAME)}&am=${tot}&cu=INR&tn=ShriBhog`;document.getElementById('qrImg').src=`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiUrl)}`;document.getElementById('qrImg').dataset.upi=upiUrl;document.getElementById('upiSection').style.display='block';document.getElementById('finalOrderBtn').style.display='block';}
 function closeCheckout(){document.getElementById('checkoutModal').classList.remove('active')}
-function getLocation(){let st=document.getElementById('locStatus');st.innerText='Location...';navigator.geolocation.getCurrentPosition(p=>{currentLoc=`https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;st.innerHTML=`✅ <a href="${currentLoc}" target="_blank">Map mil gaya</a>`;document.getElementById('cAddr').value+=`\n📍 ${currentLoc}`;},()=>{st.innerText='Allow location';});}
+function getLocation(){let st=document.getElementById('locStatus');st.innerText='Location...';navigator.geolocation.getCurrentPosition(p=>{currentLoc=`https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;st.innerHTML=`✅ <a href="${currentLoc}" target="_blank">Map</a>`;document.getElementById('cAddr').value+=`\n📍 ${currentLoc}`;},()=>{st.innerText='Allow location';});}
 function payUPI(){window.location.href=document.getElementById('qrImg').dataset.upi;}
 function confirmOrder(){
 let nm=document.getElementById('cName').value.trim(),ph=document.getElementById('cPhone').value.trim(),ad=document.getElementById('cAddr').value.trim(),paid=document.getElementById('paidCheck').checked,txn=document.getElementById('txnId').value.trim();
 if(!nm||!ph||!ad)return alert('Details bharo');if(!paid)return alert('Payment checkbox tick karo');
 let tot=cart.reduce((s,x)=>s+Number(x.rate),0);
-orders.push({id:Date.now(),items:[...cart],total:tot,customer:nm,phone:ph,address:ad,location:currentLoc,txnId:txn,payment:'UPI Paid',status:'Paid - New',time:new Date().toLocaleString()});
-save();cart=[];updateCart();closeCheckout();alert('✅ Order Paid & Confirmed!');render();
+let otp=Math.floor(1000+Math.random()*9000);
+orders.push({id:Date.now(),items:[...cart],total:tot,customer:nm,phone:ph,address:ad,location:currentLoc,txnId:txn,payment:'UPI Paid',otp:otp,status:'Paid - New',time:new Date().toLocaleString()});
+save();cart=[];updateCart();closeCheckout();
+document.getElementById('showOtp').innerText=otp;
+document.getElementById('otpModal').classList.add('active');
+render();
 document.getElementById('cName').value='';document.getElementById('cPhone').value='';document.getElementById('cAddr').value='';document.getElementById('paidCheck').checked=false;document.getElementById('txnId').value='';document.getElementById('locStatus').innerText='';currentLoc='';
 }
+function closeOtpModal(){document.getElementById('otpModal').classList.remove('active');}
 function shopReady(id){
-let o=orders.find(x=>x.id===id);if(o){o.status='Ready for Pickup';save();render();
-localStorage.setItem('shri_new_pickup',JSON.stringify(o));
-playTone();alert('✅ Ready! Delivery boy ko notification bhej diya 🔔');
-}
+let o=orders.find(x=>x.id===id);if(o){o.status='Ready for Pickup';save();localStorage.setItem('shri_new_pickup',JSON.stringify(o));playTone();notifyDelivery(o);render();alert('✅ Ready! Delivery boy ko notification bhej diya 🔔\nOTP: '+o.otp);}
 }
 function pickupOrder(id){let o=orders.find(x=>x.id===id);if(o){o.status='Out for Delivery';save();render();}}
-function completeOrder(id){let o=orders.find(x=>x.id===id);if(o){o.status='Completed';save();render();}}
+function openOtpVerify(id){
+let o=orders.find(x=>x.id===id);if(!o)return;
+currentDeliveryOrderId=id;
+document.getElementById('otpCustomerInfo').innerText=`Customer: ${o.customer} | Phone: ${o.phone}\nAddress: ${o.address}`;
+document.getElementById('inputOtp').value='';document.getElementById('otpError').style.display='none';
+document.getElementById('deliveryOtpModal').classList.add('active');
+}
+function verifyDeliveryOtp(){
+let entered=document.getElementById('inputOtp').value.trim();
+let o=orders.find(x=>x.id===currentDeliveryOrderId);
+if(!o)return;
+if(entered==o.otp){
+o.status='Delivered';o.deliveredAt=new Date().toLocaleString();save();
+document.getElementById('deliveryOtpModal').classList.remove('active');
+playTone();alert('✅ Delivery Confirmed! OTP sahi hai');
+render();
+}else{document.getElementById('otpError').style.display='block';if(navigator.vibrate) navigator.vibrate([200,100,200]);}
+}
 
 function render(){
 if(role==='owner'){
 let box=document.getElementById('ownerList');
 let html='<div class="table-head"><div class="col-photo">PHOTO</div><div class="col-name">NAME</div><div class="col-rate">RATE</div></div>';
-if(dishes.length===0)html+='<div style="padding:15px;text-align:center">Koi dish nahi</div>';
+if(dishes.length===0)html+='<div style="padding:12px;text-align:center">Koi dish nahi</div>';
 dishes.forEach(d=>{html+=`<div class="row"><div class="col-photo"><img src="${d.img}"></div><div class="col-name">${d.name}<br><span class="badge ${d.status}">${d.status}</span></div><div class="col-rate">₹${d.rate} <button class="btn-small" style="background:#eee" onclick="removeDish(${d.id})">🗑️</button></div></div>`});
 box.innerHTML=html;
 let ob=document.getElementById('ownerOrders');
 let oh='<div class="table-head"><div class="col-name">ORDERS</div><div class="col-rate">ACTION</div></div>';
-if(orders.length===0)oh+='<div style="padding:15px;text-align:center">Koi order nahi</div>';
+if(orders.length===0)oh+='<div style="padding:12px;text-align:center">Koi order nahi</div>';
 orders.slice().reverse().forEach(o=>{
-let action=o.status==='Paid - New'?`<button class="btn-small btn-ready pulse" onclick="shopReady(${o.id})">🍳 Ready Karo</button>`:o.status==='Ready for Pickup'?`<span style="color:blue">Delivery ko bhej diya</span>`:o.status;
-oh+=`<div class="row"><div class="col-name" style="font-size:12px"><b>${o.customer}</b> ${o.phone}<br>📍 ${o.address}<br>₹${o.total} | ${o.payment}<br><span class="badge ${o.status.includes('Paid')?'paid':o.status.includes('Ready')?'ready':'approved'}">${o.status}</span></div><div class="col-rate">${action}</div></div>`});
+let act=o.status==='Paid - New'?`<button class="btn-small btn-ready pulse" onclick="shopReady(${o.id})">🍳 Ready</button>`:o.status==='Ready for Pickup'?'Delivery ke paas':o.status==='Out for Delivery'?'On the way - OTP: '+o.otp:o.status;
+oh+=`<div class="row"><div class="col-name" style="font-size:11px"><b>${o.customer}</b> ${o.phone}<br>📍 ${o.address.substring(0,60)}<br>₹${o.total} | OTP:${o.otp} | ${o.payment}<br><span class="badge ${o.status.includes('Delivered')?'delivered':o.status.includes('Ready')?'ready':'paid'}">${o.status}</span></div><div class="col-rate" style="font-size:11px">${act}</div></div>`});
 ob.innerHTML=oh;
 }else{
 let box=document.getElementById('otherList');
 let list=role==='customer'?dishes.filter(d=>d.status==='approved'):dishes;
-let isOrderView=role!=='customer';
-if(isOrderView){
-let html=`<div style="padding:12px;font-weight:800;background:#fffbeb">📦 Orders (${orders.length})</div>`;
-let filtered=role==='delivery'?orders.filter(o=>o.status==='Ready for Pickup'||o.status==='Out for Delivery'):orders;
-if(filtered.length===0)html+='<div style="padding:20px;text-align:center">Koi pickup nahi</div>';
-filtered.slice().reverse().forEach(o=>{
-let btn=o.status==='Ready for Pickup'?`<button class="btn-small btn-pick pulse" onclick="pickupOrder(${o.id})">🛵 Pickup Karo</button><br><a href="${o.location}" target="_blank" style="font-size:11px">🗺️ Location</a><br><a href="tel:${o.phone}" style="font-size:11px">📞 Call ${o.customer}</a>`:o.status==='Out for Delivery'?`<button class="btn-small btn-approve" onclick="completeOrder(${o.id})">✅ Delivered</button><br><a href="${o.location}" target="_blank">🗺️ Map</a>`:o.status;
-html+=`<div class="row" style="${o.status==='Ready for Pickup'?'background:#eff6ff;border:2px solid #3b82f6':''}"><div class="col-name" style="font-size:12px">${o.status==='Ready for Pickup'?'🔔 <b>NEW PICKUP!</b><br>':''}<b>${o.customer}</b> ${o.phone}<br>📍 ${o.address}<br>₹${o.total} - ${o.payment}<br>${o.time}<br><span class="badge ${o.status.includes('Ready')?'ready':'approved'}">${o.status}</span></div><div class="col-rate">${btn}</div></div>`;
-});
-if(role==='admin'){
-html+=`<div style="padding:12px;font-weight:800;background:#fffbeb;margin-top:10px">🍛 Approve</div><div class="table-head"><div class="col-photo">PHOTO</div><div class="col-name">NAME</div><div class="col-rate">ACTION</div></div>`;
-list.forEach(d=>{html+=`<div class="row"><div class="col-photo"><img src="${d.img}"></div><div class="col-name">${d.name}<br><span class="badge ${d.status}">${d.status}</span></div><div class="col-rate">₹${d.rate}${d.status==='pending'?`<br><button class="btn-small btn-approve" onclick="approve(${d.id})">Approve</button><br><button class="btn-small btn-reject" onclick="removeDish(${d.id})">Reject</button>`:''}</div></div>`});
-}
-box.innerHTML=html;
-}else{
-let html=`<div style="padding:12px;font-weight:800;background:#fffbeb">🍛 Menu (${list.length})</div><div class="table-head"><div class="col-photo">PHOTO</div><div class="col-name">NAME</div><div class="col-rate">ADD</div></div>`;
-if(list.length===0)html+='<div style="padding:15px;text-align:center">Koi dish nahi</div>';
+if(role==='customer'){
+let html=`<div style="padding:10px;font-weight:800;background:#fffbeb">🍛 Menu (${list.length})</div><div class="table-head"><div class="col-photo">PHOTO</div><div class="col-name">NAME</div><div class="col-rate">ADD</div></div>`;
+if(list.length===0)html+='<div style="padding:12px;text-align:center">Koi dish nahi</div>';
 list.forEach(d=>{html+=`<div class="row"><div class="col-photo"><img src="${d.img}"></div><div class="col-name">${d.name}</div><div class="col-rate">₹${d.rate}<br><button class="btn-add" onclick="addToCart(${d.id})">Add</button></div></div>`});
+let myOrders=orders.filter(o=>true).slice().reverse().slice(0,5);
+html+=`<div style="padding:10px;font-weight:800;background:#fffbeb;margin-top:12px">📦 Aapke Orders</div>`;
+if(myOrders.length===0)html+='<div style="padding:10px;text-align:center;background:white">Koi order nahi</div>';
+myOrders.forEach(o=>{html+=`<div class="row" style="background:white"><div class="col-name" style="font-size:11px">₹${o.total} - ${o.items.map(i=>i.name).join(', ')}<br>OTP: <b style="font-size:14px;color:#b91c1c">${o.otp}</b> - Delivery ko dena<br><span class="badge ${o.status.includes('Delivered')?'delivered':'paid'}">${o.status}</span></div><div class="col-rate">${o.status}</div></div>`});
+box.innerHTML=html;
+}else if(role==='delivery'){
+let filtered=orders.filter(o=>o.status==='Ready for Pickup'||o.status==='Out for Delivery');
+let html=`<div style="padding:10px;font-weight:800;background:#fffbeb">🛵 Pickup Orders (${filtered.length}) - OTP se Delivery</div>`;
+if(filtered.length===0)html+='<div style="padding:20px;text-align:center;background:white">Koi pickup nahi. Shop Ready karega to yahan ayega + 🔔 Sound</div>';
+filtered.slice().reverse().forEach(o=>{
+let btn=o.status==='Ready for Pickup'?`<button class="btn-small btn-pick pulse" onclick="pickupOrder(${o.id})">🛵 Pickup</button><br><a href="${o.location}" target="_blank" style="font-size:10px">🗺️ Map</a><br><a href="tel:${o.phone}" style="font-size:10px">📞 Call</a>`:o.status==='Out for Delivery'?`<button class="btn-small btn-approve pulse" onclick="openOtpVerify(${o.id})">🔐 OTP se Deliver</button><br>Customer: ${o.customer}<br><a href="${o.location}" target="_blank">🗺️ Map</a>`:o.status;
+html+=`<div class="row" style="${o.status==='Ready for Pickup'?'background:#eff6ff;border:2px solid #3b82f6':''}"><div class="col-name" style="font-size:11px">${o.status==='Ready for Pickup'?'🔔 <b>NEW PICKUP!</b><br>':''}<b>${o.customer}</b> ${o.phone}<br>📍 ${o.address}<br>₹${o.total} | OTP: <b>${o.otp}</b><br><span class="badge ${o.status.includes('Ready')?'ready':'paid'}">${o.status}</span></div><div class="col-rate">${btn}</div></div>`;
+});
+box.innerHTML=html;
+}else if(role==='admin'){
+let delivered=orders.filter(o=>o.status==='Delivered');
+let html=`<div style="padding:10px;font-weight:800;background:#fffbeb">✅ Delivered Items Only (${delivered.length})</div><div class="table-head"><div class="col-name">DELIVERED DETAILS</div><div class="col-rate">INFO</div></div>`;
+if(delivered.length===0)html+='<div style="padding:20px;text-align:center;background:white">Abhi tak koi delivery nahi hui. Delivery boy OTP se deliver karega tab yahan ayega</div>';
+delivered.slice().reverse().forEach(o=>{
+html+=`<div class="row" style="background:white"><div class="col-name" style="font-size:11px"><b>${o.customer}</b> ${o.phone}<br>📍 ${o.address}<br>🍛 ${o.items.map(i=>i.name).join(', ')}<br>💳 ${o.payment} ${o.txnId}<br>🔐 OTP: ${o.otp} Verified<br>✅ ${o.deliveredAt||o.time}<br><span class="badge delivered">DELIVERED</span></div><div class="col-rate" style="font-size:11px">₹${o.total}<br>${o.items.length} items</div></div>`;
+});
+let totalSale=delivered.reduce((s,o)=>s+o.total,0);
+html+=`<div style="background:#111827;color:white;padding:12px;text-align:center;font-weight:800;margin-top:10px;border-radius:10px">💰 Total Delivered Sale: ₹${totalSale} | Orders: ${delivered.length}</div>`;
+html+=`<div style="padding:10px;font-weight:800;background:#fffbeb;margin-top:12px">🍛 Dishes Approve</div><div class="table-head"><div class="col-photo">PHOTO</div><div class="col-name">NAME</div><div class="col-rate">ACTION</div></div>`;
+list.forEach(d=>{html+=`<div class="row" style="background:white"><div class="col-photo"><img src="${d.img}"></div><div class="col-name">${d.name}<br><span class="badge ${d.status}">${d.status}</span></div><div class="col-rate">₹${d.rate}${d.status==='pending'?`<br><button class="btn-small btn-approve" onclick="approve(${d.id})">Approve</button>`:''}</div></div>`});
 box.innerHTML=html;
 }
 }
 }
-// Poll for new pickups for delivery
 setInterval(()=>{
-if(role==='delivery'){
-let newPickup=localStorage.getItem('shri_new_pickup');
-if(newPickup){let o=JSON.parse(newPickup);if(o.id>lastNotifiedId){notifyDelivery(o);}}
-}
 let all=JSON.parse(localStorage.getItem('shri_orders')||'[]');
-if(JSON.stringify(all)!==JSON.stringify(orders)){orders=all;render();}
+if(JSON.stringify(all)!==JSON.stringify(orders)){orders=all;render();let np=localStorage.getItem('shri_new_pickup');if(np&&role==='delivery'){let o=JSON.parse(np);if(o.id>lastNotifiedId) notifyDelivery(o);}}
 },2000);
-
-window.addEventListener('storage',(e)=>{
+window.addEventListener('storage',e=>{
 if(e.key==='shri_new_pickup' && role==='delivery'){let o=JSON.parse(e.newValue);notifyDelivery(o);render();}
 if(e.key==='shri_orders'){orders=JSON.parse(e.newValue||'[]');render();}
 });
-
 render();
 </script>
 </body>
