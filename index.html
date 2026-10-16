@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ShriBhog - Shop Edit Fix</title>
+<title>ShriBhog - Commission & Settlement</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:system-ui;background:#fff;padding-bottom:90px}
@@ -16,10 +16,11 @@ body{font-family:system-ui;background:#fff;padding-bottom:90px}
 .add-card{background:#fffbeb;border:2px dashed #fbbf24;border-radius:18px;padding:14px}
 .inp{width:100%;padding:12px;border:2px solid #fde68a;border-radius:12px;margin-bottom:10px;background:white;font-size:14px}
 .btn-green{width:100%;background:#16a34a;color:white;padding:13px;border:none;border-radius:12px;font-weight:700;font-size:14px;cursor:pointer}
+.btn-orange{width:100%;background:#f97316;color:white;padding:12px;border:none;border-radius:12px;font-weight:800;margin-top:8px;cursor:pointer}
 .table-card{background:white;border-radius:14px;overflow:hidden;margin-top:10px}
 .table-head{display:flex;background:#f8fafc;padding:10px 8px;font-weight:800;font-size:12px;border-bottom:1px solid #e5e7eb}
 .col-photo{flex:0.7}.col-name{flex:1.8}.col-rate{flex:0.8;text-align:center}
-.row{display:flex;align-items:center;padding:12px 8px;border-bottom:1px solid #f1f5f9;cursor:pointer;position:relative}
+.row{display:flex;align-items:center;padding:12px 8px;border-bottom:1px solid #f1f5f9;cursor:pointer}
 .row:hover{background:#fffbeb}
 .row img{width:50px;height:50px;border-radius:10px;object-fit:cover}
 .badge{font-size:10px;padding:3px 7px;border-radius:8px;display:inline-block;font-weight:700;margin-top:3px}
@@ -57,12 +58,14 @@ body{font-family:system-ui;background:#fff;padding-bottom:90px}
 .shop-code-badge{background:#111827;color:#facc15;padding:4px 8px;border-radius:8px;font-weight:800;font-size:11px;display:inline-block}
 .detail-section{background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:10px;margin:8px 0}
 .detail-title{font-weight:800;font-size:13px;margin-bottom:6px;border-bottom:1px solid #e5e7eb;padding-bottom:4px}
-.order-row{border:2px solid transparent}
-.order-row:active{border-color:#f97316;background:#fffbeb}
+.profit-card{background:linear-gradient(135deg,#111827,#1f2937);color:white;border-radius:16px;padding:14px;margin:10px 0}
+.profit-row{display:flex;justify-content:space-between;margin:6px 0;font-size:13px}
+.profit-big{font-size:20px;font-weight:800;color:#facc15}
+.settlement-notif{background:#fef3c7;border:2px solid #f59e0b;border-radius:12px;padding:10px;margin:8px 0;animation:pulse 2s infinite}
 </style>
 </head>
 <body>
-<div class="header"><h1>ShriBhog - Reseller<br>Demo</h1></div>
+<div class="header"><h1>ShriBhog - Reseller<br>Commission 20% Model</h1></div>
 <div class="tabs">
 <button class="tab-pill" id="t-customer" onclick="switchRole('customer')">🛒 Customer</button>
 <button class="tab-pill active" id="t-owner" onclick="switchRole('owner')">🏪 Shop Owner</button>
@@ -70,7 +73,7 @@ body{font-family:system-ui;background:#fff;padding-bottom:90px}
 <button class="tab-pill" id="t-admin" onclick="switchRole('admin')">👑 Admin</button>
 </div>
 <div class="orange-bg">
-<div class="shop-title" id="panelTitle">🏪 Shop Panel - Edit Feature</div>
+<div class="shop-title" id="panelTitle">🏪 Shop Panel</div>
 <div id="ownerPanel">
 <div class="add-card">
 <h3>🏪 Shop Profile</h3>
@@ -82,14 +85,26 @@ body{font-family:system-ui;background:#fff;padding-bottom:90px}
 <button onclick="generateShopCode()" style="background:#111827;color:white;border:none;padding:6px 10px;border-radius:8px;font-size:11px">🔄 New</button>
 </div>
 <hr style="margin:10px 0">
-<label style="font-size:12px;font-weight:700">Naya Dish Add Karo</label>
 <input type="file" id="fImg" accept="image/*" class="inp">
 <input type="text" id="fName" placeholder="Dish naam" class="inp">
 <input type="number" id="fRate" placeholder="Rate" class="inp">
 <button class="btn-green" onclick="addDish()">✅ Approval bhejo</button>
 </div>
-<div style="color:white;font-weight:700;margin:15px 0 8px">📋 Aapke Dishes - Edit kar sakte ho ✏️</div><div class="table-card" id="ownerList"></div>
-<div style="color:white;font-weight:700;margin:15px 0 8px">📦 Order History - Click karo full detail 👆</div><div class="table-card" id="ownerOrders"></div>
+
+<!-- MY PROFIT - NAYA -->
+<div id="ownerProfitSection" class="profit-card">
+<h3>💰 My Profit - Commission ke baad</h3>
+<div class="profit-row"><span>Today Sale (Delivered):</span><span id="ownerTodaySale">₹0</span></div>
+<div class="profit-row"><span>Admin Commission (<span id="ownerCommPer">20</span>%):</span><span id="ownerTodayComm" style="color:#f87171">- ₹0</span></div>
+<div class="profit-row" style="border-top:1px dashed #374151;padding-top:6px"><span>My Profit (Pending Settlement):</span><span class="profit-big" id="ownerProfitPending">₹0</span></div>
+<div class="profit-row"><span>Total Settled Profit:</span><span id="ownerProfitSettled" style="color:#4ade80">₹0</span></div>
+<div style="font-size:11px;color:#9ca3af;margin-top:8px">⏰ Auto Settlement har raat 9 baje hoga, ya niche button dabao</div>
+<button class="btn-orange" onclick="requestSettlement()">💸 Payment Settlement Request Karo - Admin ko Notification Jayega</button>
+<div id="ownerSettlementHistory" style="margin-top:10px;font-size:11px"></div>
+</div>
+
+<div style="color:white;font-weight:700;margin:15px 0 8px">📋 Dishes - Edit</div><div class="table-card" id="ownerList"></div>
+<div style="color:white;font-weight:700;margin:15px 0 8px">📦 Order History - Click detail</div><div class="table-card" id="ownerOrders"></div>
 </div>
 <div id="otherPanel" style="display:none">
 <div id="deliverySetting" style="display:none" class="add-card">
@@ -97,6 +112,8 @@ body{font-family:system-ui;background:#fff;padding-bottom:90px}
 <input id="deliveryPhoneInput" class="inp" placeholder="Delivery Mobile" oninput="saveDeliveryPhone()">
 </div>
 <div id="adminApproveBox" style="display:none"></div>
+<div id="adminCommissionBox" style="display:none"></div>
+<div id="adminSettlementBox" style="display:none"></div>
 <div class="table-card" id="otherList"></div>
 <div id="customerFoodGrid"></div>
 <div id="customerOrdersList" class="table-card" style="margin-top:12px"></div>
@@ -104,16 +121,13 @@ body{font-family:system-ui;background:#fff;padding-bottom:90px}
 </div>
 <div class="cart-bar" id="cartBar" style="display:none"><div>🛒 <span id="cartCount">0</span> Items | ₹<span id="cartTotal">0</span></div><div><button onclick="openCartEdit()" style="background:#374151;margin-right:6px">✏️ Edit</button><button onclick="openCheckout()">Order Karo</button></div></div>
 
-<!-- DISH EDIT MODAL - NAYA -->
-<div class="modal" id="editDishModal"><div class="modal-box"><div style="display:flex;justify-content:space-between"><h3>✏️ Dish Edit Karo</h3><button onclick="document.getElementById('editDishModal').classList.remove('active')" style="background:#eee;border:none;width:30px;height:30px;border-radius:50%">✕</button></div>
+<div class="modal" id="editDishModal"><div class="modal-box"><div style="display:flex;justify-content:space-between"><h3>✏️ Dish Edit</h3><button onclick="document.getElementById('editDishModal').classList.remove('active')" style="background:#eee;border:none;width:30px;height:30px;border-radius:50%">✕</button></div>
 <img id="editImgPreview" src="" style="width:100%;height:180px;object-fit:cover;border-radius:12px;margin:10px 0">
 <input type="file" id="editImg" accept="image/*" class="inp">
 <input type="text" id="editName" placeholder="Dish naam" class="inp">
 <input type="number" id="editRate" placeholder="Rate" class="inp">
 <button class="btn-green" onclick="saveEditDish()">💾 Save Edit</button>
-<button onclick="document.getElementById('editDishModal').classList.remove('active')" style="background:#eee;border:none;padding:9px;width:100%;border-radius:10px;margin-top:6px">Cancel</button>
 </div></div>
-
 <div class="modal" id="cartEditModal"><div class="modal-box"><div style="display:flex;justify-content:space-between"><h3>🛒 Cart Edit</h3><button onclick="document.getElementById('cartEditModal').classList.remove('active')" style="background:#eee;border:none;width:30px;height:30px;border-radius:50%">✕</button></div><div id="cartEditList" style="margin-top:10px"></div><div style="background:#111827;color:white;padding:10px;border-radius:10px;margin-top:10px;text-align:center;font-weight:800">Total: ₹<span id="cartEditTotal">0</span></div><button class="btn-green" style="margin-top:10px" onclick="document.getElementById('cartEditModal').classList.remove('active');openCheckout()">✅ Order Karo</button></div></div>
 <div class="modal" id="checkoutModal"><div class="modal-box"><h3>📍 Delivery + UPI</h3><input id="cName" class="inp" style="margin-top:10px" placeholder="Naam"><input id="cPhone" class="inp" placeholder="Phone"><textarea id="cAddr" class="inp" placeholder="Address"></textarea><button class="btn-loc" onclick="getLocation()">📍 Location</button><p id="locStatus" style="font-size:11px;color:green"></p><div id="upiSection" style="display:none"><div class="upi-box"><b>💳 UPI Pay First</b><br><span style="font-size:12px">UPI: <b id="upiIdText"></b></span><br><br><img id="qrImg" src="" style="width:170px;height:170px"><br><br><b>₹<span id="payAmount">0</span></b><br><button onclick="payUPI()" style="background:#16a34a;color:white;border:none;padding:10px 18px;border-radius:20px;font-weight:800;width:100%;margin-top:8px">📲 UPI Pay</button></div><label style="font-size:12px;display:flex;gap:6px;align-items:center"><input type="checkbox" id="paidCheck"> Maine Pay Kar Diya</label><input id="txnId" class="inp" style="margin-top:6px" placeholder="Txn ID last 4"></div><button class="btn-green" id="finalOrderBtn" style="display:none;margin-top:10px" onclick="confirmOrder()">✅ Confirm Order</button><button onclick="closeCheckout()" style="background:#eee;border:none;padding:9px;width:100%;border-radius:10px;margin-top:6px">Cancel</button></div></div>
 <div class="modal" id="otpModal"><div class="modal-box" style="text-align:center"><h3>✅ Order Confirmed!</h3><p style="font-size:13px">ID: <b id="showOrderId" style="color:#b91c1c"></b></p><div class="otp-big" id="showOtp">----</div><div id="afterOrderContact" class="contact-box"></div><button class="btn-green" style="margin-top:12px" onclick="closeOtpModal()">OK - Detail Dekho</button></div></div>
@@ -126,47 +140,25 @@ let SHOP_NAME=localStorage.getItem('shop_name')||"ShriBhog Main Shop";
 let STORE_PHONE=localStorage.getItem('store_phone')||"9876543210";
 let SHOP_CODE=localStorage.getItem('shop_code')||"SHOP-"+Math.floor(1000+Math.random()*9000);
 let DELIVERY_PHONE=localStorage.getItem('delivery_phone')||"9876500000";
+let COMMISSION_RATE=Number(localStorage.getItem('commission_rate')||20); // Admin commission %
 if(!localStorage.getItem('shop_code')){localStorage.setItem('shop_code',SHOP_CODE);}
 if(location.search.includes('clear')){localStorage.clear();history.replaceState(null,'',location.pathname)}
 let dishes=JSON.parse(localStorage.getItem('shri_dishes_v2')||'[]');
 let orders=JSON.parse(localStorage.getItem('shri_orders')||'[]');
+let settlements=JSON.parse(localStorage.getItem('shri_settlements')||'[]');
+let settlementRequests=JSON.parse(localStorage.getItem('shri_settlement_requests')||'[]');
 let cart=[];let role='owner';let currentLoc="";let lastNotifiedId=Number(localStorage.getItem('last_delivery_notify')||0);
 let audioCtx;let currentDeliveryOrderId=null;let editingDishId=null;
-function playTone(){try{if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();let o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.frequency.value=800;g.gain.value=0.5;o.start();g.gain.exponentialRampToValueAtTime(0.01,audioCtx.currentTime+0.6);o.stop(audioCtx.currentTime+0.6);}catch(e){}}
-function notifyDelivery(o){if(o.id<=lastNotifiedId) return; playTone(); lastNotifiedId=o.id;localStorage.setItem('last_delivery_notify',lastNotifiedId);}
-function save(){localStorage.setItem('shri_dishes_v2',JSON.stringify(dishes));localStorage.setItem('shri_orders',JSON.stringify(orders))}
+function playTone(){try{if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();let o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.frequency.value=800;g.gain.value=0.5;o.start();g.gain.exponentialRampToValueAtTime(0.01,audioCtx.currentTime+0.6);o.stop(audioCtx.currentTime+0.6);}catch(e){} if(navigator.vibrate) navigator.vibrate([400,100,400]);}
+function save(){localStorage.setItem('shri_dishes_v2',JSON.stringify(dishes));localStorage.setItem('shri_orders',JSON.stringify(orders));localStorage.setItem('shri_settlements',JSON.stringify(settlements));localStorage.setItem('shri_settlement_requests',JSON.stringify(settlementRequests));localStorage.setItem('commission_rate',COMMISSION_RATE);}
 function saveShopInfo(){SHOP_NAME=document.getElementById('shopNameInput').value.trim()||"ShriBhog Shop";STORE_PHONE=document.getElementById('storePhoneInput').value.trim();localStorage.setItem('shop_name',SHOP_NAME);localStorage.setItem('store_phone',STORE_PHONE);document.getElementById('shopCodeDisplay').innerText=SHOP_CODE;}
 function saveDeliveryPhone(){DELIVERY_PHONE=document.getElementById('deliveryPhoneInput').value.trim();localStorage.setItem('delivery_phone',DELIVERY_PHONE);}
 function generateShopCode(){SHOP_CODE="SHOP-"+Math.floor(1000+Math.random()*9000)+"-"+String(Date.now()).slice(-3);localStorage.setItem('shop_code',SHOP_CODE);document.getElementById('shopCodeDisplay').innerText=SHOP_CODE;alert('New Shop Code: '+SHOP_CODE);}
 function genOrderId(){return 'SHRI-'+String(1000+orders.length+1).slice(-4)+'-'+String(Date.now()).slice(-3)}
-function switchRole(r){role=r;updateCart();document.querySelectorAll('.tab-pill').forEach(b=>b.classList.remove('active'));document.getElementById('t-'+r).classList.add('active');document.getElementById('ownerPanel').style.display=(r==='owner')?'block':'none';document.getElementById('otherPanel').style.display=(r==='owner')?'none':'block';document.getElementById('deliverySetting').style.display=(r==='delivery')?'block':'none';document.getElementById('adminApproveBox').style.display=(r==='admin')?'block':'none';if(r==='owner'){document.getElementById('shopNameInput').value=SHOP_NAME;document.getElementById('storePhoneInput').value=STORE_PHONE;document.getElementById('shopCodeDisplay').innerText=SHOP_CODE;}if(r==='delivery') document.getElementById('deliveryPhoneInput').value=DELIVERY_PHONE;document.getElementById('panelTitle').innerText=r==='customer'?'🛒 Customer':r==='admin'?'👑 Admin':r==='delivery'?'🛵 Delivery':r==='owner'?'🏪 Shop - Dish Edit + Order Detail Fixed':'';render();}
-function addDish(){let n=document.getElementById('fName').value.trim(),rt=document.getElementById('fRate').value.trim(),fi=document.getElementById('fImg').files[0];if(!n||!rt)return alert('Naam Rate bharo');if(!fi)return alert('Photo chuno');let rd=new FileReader();rd.onload=e=>{let im=new Image();im.onload=()=>{let cv=document.createElement('canvas'),mx=600,w=im.width,h=im.height;if(w>mx||h>mx){if(w>h){h=h*mx/w;w=mx}else{w=w*mx/h;h=mx}}cv.width=w;cv.height=h;cv.getContext('2d').drawImage(im,0,0,w,h);let sm=cv.toDataURL('image/jpeg',0.7);dishes.push({id:Date.now(),name:n,rate:rt,img:sm,status:'pending',shopName:SHOP_NAME,shopCode:SHOP_CODE});save();document.getElementById('fName').value='';document.getElementById('fRate').value='';document.getElementById('fImg').value='';render();alert('Bhej diya!');};im.src=e.target.result;};rd.readAsDataURL(fi);}
-
-// EDIT DISH - NAYA FUNCTION
-function editDish(id){
-let d=dishes.find(x=>x.id===id);if(!d)return;
-editingDishId=id;
-document.getElementById('editName').value=d.name;
-document.getElementById('editRate').value=d.rate;
-document.getElementById('editImgPreview').src=d.img;
-document.getElementById('editImg').value='';
-document.getElementById('editDishModal').classList.add('active');
-}
-function saveEditDish(){
-let d=dishes.find(x=>x.id===editingDishId);if(!d)return;
-let newName=document.getElementById('editName').value.trim();
-let newRate=document.getElementById('editRate').value.trim();
-let newFile=document.getElementById('editImg').files[0];
-if(!newName||!newRate)return alert('Naam Rate bharo');
-function doSave(imgData){
-d.name=newName;d.rate=newRate;if(imgData) d.img=imgData; d.status='pending'; // edit pe fir se pending hoga admin approve karega
-save();document.getElementById('editDishModal').classList.remove('active');render();alert('✅ Edit ho gaya! Fir se Admin approve karega');
-}
-if(newFile){
-let rd=new FileReader();rd.onload=e=>{let im=new Image();im.onload=()=>{let cv=document.createElement('canvas'),mx=600,w=im.width,h=im.height;if(w>mx||h>mx){if(w>h){h=h*mx/w;w=mx}else{w=w*mx/h;h=mx}}cv.width=w;cv.height=h;cv.getContext('2d').drawImage(im,0,0,w,h);let sm=cv.toDataURL('image/jpeg',0.7);doSave(sm);};im.src=e.target.result;};rd.readAsDataURL(newFile);
-}else{doSave(null);}
-}
-
+function switchRole(r){role=r;updateCart();document.querySelectorAll('.tab-pill').forEach(b=>b.classList.remove('active'));document.getElementById('t-'+r).classList.add('active');document.getElementById('ownerPanel').style.display=(r==='owner')?'block':'none';document.getElementById('otherPanel').style.display=(r==='owner')?'none':'block';document.getElementById('deliverySetting').style.display=(r==='delivery')?'block':'none';document.getElementById('adminApproveBox').style.display=(r==='admin')?'block':'none';document.getElementById('adminCommissionBox').style.display=(r==='admin')?'block':'none';document.getElementById('adminSettlementBox').style.display=(r==='admin')?'block':'none';if(r==='owner'){document.getElementById('shopNameInput').value=SHOP_NAME;document.getElementById('storePhoneInput').value=STORE_PHONE;document.getElementById('shopCodeDisplay').innerText=SHOP_CODE;}if(r==='delivery') document.getElementById('deliveryPhoneInput').value=DELIVERY_PHONE;document.getElementById('panelTitle').innerText=r==='customer'?'🛒 Customer':r==='admin'?`👑 Admin - Commission ${COMMISSION_RATE}% + Settlement`:r==='delivery'?'🛵 Delivery':r==='owner'?'🏪 Shop - My Profit':'';render();}
+function addDish(){let n=document.getElementById('fName').value.trim(),rt=document.getElementById('fRate').value.trim(),fi=document.getElementById('fImg').files[0];if(!n||!rt)return alert('Naam Rate bharo');if(!fi)return alert('Photo chuno');let rd=new FileReader();rd.onload=e=>{let im=new Image();im.onload=()=>{let cv=document.createElement('canvas'),mx=600,w=im.width,h=im.height;if(w>mx||h>mx){if(w>h){h=h*mx/w;w=mx}else{w=w*mx/h;h=mx}}cv.width=w;cv.height=h;cv.getContext('2d').drawImage(im,0,0,w,h);let sm=cv.toDataURL('image/jpeg',0.7);dishes.push({id:Date.now(),name:n,rate:rt,img:sm,status:'pending',shopName:SHOP_NAME,shopCode:SHOP_CODE});save();document.getElementById('fName').value='';document.getElementById('fRate').value='';document.getElementById('fImg').value='';render();};im.src=e.target.result;};rd.readAsDataURL(fi);}
+function editDish(id){let d=dishes.find(x=>x.id===id);if(!d)return;editingDishId=id;document.getElementById('editName').value=d.name;document.getElementById('editRate').value=d.rate;document.getElementById('editImgPreview').src=d.img;document.getElementById('editImg').value='';document.getElementById('editDishModal').classList.add('active');}
+function saveEditDish(){let d=dishes.find(x=>x.id===editingDishId);if(!d)return;let newName=document.getElementById('editName').value.trim();let newRate=document.getElementById('editRate').value.trim();let newFile=document.getElementById('editImg').files[0];if(!newName||!newRate)return alert('Naam Rate bharo');function doSave(imgData){d.name=newName;d.rate=newRate;if(imgData) d.img=imgData; d.status='pending'; save();document.getElementById('editDishModal').classList.remove('active');render();alert('✅ Edit ho gaya! Admin approve karega');}if(newFile){let rd=new FileReader();rd.onload=e=>{let im=new Image();im.onload=()=>{let cv=document.createElement('canvas'),mx=600,w=im.width,h=im.height;if(w>mx||h>mx){if(w>h){h=h*mx/w;w=mx}else{w=w*mx/h;h=mx}}cv.width=w;cv.height=h;cv.getContext('2d').drawImage(im,0,0,w,h);let sm=cv.toDataURL('image/jpeg',0.7);doSave(sm);};im.src=e.target.result;};rd.readAsDataURL(newFile);}else{doSave(null);}}
 function approve(id){let d=dishes.find(x=>x.id===id);if(d){d.status='approved';save();render();}}
 function rejectDish(id){if(confirm('Reject?')){dishes=dishes.filter(x=>x.id!==id);save();render();}}
 function removeDish(id){if(confirm('Delete?')){dishes=dishes.filter(x=>x.id!==id);save();render()}}
@@ -182,14 +174,112 @@ function openCheckout(){if(cart.length===0)return;document.getElementById('check
 function closeCheckout(){document.getElementById('checkoutModal').classList.remove('active')}
 function getLocation(){let st=document.getElementById('locStatus');st.innerText='Location...';navigator.geolocation.getCurrentPosition(p=>{currentLoc=`https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;st.innerHTML=`✅ Map`;document.getElementById('cAddr').value+=`\n📍 ${currentLoc}`;});}
 function payUPI(){window.location.href=document.getElementById('qrImg').dataset.upi;}
-function confirmOrder(){let nm=document.getElementById('cName').value.trim(),ph=document.getElementById('cPhone').value.trim(),ad=document.getElementById('cAddr').value.trim(),paid=document.getElementById('paidCheck').checked,txn=document.getElementById('txnId').value.trim();if(!nm||!ph||!ad)return alert('Details bharo');if(!paid)return alert('Checkbox');let tot=cart.reduce((s,x)=>s+Number(x.rate)*x.qty,0);let otp=Math.floor(1000+Math.random()*9000);let oid=genOrderId();let itemsCopy=cart.map(c=>({name:c.name,rate:c.rate,qty:c.qty,img:c.img,shopName:c.shopName||SHOP_NAME,shopCode:c.shopCode||SHOP_CODE}));let newOrder={id:Date.now(),orderId:oid,items:itemsCopy,total:tot,customer:nm,phone:ph,address:ad,location:currentLoc,txnId:txn,payment:'UPI Paid',otp:otp,shopName:SHOP_NAME,shopCode:SHOP_CODE,storePhone:STORE_PHONE,deliveryPhone:'',status:'Paid - New',time:new Date().toLocaleString(),createdAt:Date.now()};orders.push(newOrder);save();cart=[];updateCart();closeCheckout();document.getElementById('showOtp').innerText=otp;document.getElementById('showOrderId').innerText=oid;document.getElementById('afterOrderContact').innerHTML=`🏪 ${SHOP_NAME} (${SHOP_CODE})<br>📞 Store: ${STORE_PHONE}`;document.getElementById('otpModal').classList.add('active');render();}
+function confirmOrder(){let nm=document.getElementById('cName').value.trim(),ph=document.getElementById('cPhone').value.trim(),ad=document.getElementById('cAddr').value.trim(),paid=document.getElementById('paidCheck').checked,txn=document.getElementById('txnId').value.trim();if(!nm||!ph||!ad)return alert('Details bharo');if(!paid)return alert('Checkbox');let tot=cart.reduce((s,x)=>s+Number(x.rate)*x.qty,0);let otp=Math.floor(1000+Math.random()*9000);let oid=genOrderId();let comm=Math.round(tot*COMMISSION_RATE/100);let profit=tot-comm;let itemsCopy=cart.map(c=>({name:c.name,rate:c.rate,qty:c.qty,img:c.img,shopName:c.shopName||SHOP_NAME,shopCode:c.shopCode||SHOP_CODE}));let newOrder={id:Date.now(),orderId:oid,items:itemsCopy,total:tot,commission:comm,shopProfit:profit,commissionRate:COMMISSION_RATE,customer:nm,phone:ph,address:ad,location:currentLoc,txnId:txn,payment:'UPI Paid',otp:otp,shopName:SHOP_NAME,shopCode:SHOP_CODE,storePhone:STORE_PHONE,deliveryPhone:'',status:'Paid - New',time:new Date().toLocaleString(),createdAt:Date.now(),settled:false};orders.push(newOrder);save();cart=[];updateCart();closeCheckout();document.getElementById('showOtp').innerText=otp;document.getElementById('showOrderId').innerText=oid;document.getElementById('afterOrderContact').innerHTML=`🏪 ${SHOP_NAME} (${SHOP_CODE})<br>💰 Total: ₹${tot} | Commission ${COMMISSION_RATE}% = ₹${comm} | Your Profit: ₹${profit}`;document.getElementById('otpModal').classList.add('active');render();}
 function closeOtpModal(){document.getElementById('otpModal').classList.remove('active');let last=orders[orders.length-1];if(last) openOrderDetail(last.id);}
-function shopReady(id){let o=orders.find(x=>x.id===id);if(o){o.status='Ready for Pickup';o.readyAt=Date.now();save();localStorage.setItem('shri_new_pickup',JSON.stringify(o));playTone();notifyDelivery(o);render();}}
+function shopReady(id){let o=orders.find(x=>x.id===id);if(o){o.status='Ready for Pickup';o.readyAt=Date.now();save();playTone();render();}}
 function pickupOrder(id){let o=orders.find(x=>x.id===id);if(!o)return;if(!DELIVERY_PHONE||DELIVERY_PHONE.length<8){alert('Pehle Mobile No daalo');return}o.status='Out for Delivery';o.pickupAt=Date.now();o.deliveryPhone=DELIVERY_PHONE;save();render();}
 function openOtpVerify(id){let o=orders.find(x=>x.id===id);if(!o)return;currentDeliveryOrderId=id;document.getElementById('otpCustomerInfo').innerHTML=`<b>${o.orderId}</b> - ${o.customer}<br>🏪 ${o.shopName} (${o.shopCode})<br>📞 ${o.phone}<br><span style="color:red">⚠️ OTP Customer se puchho</span>`;document.getElementById('inputOtp').value='';document.getElementById('otpError').style.display='none';document.getElementById('deliveryOtpModal').classList.add('active');}
-function verifyDeliveryOtp(){let entered=document.getElementById('inputOtp').value.trim();let o=orders.find(x=>x.id===currentDeliveryOrderId);if(!o)return;if(entered==o.otp){o.status='Delivered';o.deliveredAt=new Date().toLocaleString();save();document.getElementById('deliveryOtpModal').classList.remove('active');playTone();render();alert('✅ Delivered');}else{document.getElementById('otpError').style.display='block';}}
+function verifyDeliveryOtp(){let entered=document.getElementById('inputOtp').value.trim();let o=orders.find(x=>x.id===currentDeliveryOrderId);if(!o)return;if(entered==o.otp){o.status='Delivered';o.deliveredAt=new Date().toLocaleString();o.deliveredDate=new Date().toISOString().split('T')[0];save();document.getElementById('deliveryOtpModal').classList.remove('active');playTone();render();alert('✅ Delivered - Profit ₹'+o.shopProfit+' added to My Profit');}else{document.getElementById('otpError').style.display='block';}}
 function cancelOrder(id){let o=orders.find(x=>x.id===id);if(!o)return;if(o.status!=='Paid - New'){alert('Cancel nahi');return}if(!confirm('Cancel '+o.orderId+'?')) return;o.status='Cancelled by Customer';save();render();}
-function getEta(o){let now=Date.now();let diff=now-(o.createdAt||o.id);if(o.status==='Delivered') return '✅ Delivered at '+o.deliveredAt;if(o.status.includes('Cancelled')) return '❌ Cancelled';if(o.status==='Paid - New'){let l=15-Math.floor(diff/60000); if(l<1) l=1; return `⏳ ${l} min me Ready`;}if(o.status==='Ready for Pickup') return '🟦 Ready!';if(o.status==='Out for Delivery'){let l=15-Math.floor((now-(o.pickupAt||now))/60000); if(l<2) l=2; return `🛵 ${l} min`;}return o.status;}
+function getEta(o){if(o.status==='Delivered') return '✅ Delivered at '+o.deliveredAt;if(o.status.includes('Cancelled')) return '❌ Cancelled';if(o.status==='Paid - New') return `⏳ Shop Ready karega`;if(o.status==='Ready for Pickup') return '🟦 Ready!';if(o.status==='Out for Delivery') return `🛵 On the way`;return o.status;}
+
+// COMMISSION + SETTLEMENT LOGIC
+function calculateOwnerProfit(){
+let myOrders=orders.filter(o=>o.shopCode===SHOP_CODE && o.status==='Delivered');
+let pendingOrders=myOrders.filter(o=>!o.settled);
+let settledOrders=myOrders.filter(o=>o.settled);
+let todayStr=new Date().toISOString().split('T')[0];
+let todayOrders=myOrders.filter(o=>o.deliveredDate===todayStr || (!o.deliveredDate && new Date(o.id).toISOString().split('T')[0]===todayStr));
+let todaySale=todayOrders.reduce((s,o)=>s+o.total,0);
+let todayComm=todayOrders.reduce((s,o)=>s+(o.commission||Math.round(o.total*COMMISSION_RATE/100)),0);
+let todayProfit=todaySale-todayComm;
+let pendingProfit=pendingOrders.reduce((s,o)=>s+(o.shopProfit||o.total-Math.round(o.total*COMMISSION_RATE/100)),0);
+let settledProfit=settledOrders.reduce((s,o)=>s+(o.shopProfit||0),0);
+return {todaySale,todayComm,todayProfit,pendingProfit,settledProfit,pendingOrders,settledOrders,todayOrders};
+}
+function updateOwnerProfitUI(){
+let calc=calculateOwnerProfit();
+document.getElementById('ownerCommPer').innerText=COMMISSION_RATE;
+document.getElementById('ownerTodaySale').innerText='₹'+calc.todaySale;
+document.getElementById('ownerTodayComm').innerText='- ₹'+calc.todayComm;
+document.getElementById('ownerProfitPending').innerText='₹'+calc.pendingProfit;
+document.getElementById('ownerProfitSettled').innerText='₹'+calc.settledProfit;
+let histHtml='';
+if(settlements.filter(s=>s.shopCode===SHOP_CODE).length>0){
+histHtml='<div style="margin-top:8px;font-weight:700">Settlement History:</div>';
+settlements.filter(s=>s.shopCode===SHOP_CODE).slice().reverse().slice(0,5).forEach(s=>{
+histHtml+=`<div style="background:#1f2937;padding:6px;border-radius:6px;margin-top:4px">📅 ${s.date} - ₹${s.amount} settled | ${s.status}</div>`;
+});
+}
+document.getElementById('ownerSettlementHistory').innerHTML=histHtml;
+}
+function requestSettlement(){
+let calc=calculateOwnerProfit();
+if(calc.pendingProfit<=0){alert('Koi pending profit nahi hai!');return;}
+let req={id:Date.now(),shopName:SHOP_NAME,shopCode:SHOP_CODE,storePhone:STORE_PHONE,amount:calc.pendingProfit,ordersCount:calc.pendingOrders.length,date:new Date().toLocaleString(),status:'Pending',todaySale:calc.todaySale,commission:calc.todayComm};
+settlementRequests.push(req);
+save();
+playTone();
+alert(`💸 Settlement Request bheja Admin ko! Amount: ₹${calc.pendingProfit} | Orders: ${calc.pendingOrders.length}\nAdmin approve karega tab settled hoga.`);
+render();
+}
+function autoSettlementCheck(){
+let now=new Date();
+if(now.getHours()===21 && now.getMinutes()===0){ // 9 PM = 21 hour
+let lastAuto=localStorage.getItem('last_auto_settlement');
+let todayStr=now.toISOString().split('T')[0];
+if(lastAuto!==todayStr){
+doAutoSettlement();
+localStorage.setItem('last_auto_settlement',todayStr);
+}
+}
+}
+function doAutoSettlement(){
+let byShop={};
+orders.filter(o=>o.status==='Delivered' &&!o.settled).forEach(o=>{
+if(!byShop[o.shopCode]) byShop[o.shopCode]={shopName:o.shopName,shopCode:o.shopCode,orders:[],totalProfit:0,totalComm:0,totalSale:0};
+byShop[o.shopCode].orders.push(o);
+byShop[o.shopCode].totalProfit+=(o.shopProfit||0);
+byShop[o.shopCode].totalComm+=(o.commission||0);
+byShop[o.shopCode].totalSale+=o.total;
+});
+for(let code in byShop){
+let g=byShop[code];
+let settlement={id:Date.now()+Math.random(),shopName:g.shopName,shopCode:g.shopCode,date:new Date().toLocaleString(),dateStr:new Date().toISOString().split('T')[0],amount:g.totalProfit,commission:g.totalComm,sale:g.totalSale,ordersCount:g.orders.length,status:'Auto Settled at 9 PM',type:'auto'};
+settlements.push(settlement);
+g.orders.forEach(o=>{o.settled=true;});
+}
+save();
+if(Object.keys(byShop).length>0){console.log('Auto settlement done',byShop);playTone();}
+render();
+}
+function adminApproveSettlement(reqId){
+let req=settlementRequests.find(r=>r.id===reqId);if(!req)return;
+if(!confirm(`Approve settlement?\nShop: ${req.shopName} (${req.shopCode})\nAmount: ₹${req.amount}\nOrders: ${req.ordersCount}`)) return;
+let myOrders=orders.filter(o=>o.shopCode===req.shopCode && o.status==='Delivered' &&!o.settled);
+myOrders.forEach(o=>o.settled=true);
+let settlement={id:Date.now(),shopName:req.shopName,shopCode:req.shopCode,date:new Date().toLocaleString(),dateStr:new Date().toISOString().split('T')[0],amount:req.amount,commission:req.commission,sale:req.todaySale,ordersCount:req.ordersCount,status:'Approved by Admin',type:'manual',requestId:reqId};
+settlements.push(settlement);
+req.status='Approved';
+save();
+alert('✅ Settlement Approved! Shop ko ₹'+req.amount+' mil gaya My Profit Settled me.');
+render();
+}
+function adminRejectSettlement(reqId){
+let req=settlementRequests.find(r=>r.id===reqId);if(!req)return;
+if(!confirm('Reject settlement request?')) return;
+req.status='Rejected';
+save();
+render();
+}
+function saveCommissionRate(){
+let newRate=Number(document.getElementById('commissionInput').value);
+if(isNaN(newRate)||newRate<0||newRate>50){alert('Commission 0-50% ke beech daalo');return;}
+COMMISSION_RATE=newRate;
+save();
+alert('✅ Commission updated to '+COMMISSION_RATE+'% - Ab se har order pe '+COMMISSION_RATE+'% katega');
+render();
+}
 
 function openOrderDetail(id){
 let o=orders.find(x=>x.id===id);if(!o)return;
@@ -199,46 +289,62 @@ let trackHtml='<div class="track">'+steps.map(s=>`<div class="track-step"><div c
 let isPending = o.status==='Paid - New' || o.status==='Ready for Pickup' || o.status==='Out for Delivery';
 let otpBox = '';
 if(role==='delivery'){
-if(isPending){otpBox=`<div style="background:#fef3c7;border:2px dashed #f59e0b;border-radius:12px;padding:14px;text-align:center"><div style="font-weight:800">🔒 OTP CUSTOMER KE PASS HAI</div><div style="font-size:12px">Customer se OTP mango</div></div>`;}
+if(isPending){otpBox=`<div style="background:#fef3c7;border:2px dashed #f59e0b;border-radius:12px;padding:14px;text-align:center"><div style="font-weight:800">🔒 OTP CUSTOMER KE PASS</div></div>`;}
 else if(o.status==='Delivered'){otpBox=`<div style="background:#dcfce7;border-radius:12px;padding:12px;text-align:center;font-weight:800">✅ Delivered - OTP ${o.otp} Verified</div>`;}
 }else{
 if(isPending){otpBox=`<div style="background:#111827;border:3px dashed #facc15;border-radius:16px;padding:15px;text-align:center"><div style="color:#cbd5e1;font-size:11px">DELIVERY OTP</div><div class="otp-big">${o.otp}</div></div>`;}
-else if(o.status==='Delivered'){otpBox=`<div style="background:#dcfce7;border-radius:12px;padding:12px;text-align:center;font-weight:800">✅ Delivered - OTP was ${o.otp}</div>`;}
-else if(o.status.includes('Cancelled')){otpBox=`<div style="background:#fee2e2;border-radius:12px;padding:12px;text-align:center;font-weight:800;color:#991b1b">❌ Cancelled</div>`;}
+else if(o.status==='Delivered'){otpBox=`<div style="background:#dcfce7;border-radius:12px;padding:12px;text-align:center;font-weight:800">✅ Delivered</div>`;}
 }
+let commission=o.commission||Math.round(o.total*(o.commissionRate||COMMISSION_RATE)/100);
+let profit=o.shopProfit||o.total-commission;
 let fullDetailHtml = '';
-if(role==='customer'){
+if(role==='owner'){
 fullDetailHtml = `
-<div class="detail-section"><div class="detail-title">🏪 SHOP DETAIL</div>Shop: <b>${o.shopName}</b><br>Code: <span class="shop-code-badge">${o.shopCode}</span><br>Phone: <a href="tel:${o.storePhone}">${o.storePhone}</a></div>
-<div class="detail-section"><div class="detail-title">👤 AAPKA DETAIL</div>Naam: ${o.customer}<br>Phone: ${o.phone}<br>Address: ${o.address}<br>${o.location?`Map: <a href="${o.location}" target="_blank">Map</a><br>`:''}</div>
-<div class="detail-section"><div class="detail-title">📦 ORDER DETAIL</div>Order ID: <b style="color:#b91c1c">${o.orderId}</b><br>Items: ${o.items.map(i=>`${i.name} x${i.qty||1} = ₹${i.rate*(i.qty||1)}`).join(', ')}<br>Total: <b style="font-size:16px;color:#16a34a">₹${o.total}</b><br>Payment: ${o.payment} | Txn: ${o.txnId}<br>Time: ${o.time}<br>${o.deliveredAt?`Delivered: ${o.deliveredAt}<br>`:''}Status: ${o.status}</div>
-${o.status==='Out for Delivery'||o.status==='Delivered'?`<div class="detail-section" style="background:#dcfce7"><div class="detail-title">🛵 DELIVERY</div>Phone: <a href="tel:${o.deliveryPhone}">${o.deliveryPhone}</a></div>`:''}
-`;
-}else if(role==='owner'){
-fullDetailHtml = `
-<div class="detail-section" style="background:#fff7ed;border-color:#f97316"><div class="detail-title">👤 CUSTOMER FULL DETAIL</div>Naam: <b>${o.customer}</b><br>Phone: <a href="tel:${o.phone}">${o.phone}</a> <a href="tel:${o.phone}" style="background:#f97316;color:white;padding:4px 8px;border-radius:12px;text-decoration:none;font-size:11px;margin-left:6px">📞 Call</a><br>Address: ${o.address}<br>${o.location?`Live: <a href="${o.location}" target="_blank">📍 Map Kholo</a><br>`:''}</div>
-<div class="detail-section"><div class="detail-title">🏪 SHOP</div>Shop: <b>${o.shopName}</b> | Code: <span class="shop-code-badge">${o.shopCode}</span></div>
-<div class="detail-section"><div class="detail-title">📦 ORDER</div>Order ID: <b style="color:#b91c1c">${o.orderId}</b><br>Items: ${o.items.map(i=>`${i.name} x${i.qty||1} = ₹${i.rate*(i.qty||1)}`).join(', ')}<br>Total: <b style="font-size:16px;color:#16a34a">₹${o.total}</b><br>Payment: ${o.payment} | Txn: ${o.txnId}<br>Time: ${o.time}<br>${o.deliveredAt?`Delivered: ${o.deliveredAt} by ${o.deliveryPhone}<br>`:''}${isPending?`OTP: ${o.otp}<br>`:''}Status: ${o.status}</div>
-${o.deliveryPhone?`<div class="detail-section"><div class="detail-title">🛵 DELIVERY</div>Phone: ${o.deliveryPhone}</div>`:''}
+<div class="detail-section" style="background:#fff7ed;border-color:#f97316"><div class="detail-title">👤 CUSTOMER</div>Naam: ${o.customer}<br>Phone: <a href="tel:${o.phone}">${o.phone}</a><br>Address: ${o.address}</div>
+<div class="detail-section"><div class="detail-title">💰 COMMISSION + PROFIT DETAIL</div>
+Total Sale: ₹${o.total}<br>
+Admin Commission (${o.commissionRate||COMMISSION_RATE}%): <span style="color:red">- ₹${commission}</span><br>
+<b>Your Profit:</b> <span style="color:green;font-size:16px;font-weight:800">₹${profit}</span><br>
+Settled: ${o.settled?'✅ Yes - Settled':'⏳ Pending - My Profit me hai'}<br>
+Status: ${o.status}
+</div>
 `;
 }else if(role==='admin'){
-fullDetailHtml = `<div class="detail-section" style="background:#111827;color:white"><div class="detail-title" style="color:#facc15">👑 ADMIN FULL</div>🏪 ${o.shopName} | Code: <span style="background:#facc15;color:#000;padding:2px 6px;border-radius:5px;font-weight:800">${o.shopCode}</span><br>Store: ${o.storePhone}<br><br>👤 ${o.customer} | ${o.phone}<br>📍 ${o.address}<br><br>📦 ${o.orderId} | Items: ${o.items.map(i=>`${i.name} x${i.qty||1}`).join(', ')}<br>Total: ₹${o.total} | OTP: ${o.otp} | Txn: ${o.txnId}<br>Status: ${o.status}<br>🛵 Del: ${o.deliveryPhone||'N/A'}</div>`;
-}else{fullDetailHtml = `<div class="detail-section"><b>Items:</b> ${o.items.map(i=>`${i.name} x${i.qty||1}`).join(', ')}<br><b>Total:</b> ₹${o.total}<br><b>Status:</b> ${o.status}</div>`;}
-let html=`<div style="background:#fef3c7;padding:10px;border-radius:10px;font-size:13px;font-weight:700">⏱️ ${getEta(o)} | ${o.orderId}</div>${trackHtml}${otpBox}${fullDetailHtml}<div style="margin-top:10px">${o.status==='Paid - New'&&role==='customer'?`<button class="btn-small btn-cancel" onclick="cancelOrder(${o.id});document.getElementById('detailModal').classList.remove('active')">❌ Cancel</button>`:''}${o.status==='Paid - New'&&role==='owner'?`<button class="btn-small btn-ready pulse" onclick="shopReady(${o.id});document.getElementById('detailModal').classList.remove('active')">🍳 Ready Karo</button>`:''}</div>`;
+fullDetailHtml = `
+<div class="detail-section" style="background:#111827;color:white"><div class="detail-title" style="color:#facc15">👑 ADMIN - COMMISSION DETAIL</div>
+🏪 ${o.shopName} | Code: <span style="background:#facc15;color:#000;padding:2px 6px;border-radius:5px">${o.shopCode}</span><br>
+👤 Cust: ${o.customer} | ${o.phone}<br>
+💰 Total: ₹${o.total}<br>
+Commission (${o.commissionRate||COMMISSION_RATE}%): <span style="color:#f87171">₹${commission} (Admin ka)</span><br>
+Shop Profit: <span style="color:#4ade80">₹${profit} (Shop ka)</span><br>
+Status: ${o.status} | Settled: ${o.settled?'Yes':'No'}<br>
+Del: ${o.deliveryPhone||'N/A'} | OTP: ${o.otp}
+</div>
+`;
+}else if(role==='customer'){
+fullDetailHtml = `
+<div class="detail-section"><div class="detail-title">🏪 SHOP</div>Shop: ${o.shopName} | ${o.shopCode}<br>Phone: ${o.storePhone}</div>
+<div class="detail-section"><div class="detail-title">📦 ORDER</div>Items: ${o.items.map(i=>`${i.name} x${i.qty||1}`).join(', ')}<br>Total: ₹${o.total}<br>Status: ${o.status}</div>
+`;
+}
+let html=`<div style="background:#fef3c7;padding:10px;border-radius:10px;font-size:13px;font-weight:700">⏱️ ${getEta(o)} | ${o.orderId}</div>${trackHtml}${otpBox}${fullDetailHtml}`;
 document.getElementById('detailContent').innerHTML=html;
 document.getElementById('detailModal').classList.add('active');
 }
 
 function render(){
+updateOwnerProfitUI();
 if(role==='owner'){
-let box=document.getElementById('ownerList');let html='<div class="table-head"><div class="col-photo">PHOTO</div><div class="col-name">NAME - Edit kar sakte ho</div><div class="col-rate">ACTION</div></div>';
+let box=document.getElementById('ownerList');let html='<div class="table-head"><div class="col-photo">PHOTO</div><div class="col-name">NAME</div><div class="col-rate">ACTION</div></div>';
 if(dishes.length===0)html+='<div style="padding:12px;text-align:center">Koi dish nahi</div>';
-dishes.forEach(d=>{html+=`<div class="row" style="cursor:default"><div class="col-photo"><img src="${d.img}"></div><div class="col-name" style="font-size:11px"><b>${d.name}</b><br>₹${d.rate} - <span class="badge ${d.status}">${d.status}</span><br><span style="font-size:9px">${d.shopCode||SHOP_CODE}</span></div><div class="col-rate" style="display:flex;flex-direction:column;gap:4px"><button class="btn-small btn-edit" onclick="editDish(${d.id})">✏️ Edit</button><button class="btn-small" style="background:#eee" onclick="removeDish(${d.id})">🗑️ Del</button></div></div>`});box.innerHTML=html;
-let ob=document.getElementById('ownerOrders');let oh='<div class="table-head"><div class="col-name">ORDER HISTORY - Row pe click karo full detail 👆</div><div class="col-rate">ACTION</div></div>';
-if(orders.length===0)oh+='<div style="padding:12px;text-align:center">Koi order nahi</div>';
-orders.slice().reverse().forEach(o=>{
-let act=o.status==='Paid - New'?`<button class="btn-small btn-ready pulse" onclick="event.stopPropagation();shopReady(${o.id})">🍳 Ready</button>`:`<span style="font-size:10px;font-weight:700">${o.status}</span>`;
-oh+=`<div class="order-row row" onclick="openOrderDetail(${o.id})"><div class="col-name" style="font-size:11px"><b style="color:#b91c1c">${o.orderId}</b> - ${o.customer}<br>📞 ${o.phone} | ₹${o.total} | ${o.items.map(i=>i.name+' x'+(i.qty||1)).join(', ')}<br><span class="badge ${o.status.includes('Delivered')?'delivered':o.status.includes('Cancelled')?'cancelled':o.status.includes('Ready')?'ready':'paid'}">${o.status}</span> <span style="font-size:9px;color:#f97316">👆 Click detail</span></div><div class="col-rate">${act}</div></div>`;});
+dishes.forEach(d=>{html+=`<div class="row" style="cursor:default"><div class="col-photo"><img src="${d.img}"></div><div class="col-name" style="font-size:11px"><b>${d.name}</b><br>₹${d.rate} - <span class="badge ${d.status}">${d.status}</span></div><div class="col-rate" style="display:flex;flex-direction:column;gap:4px"><button class="btn-small btn-edit" onclick="editDish(${d.id})">✏️ Edit</button><button class="btn-small" style="background:#eee" onclick="removeDish(${d.id})">🗑️</button></div></div>`});box.innerHTML=html;
+let ob=document.getElementById('ownerOrders');let oh='<div class="table-head"><div class="col-name">ORDER HISTORY - Click detail + Commission dekho</div><div class="col-rate">ACTION</div></div>';
+if(orders.filter(o=>o.shopCode===SHOP_CODE).length===0)oh+='<div style="padding:12px;text-align:center">Koi order nahi - Aapki shop ka</div>';
+orders.filter(o=>o.shopCode===SHOP_CODE).slice().reverse().forEach(o=>{
+let act=o.status==='Paid - New'?`<button class="btn-small btn-ready pulse" onclick="event.stopPropagation();shopReady(${o.id})">🍳 Ready</button>`:`<span style="font-size:10px">${o.status}${o.settled?' ✅ Settled':''}</span>`;
+let comm=o.commission||Math.round(o.total*COMMISSION_RATE/100);
+let prof=o.shopProfit||o.total-comm;
+oh+=`<div class="row" onclick="openOrderDetail(${o.id})"><div class="col-name" style="font-size:11px"><b style="color:#b91c1c">${o.orderId}</b> - ${o.customer} - ₹${o.total}<br>💰 Comm: ₹${comm} | Profit: <b style="color:green">₹${prof}</b> ${o.settled?'✅ Settled':'⏳ Pending'}<br><span class="badge ${o.status.includes('Delivered')?'delivered':o.status.includes('Cancelled')?'cancelled':'paid'}">${o.status}</span></div><div class="col-rate">${act}</div></div>`;});
 ob.innerHTML=oh;
 document.getElementById('customerFoodGrid').innerHTML='';
 document.getElementById('customerOrdersList').innerHTML='';
@@ -247,19 +353,19 @@ let box=document.getElementById('otherList');box.innerHTML='';
 if(role==='customer'){
 renderCustomerGrid();
 let myOrders=orders.slice().reverse();
-let html=`<div class="table-head"><div class="col-name" style="font-weight:800">📦 ORDER HISTORY - Click full detail</div></div>`;
+let html=`<div class="table-head"><div class="col-name" style="font-weight:800">📦 ORDER HISTORY</div></div>`;
 if(myOrders.length===0)html+='<div style="padding:10px;text-align:center;background:white">Koi order nahi</div>';
 myOrders.forEach(o=>{
 let otpPreview = (o.status==='Paid - New'||o.status==='Ready for Pickup'||o.status==='Out for Delivery')? `OTP: <b style="background:#111827;color:#facc15;padding:2px 6px;border-radius:5px">${o.otp}</b>` : `OTP Hidden`;
-html+=`<div class="order-row row" style="background:white" onclick="openOrderDetail(${o.id})"><div class="col-name" style="font-size:11px"><b style="color:#b91c1c">${o.orderId}</b> - ₹${o.total} - ${o.shopName}<br>🍛 ${o.items.map(i=>i.name+' x'+(i.qty||1)).join(', ')}<br>${otpPreview} | ${getEta(o)}<br><span class="badge ${o.status.includes('Cancelled')?'cancelled':o.status.includes('Delivered')?'delivered':'paid'}">${o.status}</span> <span style="font-size:9px;color:#f97316">👆 Click</span></div><div class="col-rate" onclick="event.stopPropagation()">${o.status==='Paid - New'?`<button class="btn-small btn-cancel" onclick="cancelOrder(${o.id})">❌ Cancel</button>`:''}</div></div>`});
+html+=`<div class="row" style="background:white" onclick="openOrderDetail(${o.id})"><div class="col-name" style="font-size:11px"><b style="color:#b91c1c">${o.orderId}</b> - ₹${o.total} - ${o.shopName}<br>🍛 ${o.items.map(i=>i.name+' x'+(i.qty||1)).join(', ')}<br>${otpPreview} | ${getEta(o)}</div></div>`});
 document.getElementById('customerOrdersList').innerHTML=html;
 }else if(role==='delivery'){
 let filtered=orders.filter(o=>o.status==='Ready for Pickup'||o.status==='Out for Delivery');
-let html=`<div class="table-head"><div class="col-name" style="font-weight:800">🛵 Pickup (${filtered.length}) - Click detail</div></div>`;
+let html=`<div class="table-head"><div class="col-name" style="font-weight:800">🛵 Pickup (${filtered.length})</div></div>`;
 if(filtered.length===0)html+='<div style="padding:20px;text-align:center;background:white">Koi pickup nahi</div>';
 filtered.slice().reverse().forEach(o=>{
 let btn=o.status==='Ready for Pickup'?`<button class="btn-small btn-pick pulse" onclick="event.stopPropagation();pickupOrder(${o.id})">🛵 Pickup</button>`:o.status==='Out for Delivery'?`<button class="btn-small btn-approve pulse" onclick="event.stopPropagation();openOtpVerify(${o.id})">🔐 OTP Mango</button>`:o.status;
-html+=`<div class="order-row row" onclick="openOrderDetail(${o.id})"><div class="col-name" style="font-size:11px"><b style="color:#b91c1c">${o.orderId}</b> - ${o.shopName}<br><b>${o.customer}</b> ${o.phone}<br>🏪 ${o.shopCode} | ₹${o.total}</div><div class="col-rate">${btn}</div></div>`});
+html+=`<div class="row" onclick="openOrderDetail(${o.id})"><div class="col-name" style="font-size:11px"><b style="color:#b91c1c">${o.orderId}</b> - ${o.shopName}<br><b>${o.customer}</b> ${o.phone}</div><div class="col-rate">${btn}</div></div>`});
 box.innerHTML=html;
 document.getElementById('customerFoodGrid').innerHTML='';
 document.getElementById('customerOrdersList').innerHTML='';
@@ -268,15 +374,68 @@ let approveBox=document.getElementById('adminApproveBox');
 let pendingDishes=dishes.filter(d=>d.status==='pending');
 let approveHtml=`<div class="admin-section"><div class="admin-title">🍛 Approve Karo (${pendingDishes.length})</div>`;
 if(pendingDishes.length===0){approveHtml+=`<div style="padding:12px;text-align:center;color:#666">Koi pending nahi</div>`;}
-else{approveHtml+=`<div class="table-head"><div class="col-photo">PHOTO</div><div class="col-name">NAME + SHOP</div><div class="col-rate">ACTION</div></div>`;pendingDishes.forEach(d=>{approveHtml+=`<div class="row" style="background:white"><div class="col-photo"><img src="${d.img}"></div><div class="col-name" style="font-size:11px">${d.name}<br>₹${d.rate}<br>🏪 ${d.shopName||SHOP_NAME}<br><span class="shop-code-badge">${d.shopCode||SHOP_CODE}</span></div><div class="col-rate"><button class="btn-small btn-approve pulse" onclick="approve(${d.id})">✅ Approve</button><br><button class="btn-small btn-reject" onclick="rejectDish(${d.id})">❌ Reject</button></div></div>`});}
+else{approveHtml+=`<div class="table-head"><div class="col-photo">PHOTO</div><div class="col-name">NAME + SHOP</div><div class="col-rate">ACTION</div></div>`;pendingDishes.forEach(d=>{approveHtml+=`<div class="row" style="background:white"><div class="col-photo"><img src="${d.img}"></div><div class="col-name" style="font-size:11px">${d.name}<br>₹${d.rate}<br>🏪 ${d.shopName}<br><span class="shop-code-badge">${d.shopCode}</span></div><div class="col-rate"><button class="btn-small btn-approve pulse" onclick="approve(${d.id})">✅ Approve</button><br><button class="btn-small btn-reject" onclick="rejectDish(${d.id})">❌ Reject</button></div></div>`});}
 approveHtml+=`</div>`;approveBox.innerHTML=approveHtml;
+
+let commBox=document.getElementById('adminCommissionBox');
+let allDelivered=orders.filter(o=>o.status==='Delivered');
+let totalSale=allDelivered.reduce((s,o)=>s+o.total,0);
+let totalComm=allDelivered.reduce((s,o)=>s+(o.commission||0),0);
+let totalShopProfit=allDelivered.reduce((s,o)=>s+(o.shopProfit||0),0);
+let pendingRequests=settlementRequests.filter(r=>r.status==='Pending');
+commBox.innerHTML=`
+<div class="admin-section" style="background:#111827;color:white">
+<div class="admin-title" style="color:#facc15;border-color:#333">💰 COMMISSION SETTING + DAY COLLECTION</div>
+<div style="display:flex;gap:8px;align-items:center;margin:10px 0">
+<label>Commission %:</label>
+<input id="commissionInput" type="number" value="${COMMISSION_RATE}" style="width:70px;padding:8px;border-radius:8px;border:none;text-align:center;font-weight:800">
+<button onclick="saveCommissionRate()" style="background:#facc15;color:#000;border:none;padding:8px 12px;border-radius:8px;font-weight:800">💾 Save</button>
+</div>
+<div style="font-size:13px">
+Today Collection: ₹${totalSale}<br>
+Admin Commission (${COMMISSION_RATE}%): <span style="color:#f87171">₹${totalComm}</span><br>
+Shop Owners ka Profit: <span style="color:#4ade80">₹${totalShopProfit}</span><br>
+Total Delivered Orders: ${allDelivered.length}<br>
+Pending Settlements: ${pendingRequests.length}
+</div>
+<div style="margin-top:10px">
+<button onclick="doAutoSettlement()" style="background:#22c55e;color:white;border:none;padding:10px;border-radius:8px;width:100%;font-weight:800">🌙 Abhi 9 baje wala Auto Settlement Karo (Sab shop ka)</button>
+</div>
+</div>
+`;
+
+let settleBox=document.getElementById('adminSettlementBox');
+let settleHtml=`<div class="admin-section"><div class="admin-title">🔔 Settlement Requests - Owner ne Payment Manga (${pendingRequests.length} pending)</div>`;
+if(pendingRequests.length===0){settleHtml+=`<div style="padding:12px;text-align:center">Koi pending request nahi</div>`;}
+else{
+pendingRequests.slice().reverse().forEach(req=>{
+settleHtml+=`<div class="settlement-notif">
+<div style="font-weight:800">🏪 ${req.shopName} - <span class="shop-code-badge">${req.shopCode}</span></div>
+<div style="font-size:12px">Phone: ${req.storePhone}<br>Amount: <b style="font-size:16px;color:#16a34a">₹${req.amount}</b> | Orders: ${req.ordersCount}<br>Today Sale: ₹${req.todaySale} | Comm: ₹${req.commission}<br>Time: ${req.date}<br>Status: <span class="badge pending">${req.status}</span></div>
+<div style="margin-top:8px;display:flex;gap:6px">
+<button class="btn-small btn-approve" onclick="adminApproveSettlement(${req.id})">✅ Approve + Settled Karo</button>
+<button class="btn-small btn-reject" onclick="adminRejectSettlement(${req.id})">❌ Reject</button>
+<button class="btn-small" style="background:#eee" onclick="openOrderDetail(${orders.find(o=>o.shopCode===req.shopCode &&!o.settled)?.id||orders[0]?.id})">👁️ Detail</button>
+</div>
+</div>`;
+});
+}
+settleHtml+=`<div style="margin-top:12px"><div style="font-weight:800">Settlement History (Last 10)</div>`;
+settlements.slice().reverse().slice(0,10).forEach(s=>{
+settleHtml+=`<div style="background:#f3f4f6;padding:8px;border-radius:8px;margin-top:6px;font-size:11px">🏪 ${s.shopName} (${s.shopCode}) - ₹${s.amount} | Comm ₹${s.commission} | Sale ₹${s.sale} | Orders ${s.ordersCount}<br>📅 ${s.date} - ${s.status} - ${s.type}</div>`;
+});
+settleHtml+=`</div></div>`;
+settleBox.innerHTML=settleHtml;
+
 let all=orders;
-let html=`<div class="admin-section"><div class="admin-title">📦 All Orders - Click detail (${all.length})</div>`;
+let html=`<div class="admin-section"><div class="admin-title">📦 All Orders with Commission (${all.length})</div>`;
 if(all.length===0)html+='<div style="padding:15px;text-align:center">Koi order nahi</div>';
 else{
 all.slice().reverse().forEach(o=>{
 let isDel=o.status==='Delivered';
-html+=`<div class="order-row row" style="background:${isDel?'#dcfce7':'white'}" onclick="openOrderDetail(${o.id})"><div class="col-name" style="font-size:11px"><b style="color:#b91c1c">${o.orderId}</b> ${isDel?'✅':''}<br>🏪 ${o.shopName} | ${o.shopCode}<br>👤 ${o.customer} | 📞 ${o.phone}<br>💰 ₹${o.total} | ${o.items.map(i=>i.name+' x'+(i.qty||1)).join(', ')}<br><span class="badge ${o.status.includes('Delivered')?'delivered':o.status.includes('Cancelled')?'cancelled':'paid'}">${o.status}</span></div><div class="col-rate">₹${o.total}</div></div>`;
+let comm=o.commission||Math.round(o.total*COMMISSION_RATE/100);
+let prof=o.shopProfit||o.total-comm;
+html+=`<div class="row" style="background:${isDel?'#dcfce7':'white'}" onclick="openOrderDetail(${o.id})"><div class="col-name" style="font-size:11px"><b style="color:#b91c1c">${o.orderId}</b> ${isDel?'✅':''} ${o.settled?'💰 Settled':''}<br>🏪 ${o.shopName} | ${o.shopCode}<br>👤 ${o.customer} | ₹${o.total} = Comm ₹${comm} + Profit ₹${prof}<br><span class="badge ${o.status.includes('Delivered')?'delivered':'paid'}">${o.status}</span></div><div class="col-rate">₹${o.total}<br><span style="font-size:9px">P:₹${prof}</span></div></div>`;
 });
 }
 html+=`</div>`;box.innerHTML=html;
@@ -285,7 +444,8 @@ document.getElementById('customerOrdersList').innerHTML='';
 }
 }
 }
-setInterval(()=>{let all=JSON.parse(localStorage.getItem('shri_orders')||'[]');let allDishes=JSON.parse(localStorage.getItem('shri_dishes_v2')||'[]');if(JSON.stringify(all)!==JSON.stringify(orders)||JSON.stringify(allDishes)!==JSON.stringify(dishes)){orders=all;dishes=allDishes;render();}},2500);
+setInterval(()=>{let all=JSON.parse(localStorage.getItem('shri_orders')||'[]');let allDishes=JSON.parse(localStorage.getItem('shri_dishes_v2')||'[]');let allSettle=JSON.parse(localStorage.getItem('shri_settlements')||'[]');let allReq=JSON.parse(localStorage.getItem('shri_settlement_requests')||'[]');if(JSON.stringify(all)!==JSON.stringify(orders)||JSON.stringify(allDishes)!==JSON.stringify(dishes)){orders=all;dishes=allDishes;settlements=allSettle;settlementRequests=allReq;render();}},2500);
+setInterval(autoSettlementCheck,60000); // har minute check karo 9 baje
 render();
 </script>
 </body>
