@@ -24,7 +24,7 @@ body{font-family:system-ui;background:#fff;padding-bottom:85px}
 .badge{font-size:10px;padding:3px 7px;border-radius:8px;display:inline-block;font-weight:700;margin-top:3px}
 .pending{background:#fef3c7;color:#92400e}.approved{background:#dcfce7;color:#166534}.ready{background:#dbeafe;color:#1e40af}.paid{background:#f3e8ff;color:#6b21a8}.delivered{background:#dcfce7;color:#065f46}.cancelled{background:#fee2e2;color:#991b1b}
 .btn-small{padding:6px 10px;border:none;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;margin:2px}
-.btn-approve{background:#22c55e;color:white}.btn-ready{background:#3b82f6;color:white}.btn-pick{background:#f97316;color:white}.btn-cancel{background:#ef4444;color:white}
+.btn-approve{background:#22c55e;color:white}.btn-reject{background:#ef4444;color:white}.btn-ready{background:#3b82f6;color:white}.btn-pick{background:#f97316;color:white}.btn-cancel{background:#ef4444;color:white}
 .btn-add{background:#f97316;color:white;padding:5px 10px;border-radius:20px;border:none;font-weight:700;cursor:pointer;font-size:12px}
 .cart-bar{position:fixed;bottom:0;left:0;right:0;background:#111827;color:white;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;z-index:20}
 .cart-bar button{background:#f97316;color:white;border:none;padding:10px 18px;border-radius:25px;font-weight:800}
@@ -35,13 +35,15 @@ body{font-family:system-ui;background:#fff;padding-bottom:85px}
 .upi-box{background:#f0fdf4;border:2px solid #22c55e;border-radius:14px;padding:12px;text-align:center;margin:10px 0}
 .otp-big{background:#111827;color:#facc15;font-size:26px;font-weight:900;letter-spacing:6px;padding:10px;border-radius:10px;text-align:center;margin:10px 0}
 .pulse{animation:pulse 1s infinite}@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.04)}100%{transform:scale(1)}}
-/* Tracking */
 .track{display:flex;justify-content:space-between;margin:15px 0;position:relative}
 .track::before{content:'';position:absolute;top:14px;left:10%;right:10%;height:3px;background:#e5e7eb;z-index:0}
 .track-step{flex:1;text-align:center;z-index:1}
 .dot{width:28px;height:28px;border-radius:50%;background:#e5e7eb;margin:0 auto 5px;display:flex;align-items:center;justify-content:center;font-size:14px}
 .dot.active{background:#22c55e;color:white}.dot.current{background:#3b82f6;color:white;animation:pulse 1s infinite}
 .track-label{font-size:10px;font-weight:700}
+.contact-box{background:#fffbeb;border:1px solid #fbbf24;border-radius:12px;padding:10px;margin:10px 0;font-size:13px}
+.admin-section{background:white;border-radius:14px;padding:10px;margin-bottom:15px}
+.admin-title{font-weight:800;padding:8px 0;border-bottom:2px solid #f97316;margin-bottom:8px}
 </style>
 </head>
 <body>
@@ -56,93 +58,63 @@ body{font-family:system-ui;background:#fff;padding-bottom:85px}
 <div class="shop-title" id="panelTitle">🏪 Shop Panel</div>
 <div id="ownerPanel">
 <div class="add-card">
-<h3>🍛 Nayi Dish</h3>
-<input type="file" id="fImg" accept="image/*" class="inp">
+<h3>🏪 Store Setting + Dish</h3>
+<label style="font-size:12px;font-weight:700">Store Mobile No.</label>
+<input id="storePhoneInput" class="inp" placeholder="Store Mobile - 9876543210" oninput="saveStorePhone()">
+<input type="file" id="fImg" accept="image/*" class="inp" style="margin-top:10px">
 <input type="text" id="fName" placeholder="Dish naam" class="inp">
 <input type="number" id="fRate" placeholder="Rate" class="inp">
 <button class="btn-green" onclick="addDish()">✅ Approval bhejo</button>
 </div>
 <div style="color:white;font-weight:700;margin:15px 0 8px">📋 Dishes</div><div class="table-card" id="ownerList"></div>
-<div style="color:white;font-weight:700;margin:15px 0 8px">📦 Orders - Click for Detail</div><div class="table-card" id="ownerOrders"></div>
+<div style="color:white;font-weight:700;margin:15px 0 8px">📦 Orders</div><div class="table-card" id="ownerOrders"></div>
 </div>
-<div id="otherPanel" style="display:none"><div class="table-card" id="otherList"></div></div>
+<div id="otherPanel" style="display:none">
+<div id="deliverySetting" style="display:none" class="add-card">
+<h3>🛵 Delivery Setting</h3>
+<label style="font-size:12px;font-weight:700">Delivery Mobile No.</label>
+<input id="deliveryPhoneInput" class="inp" placeholder="Delivery Mobile - 9876543210" oninput="saveDeliveryPhone()">
+</div>
+<div id="adminApproveBox" style="display:none"></div>
+<div class="table-card" id="otherList"></div>
+</div>
 </div>
 <div class="cart-bar" id="cartBar" style="display:none"><div>🛒 <span id="cartCount">0</span> | ₹<span id="cartTotal">0</span></div><button onclick="openCheckout()">Order Karo</button></div>
 
-<!-- Checkout -->
-<div class="modal" id="checkoutModal">
-<div class="modal-box">
-<h3>📍 Delivery + UPI</h3>
-<input id="cName" class="inp" style="margin-top:10px" placeholder="Naam">
-<input id="cPhone" class="inp" placeholder="Phone">
-<textarea id="cAddr" class="inp" placeholder="Address"></textarea>
-<button class="btn-loc" onclick="getLocation()">📍 Current Location</button>
-<p id="locStatus" style="font-size:11px;color:green;margin-bottom:8px"></p>
-<div id="upiSection" style="display:none">
-<div class="upi-box">
-<b>💳 UPI Pay First</b><br><span style="font-size:12px">UPI: <b id="upiIdText"></b></span><br><br>
-<img id="qrImg" src="" style="width:170px;height:170px;border-radius:10px"><br><br>
-<b>₹<span id="payAmount">0</span></b><br>
-<button onclick="payUPI()" style="background:#16a34a;color:white;border:none;padding:10px 18px;border-radius:20px;font-weight:800;width:100%;margin-top:8px">📲 UPI App se Pay</button>
-</div>
-<label style="font-size:12px;display:flex;gap:6px;align-items:center"><input type="checkbox" id="paidCheck"> Maine Payment Kar Diya</label>
-<input id="txnId" class="inp" style="margin-top:6px" placeholder="Txn ID last 4 digit">
-</div>
-<button class="btn-green" id="finalOrderBtn" style="display:none;margin-top:10px" onclick="confirmOrder()">✅ Confirm Order</button>
-<button onclick="closeCheckout()" style="background:#eee;border:none;padding:9px;width:100%;border-radius:10px;margin-top:6px">Cancel</button>
-</div>
-</div>
-
-<!-- OTP Modal -->
-<div class="modal" id="otpModal">
-<div class="modal-box" style="text-align:center">
-<h3>✅ Order Confirmed!</h3>
-<p style="font-size:13px">Order ID: <b id="showOrderId" style="color:#b91c1c"></b></p>
-<p style="font-size:12px;margin:6px 0">Ye OTP Delivery Boy ko dena</p>
-<div class="otp-big" id="showOtp">----</div>
-<p style="font-size:11px;color:#666">My Orders pe click karke tracking dekho</p>
-<button class="btn-green" style="margin-top:12px" onclick="closeOtpModal()">OK - Tracking Dekho</button>
-</div>
-</div>
-
-<!-- Delivery OTP -->
-<div class="modal" id="deliveryOtpModal">
-<div class="modal-box">
-<h3>🔐 Delivery OTP</h3>
-<p id="otpCustomerInfo" style="font-size:12px;background:#fef3c7;padding:8px;border-radius:8px"></p>
-<input id="inputOtp" type="number" class="inp" style="margin-top:12px;letter-spacing:8px;font-size:22px;text-align:center;font-weight:800" placeholder="1234">
-<button class="btn-green" onclick="verifyDeliveryOtp()">✅ Verify Delivery</button>
-<button onclick="document.getElementById('deliveryOtpModal').classList.remove('active')" style="background:#eee;border:none;padding:9px;width:100%;border-radius:10px;margin-top:6px">Cancel</button>
-<p id="otpError" style="color:red;font-size:12px;margin-top:6px;display:none">❌ Galat OTP!</p>
-</div>
-</div>
-
-<!-- ORDER DETAIL MODAL -->
-<div class="modal" id="detailModal">
-<div class="modal-box">
-<div style="display:flex;justify-content:space-between;align-items:center">
-<h3 id="detailId" style="color:#b91c1c">SHRI-XXXX</h3>
-<button onclick="document.getElementById('detailModal').classList.remove('active')" style="background:#eee;border:none;width:30px;height:30px;border-radius:50%">✕</button>
-</div>
-<div id="detailContent"></div>
-</div>
-</div>
+<div class="modal" id="checkoutModal"><div class="modal-box"><h3>📍 Delivery + UPI</h3><input id="cName" class="inp" style="margin-top:10px" placeholder="Naam"><input id="cPhone" class="inp" placeholder="Phone"><textarea id="cAddr" class="inp" placeholder="Address"></textarea><button class="btn-loc" onclick="getLocation()">📍 Current Location</button><p id="locStatus" style="font-size:11px;color:green;margin-bottom:8px"></p><div id="upiSection" style="display:none"><div class="upi-box"><b>💳 UPI Pay First</b><br><span style="font-size:12px">UPI: <b id="upiIdText"></b></span><br><br><img id="qrImg" src="" style="width:170px;height:170px;border-radius:10px"><br><br><b>₹<span id="payAmount">0</span></b><br><button onclick="payUPI()" style="background:#16a34a;color:white;border:none;padding:10px 18px;border-radius:20px;font-weight:800;width:100%;margin-top:8px">📲 UPI App se Pay</button></div><label style="font-size:12px;display:flex;gap:6px;align-items:center"><input type="checkbox" id="paidCheck"> Maine Payment Kar Diya</label><input id="txnId" class="inp" style="margin-top:6px" placeholder="Txn ID last 4 digit"></div><button class="btn-green" id="finalOrderBtn" style="display:none;margin-top:10px" onclick="confirmOrder()">✅ Confirm Order</button><button onclick="closeCheckout()" style="background:#eee;border:none;padding:9px;width:100%;border-radius:10px;margin-top:6px">Cancel</button></div></div>
+<div class="modal" id="otpModal"><div class="modal-box" style="text-align:center"><h3>✅ Order Confirmed!</h3><p style="font-size:13px">ID: <b id="showOrderId" style="color:#b91c1c"></b></p><div class="otp-big" id="showOtp">----</div><div id="afterOrderContact" class="contact-box"></div><button class="btn-green" style="margin-top:12px" onclick="closeOtpModal()">OK - Tracking Dekho</button></div></div>
+<div class="modal" id="deliveryOtpModal"><div class="modal-box"><h3>🔐 Delivery OTP</h3><p id="otpCustomerInfo" style="font-size:12px;background:#fef3c7;padding:8px;border-radius:8px"></p><input id="inputOtp" type="number" class="inp" style="margin-top:12px;letter-spacing:8px;font-size:22px;text-align:center;font-weight:800" placeholder="1234"><button class="btn-green" onclick="verifyDeliveryOtp()">✅ Verify Delivery</button><button onclick="document.getElementById('deliveryOtpModal').classList.remove('active')" style="background:#eee;border:none;padding:9px;width:100%;border-radius:10px;margin-top:6px">Cancel</button><p id="otpError" style="color:red;font-size:12px;margin-top:6px;display:none">❌ Galat OTP!</p></div></div>
+<div class="modal" id="detailModal"><div class="modal-box"><div style="display:flex;justify-content:space-between;align-items:center"><h3 id="detailId" style="color:#b91c1c">SHRI-XXXX</h3><button onclick="document.getElementById('detailModal').classList.remove('active')" style="background:#eee;border:none;width:30px;height:30px;border-radius:50%">✕</button></div><div id="detailContent"></div></div></div>
 
 <script>
 const UPI_ID="rohitpnd23@okaxis"; const MERCHANT_NAME="ShriBhog";
+let STORE_PHONE=localStorage.getItem('store_phone')||"9876543210";
+let DELIVERY_PHONE=localStorage.getItem('delivery_phone')||"9876500000";
 if(location.search.includes('clear')){localStorage.clear();history.replaceState(null,'',location.pathname)}
 let dishes=JSON.parse(localStorage.getItem('shri_dishes_v2')||'[]');
 let orders=JSON.parse(localStorage.getItem('shri_orders')||'[]');
 let cart=[];let role='owner';let currentLoc="";let lastNotifiedId=Number(localStorage.getItem('last_delivery_notify')||0);
 let audioCtx;let currentDeliveryOrderId=null;
 if('Notification' in window && Notification.permission==='default') Notification.requestPermission();
-function playTone(){try{if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();let osc=audioCtx.createOscillator(),g=audioCtx.createGain();osc.connect(g);g.connect(audioCtx.destination);osc.frequency.value=800;g.gain.value=0.5;osc.start();g.gain.exponentialRampToValueAtTime(0.01,audioCtx.currentTime+0.6);osc.stop(audioCtx.currentTime+0.6);setTimeout(()=>{let o2=audioCtx.createOscillator(),g2=audioCtx.createGain();o2.connect(g2);g2.connect(audioCtx.destination);o2.frequency.value=1000;g2.gain.value=0.5;o2.start();g2.gain.exponentialRampToValueAtTime(0.01,audioCtx.currentTime+0.6);o2.stop(audioCtx.currentTime+0.6)},300);}catch(e){}if(navigator.vibrate) navigator.vibrate([300,100,300,100,500]);}
-function notifyDelivery(o){if(o.id<=lastNotifiedId) return; playTone(); if('Notification' in window && Notification.permission==='granted'){new Notification('🔥 NEW PICKUP! '+o.orderId)} lastNotifiedId=o.id;localStorage.setItem('last_delivery_notify',lastNotifiedId);}
+function playTone(){try{if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();let o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.frequency.value=800;g.gain.value=0.5;o.start();g.gain.exponentialRampToValueAtTime(0.01,audioCtx.currentTime+0.6);o.stop(audioCtx.currentTime+0.6);setTimeout(()=>{let o2=audioCtx.createOscillator(),g2=audioCtx.createGain();o2.connect(g2);g2.connect(audioCtx.destination);o2.frequency.value=1000;g2.gain.value=0.5;o2.start();g2.gain.exponentialRampToValueAtTime(0.01,audioCtx.currentTime+0.6);o2.stop(audioCtx.currentTime+0.6)},300);}catch(e){}if(navigator.vibrate) navigator.vibrate([300,100,300,100,500]);}
+function notifyDelivery(o){if(o.id<=lastNotifiedId) return; playTone(); lastNotifiedId=o.id;localStorage.setItem('last_delivery_notify',lastNotifiedId);}
 function save(){localStorage.setItem('shri_dishes_v2',JSON.stringify(dishes));localStorage.setItem('shri_orders',JSON.stringify(orders))}
-function genOrderId(){let n=orders.length+1;return 'SHRI-'+String(1000+n).slice(-4)+'-'+String(Date.now()).slice(-3)}
-function switchRole(r){role=r;cart=[];updateCart();document.querySelectorAll('.tab-pill').forEach(b=>b.classList.remove('active'));document.getElementById('t-'+r).classList.add('active');document.getElementById('ownerPanel').style.display=(r==='owner')?'block':'none';document.getElementById('otherPanel').style.display=(r==='owner')?'none':'block';document.getElementById('panelTitle').innerText=r==='customer'?'🛒 Customer - Order pe Click karo detail':r==='admin'?'👑 Admin - All Delivered':r==='delivery'?'🛵 Delivery':r==='owner'?'🏪 Shop Panel':'';render();}
-function addDish(){let n=document.getElementById('fName').value.trim(),rt=document.getElementById('fRate').value.trim(),fi=document.getElementById('fImg').files[0];if(!n||!rt)return alert('Naam Rate bharo');if(!fi)return alert('Photo chuno');let rd=new FileReader();rd.onload=e=>{let im=new Image();im.onload=()=>{let cv=document.createElement('canvas'),mx=400,w=im.width,h=im.height;if(w>mx||h>mx){if(w>h){h=h*mx/w;w=mx}else{w=w*mx/h;h=mx}}cv.width=w;cv.height=h;cv.getContext('2d').drawImage(im,0,0,w,h);let sm=cv.toDataURL('image/jpeg',0.6);dishes.push({id:Date.now(),name:n,rate:rt,img:sm,status:'pending'});save();document.getElementById('fName').value='';document.getElementById('fRate').value='';document.getElementById('fImg').value='';render();alert('Bhej diya!');};im.src=e.target.result;};rd.readAsDataURL(fi);}
-function approve(id){let d=dishes.find(x=>x.id===id);if(d){d.status='approved';save();render()}}
+function saveStorePhone(){STORE_PHONE=document.getElementById('storePhoneInput').value.trim();localStorage.setItem('store_phone',STORE_PHONE);}
+function saveDeliveryPhone(){DELIVERY_PHONE=document.getElementById('deliveryPhoneInput').value.trim();localStorage.setItem('delivery_phone',DELIVERY_PHONE);}
+function genOrderId(){return 'SHRI-'+String(1000+orders.length+1).slice(-4)+'-'+String(Date.now()).slice(-3)}
+function switchRole(r){
+role=r;cart=[];updateCart();
+document.querySelectorAll('.tab-pill').forEach(b=>b.classList.remove('active'));document.getElementById('t-'+r).classList.add('active');
+document.getElementById('ownerPanel').style.display=(r==='owner')?'block':'none';document.getElementById('otherPanel').style.display=(r==='owner')?'none':'block';
+document.getElementById('deliverySetting').style.display=(r==='delivery')?'block':'none';
+document.getElementById('adminApproveBox').style.display=(r==='admin')?'block':'none';
+if(r==='owner') document.getElementById('storePhoneInput').value=STORE_PHONE;
+if(r==='delivery') document.getElementById('deliveryPhoneInput').value=DELIVERY_PHONE;
+document.getElementById('panelTitle').innerText=r==='customer'?'🛒 Customer':r==='admin'?'👑 Admin - Approve + Full Details':r==='delivery'?'🛵 Delivery':r==='owner'?'🏪 Shop Panel':'';render();
+}
+function addDish(){let n=document.getElementById('fName').value.trim(),rt=document.getElementById('fRate').value.trim(),fi=document.getElementById('fImg').files[0];if(!n||!rt)return alert('Naam Rate bharo');if(!fi)return alert('Photo chuno');let rd=new FileReader();rd.onload=e=>{let im=new Image();im.onload=()=>{let cv=document.createElement('canvas'),mx=400,w=im.width,h=im.height;if(w>mx||h>mx){if(w>h){h=h*mx/w;w=mx}else{w=w*mx/h;h=mx}}cv.width=w;cv.height=h;cv.getContext('2d').drawImage(im,0,0,w,h);let sm=cv.toDataURL('image/jpeg',0.6);dishes.push({id:Date.now(),name:n,rate:rt,img:sm,status:'pending'});save();document.getElementById('fName').value='';document.getElementById('fRate').value='';document.getElementById('fImg').value='';render();alert('Bhej diya Admin ko!');};im.src=e.target.result;};rd.readAsDataURL(fi);}
+function approve(id){let d=dishes.find(x=>x.id===id);if(d){d.status='approved';save();render();alert('✅ Approved! Ab Customer ko dikhega')}}
+function rejectDish(id){if(confirm('Reject karna hai?')){dishes=dishes.filter(x=>x.id!==id);save();render();}}
 function removeDish(id){if(confirm('Delete?')){dishes=dishes.filter(x=>x.id!==id);save();render()}}
 function addToCart(id){let d=dishes.find(x=>x.id===id);cart.push(d);updateCart();}
 function updateCart(){let tot=cart.reduce((s,x)=>s+Number(x.rate),0);document.getElementById('cartCount').innerText=cart.length;document.getElementById('cartTotal').innerText=tot;document.getElementById('cartBar').style.display=(role==='customer'&&cart.length>0)?'flex':'none';}
@@ -154,59 +126,35 @@ function confirmOrder(){
 let nm=document.getElementById('cName').value.trim(),ph=document.getElementById('cPhone').value.trim(),ad=document.getElementById('cAddr').value.trim(),paid=document.getElementById('paidCheck').checked,txn=document.getElementById('txnId').value.trim();
 if(!nm||!ph||!ad)return alert('Details bharo');if(!paid)return alert('Payment checkbox tick karo');
 let tot=cart.reduce((s,x)=>s+Number(x.rate),0);let otp=Math.floor(1000+Math.random()*9000);let oid=genOrderId();
-let newOrder={id:Date.now(),orderId:oid,items:[...cart],total:tot,customer:nm,phone:ph,address:ad,location:currentLoc,txnId:txn,payment:'UPI Paid',otp:otp,status:'Paid - New',time:new Date().toLocaleString(),createdAt:Date.now()};
+let newOrder={id:Date.now(),orderId:oid,items:[...cart],total:tot,customer:nm,phone:ph,address:ad,location:currentLoc,txnId:txn,payment:'UPI Paid',otp:otp,storePhone:STORE_PHONE,deliveryPhone:'',status:'Paid - New',time:new Date().toLocaleString(),createdAt:Date.now()};
 orders.push(newOrder);save();cart=[];updateCart();closeCheckout();
 document.getElementById('showOtp').innerText=otp;document.getElementById('showOrderId').innerText=oid;
+document.getElementById('afterOrderContact').innerHTML=`📞 Store: <a href="tel:${STORE_PHONE}">${STORE_PHONE}</a> (Pickup se pehle)<br>🆔 ${oid}`;
 document.getElementById('otpModal').classList.add('active');render();
 document.getElementById('cName').value='';document.getElementById('cPhone').value='';document.getElementById('cAddr').value='';document.getElementById('paidCheck').checked=false;document.getElementById('txnId').value='';document.getElementById('locStatus').innerText='';currentLoc='';
 }
 function closeOtpModal(){document.getElementById('otpModal').classList.remove('active');let last=orders[orders.length-1];if(last) openOrderDetail(last.id);}
 function shopReady(id){let o=orders.find(x=>x.id===id);if(o){o.status='Ready for Pickup';o.readyAt=Date.now();save();localStorage.setItem('shri_new_pickup',JSON.stringify(o));playTone();notifyDelivery(o);render();alert('✅ Ready! '+o.orderId);}}
-function pickupOrder(id){let o=orders.find(x=>x.id===id);if(o){o.status='Out for Delivery';o.pickupAt=Date.now();save();render();}}
+function pickupOrder(id){let o=orders.find(x=>x.id===id);if(!o)return;if(!DELIVERY_PHONE||DELIVERY_PHONE.length<8){alert('Pehle upar apna Delivery Mobile No daalo');return}o.status='Out for Delivery';o.pickupAt=Date.now();o.deliveryPhone=DELIVERY_PHONE;save();render();alert('🛵 Pickup Done! Customer ko aapka number dikhega: '+DELIVERY_PHONE);}
 function openOtpVerify(id){let o=orders.find(x=>x.id===id);if(!o)return;currentDeliveryOrderId=id;document.getElementById('otpCustomerInfo').innerText=`${o.orderId} - ${o.customer} | ${o.phone}\n${o.address}`;document.getElementById('inputOtp').value='';document.getElementById('otpError').style.display='none';document.getElementById('deliveryOtpModal').classList.add('active');}
 function verifyDeliveryOtp(){let entered=document.getElementById('inputOtp').value.trim();let o=orders.find(x=>x.id===currentDeliveryOrderId);if(!o)return;if(entered==o.otp){o.status='Delivered';o.deliveredAt=new Date().toLocaleString();o.deliveredTime=Date.now();save();document.getElementById('deliveryOtpModal').classList.remove('active');playTone();alert('✅ Delivered! '+o.orderId);render();}else{document.getElementById('otpError').style.display='block';if(navigator.vibrate) navigator.vibrate([200,100,200]);}}
-function cancelOrder(id){let o=orders.find(x=>x.id===id);if(!o)return;if(o.status!=='Paid - New'){alert('❌ Ab cancel nahi ho sakta, Shop Ready kar chuka hai');return}if(!confirm('Cancel '+o.orderId+'?\nRefund: ₹'+o.total)) return;o.status='Cancelled by Customer';o.cancelledAt=new Date().toLocaleString();save();render();alert('✅ Cancelled '+o.orderId);}
-function getEta(o){
-let now=Date.now();let diff=now-(o.createdAt||o.id);
-if(o.status==='Delivered') return '✅ Delivered at '+o.deliveredAt;
-if(o.status.includes('Cancelled')) return '❌ Cancelled';
-if(o.status==='Paid - New'){let left=15-Math.floor(diff/60000); if(left<1) left=1; return `⏳ Shop prepare kar raha hai - ${left} min me Ready hoga`;}
-if(o.status==='Ready for Pickup') return '🟦 Ready! Delivery boy aane wala hai - 5-10 min';
-if(o.status==='Out for Delivery'){let left=15-Math.floor((now-(o.pickupAt||now))/60000); if(left<2) left=2; return `🛵 On the way - ${left} min me aayega - OTP ${o.otp} ready rakho`;}
-return o.status;
-}
+function cancelOrder(id){let o=orders.find(x=>x.id===id);if(!o)return;if(o.status!=='Paid - New'){alert('❌ Ab cancel nahi ho sakta');return}if(!confirm('Cancel '+o.orderId+'? Refund: ₹'+o.total)) return;o.status='Cancelled by Customer';o.cancelledAt=new Date().toLocaleString();save();render();alert('✅ Cancelled '+o.orderId);}
+function getEta(o){let now=Date.now();let diff=now-(o.createdAt||o.id);if(o.status==='Delivered') return '✅ Delivered at '+o.deliveredAt;if(o.status.includes('Cancelled')) return '❌ Cancelled';if(o.status==='Paid - New'){let left=15-Math.floor(diff/60000); if(left<1) left=1; return `⏳ Shop prepare - ${left} min me Ready`;}if(o.status==='Ready for Pickup') return '🟦 Ready! Delivery 5-10 min';if(o.status==='Out for Delivery'){let left=15-Math.floor((now-(o.pickupAt||now))/60000); if(left<2) left=2; return `🛵 On the way - ${left} min`;}return o.status;}
+
 function openOrderDetail(id){
 let o=orders.find(x=>x.id===id);if(!o)return;
 document.getElementById('detailId').innerText=o.orderId;
-let steps=[
-{label:'Paid',icon:'💳',done:true},
-{label:'Ready',icon:'🍳',done:o.status!=='Paid - New'&&!o.status.includes('Cancelled'),current:o.status==='Paid - New'},
-{label:'Pickup',icon:'🛵',done:o.status==='Out for Delivery'||o.status==='Delivered',current:o.status==='Ready for Pickup'},
-{label:'Delivered',icon:'✅',done:o.status==='Delivered',current:o.status==='Out for Delivery'}
-];
+let steps=[{label:'Paid',icon:'💳',done:true},{label:'Ready',icon:'🍳',done:o.status!=='Paid - New'&&!o.status.includes('Cancelled'),current:o.status==='Paid - New'},{label:'Pickup',icon:'🛵',done:o.status==='Out for Delivery'||o.status==='Delivered',current:o.status==='Ready for Pickup'},{label:'Delivered',icon:'✅',done:o.status==='Delivered',current:o.status==='Out for Delivery'}];
 let trackHtml='<div class="track">'+steps.map(s=>`<div class="track-step"><div class="dot ${s.done?'active':''} ${s.current?'current':''}">${s.icon}</div><div class="track-label">${s.label}</div></div>`).join('')+'</div>';
-let eta=getEta(o);
-let html=`
-<div style="background:#fef3c7;padding:10px;border-radius:10px;font-size:13px;font-weight:700">⏱️ ${eta}</div>
-${trackHtml}
-<div style="font-size:13px;line-height:1.6">
-<b>Customer:</b> ${o.customer} (${o.phone})<br>
-<b>Address:</b> ${o.address}<br>
-${o.location?`<a href="${o.location}" target="_blank">🗺️ Map Dekho</a><br>`:''}
-<b>Items:</b> ${o.items.map(i=>i.name+' (₹'+i.rate+')').join(', ')}<br>
-<b>Total:</b> ₹${o.total} | ${o.payment} ${o.txnId?'- '+o.txnId:''}<br>
-<b>OTP:</b> <span style="background:#111827;color:#facc15;padding:2px 8px;border-radius:5px;letter-spacing:3px">${o.otp}</span> (Delivery ko dena)<br>
-<b>Order Time:</b> ${o.time}<br>
-<b>Status:</b> <span class="badge ${o.status.includes('Cancelled')?'cancelled':o.status.includes('Delivered')?'delivered':o.status.includes('Ready')?'ready':'paid'}">${o.status}</span><br>
-<b>Order ID:</b> ${o.orderId}<br>
-</div>
-<div style="margin-top:12px">
-${o.status==='Paid - New'?`<button class="btn-small btn-cancel" onclick="cancelOrder(${o.id});document.getElementById('detailModal').classList.remove('active')">❌ Cancel Order</button>`:''}
-<a href="tel:${o.phone}" style="background:#3b82f6;color:white;padding:8px 12px;border-radius:8px;text-decoration:none;font-size:12px;font-weight:700;display:inline-block;margin-left:6px">📞 Call</a>
-</div>
-`;
-document.getElementById('detailContent').innerHTML=html;
-document.getElementById('detailModal').classList.add('active');
+let contactHtml='';
+if(o.status==='Paid - New'||o.status==='Ready for Pickup'){
+contactHtml=`<div class="contact-box">🏪 <b>Pickup se Pehle - Store</b><br>📞 Store: <a href="tel:${o.storePhone||STORE_PHONE}">${o.storePhone||STORE_PHONE}</a></div>`;
+}else if(o.status==='Out for Delivery'||o.status==='Delivered'){
+contactHtml=`<div class="contact-box" style="background:#dcfce7;border-color:#22c55e">🛵 <b>Pickup ke Baad - Delivery</b><br>📞 Delivery: <a href="tel:${o.deliveryPhone}">${o.deliveryPhone}</a><br>🏪 Store: <a href="tel:${o.storePhone}">${o.storePhone}</a></div>`;
+}
+let adminExtra = role==='admin'? `<div class="contact-box" style="background:#f3f4f6"><b>👑 Admin - Full Customer</b><br>🆔 ${o.orderId}<br>👤 ${o.customer} | 📞 <a href="tel:${o.phone}">${o.phone}</a><br>📍 ${o.address}<br>${o.location?`🗺️ <a href="${o.location}" target="_blank">Map</a><br>`:''}💳 ${o.payment} | Txn: ${o.txnId}<br>🏪 Store: ${o.storePhone} | 🛵 Del: ${o.deliveryPhone||'N/A'}<br>🔐 OTP: ${o.otp}<br>⏰ ${o.time}</div>` : '';
+let html=`<div style="background:#fef3c7;padding:10px;border-radius:10px;font-size:13px;font-weight:700">⏱️ ${getEta(o)}</div>${trackHtml}${contactHtml}${adminExtra}<div style="font-size:13px;line-height:1.6;margin-top:8px"><b>Items:</b> ${o.items.map(i=>i.name+' (₹'+i.rate+')').join(', ')}<br><b>Total:</b> ₹${o.total}<br><b>Status:</b> <span class="badge ${o.status.includes('Cancelled')?'cancelled':o.status.includes('Delivered')?'delivered':o.status.includes('Ready')?'ready':'paid'}">${o.status}</span><br></div>`;
+document.getElementById('detailContent').innerHTML=html;document.getElementById('detailModal').classList.add('active');
 }
 
 function render(){
@@ -214,9 +162,9 @@ if(role==='owner'){
 let box=document.getElementById('ownerList');let html='<div class="table-head"><div class="col-photo">PHOTO</div><div class="col-name">NAME</div><div class="col-rate">RATE</div></div>';
 if(dishes.length===0)html+='<div style="padding:12px;text-align:center">Koi dish nahi</div>';
 dishes.forEach(d=>{html+=`<div class="row"><div class="col-photo"><img src="${d.img}"></div><div class="col-name">${d.name}<br><span class="badge ${d.status}">${d.status}</span></div><div class="col-rate">₹${d.rate} <button class="btn-small" style="background:#eee" onclick="removeDish(${d.id})">🗑️</button></div></div>`});box.innerHTML=html;
-let ob=document.getElementById('ownerOrders');let oh='<div class="table-head"><div class="col-name">ORDERS (ID pe click karo detail)</div><div class="col-rate">ACTION</div></div>';
+let ob=document.getElementById('ownerOrders');let oh='<div class="table-head"><div class="col-name">ORDERS</div><div class="col-rate">ACTION</div></div>';
 if(orders.length===0)oh+='<div style="padding:12px;text-align:center">Koi order nahi</div>';
-orders.slice().reverse().forEach(o=>{let act=o.status==='Paid - New'?`<button class="btn-small btn-ready pulse" onclick="shopReady(${o.id})">🍳 Ready</button>`:`<span style="font-size:10px">${o.status}</span>`;oh+=`<div class="row" onclick="openOrderDetail(${o.id})" style="${o.status.includes('Cancelled')?'background:#fee2e2':''}"><div class="col-name" style="font-size:11px"><b style="color:#b91c1c">${o.orderId}</b> - ${o.customer}<br>₹${o.total} | OTP:${o.otp} | ${getEta(o).substring(0,45)}<br><span class="badge ${o.status.includes('Cancelled')?'cancelled':o.status.includes('Delivered')?'delivered':o.status.includes('Ready')?'ready':'paid'}">${o.status}</span></div><div class="col-rate" onclick="event.stopPropagation()">${act}</div></div>`});ob.innerHTML=oh;
+orders.slice().reverse().forEach(o=>{let act=o.status==='Paid - New'?`<button class="btn-small btn-ready pulse" onclick="shopReady(${o.id})">🍳 Ready</button>`:`<span style="font-size:10px">${o.status}</span>`;oh+=`<div class="row" onclick="openOrderDetail(${o.id})" style="${o.status.includes('Cancelled')?'background:#fee2e2':''}"><div class="col-name" style="font-size:11px"><b style="color:#b91c1c">${o.orderId}</b> - ${o.customer}<br>📞 ${o.phone} | ₹${o.total}<br><span class="badge ${o.status.includes('Cancelled')?'cancelled':o.status.includes('Delivered')?'delivered':o.status.includes('Ready')?'ready':'paid'}">${o.status}</span></div><div class="col-rate" onclick="event.stopPropagation()">${act}</div></div>`});ob.innerHTML=oh;
 }else{
 let box=document.getElementById('otherList');let list=role==='customer'?dishes.filter(d=>d.status==='approved'):dishes;
 if(role==='customer'){
@@ -224,32 +172,54 @@ let html=`<div style="padding:10px;font-weight:800;background:#fffbeb">🍛 Menu
 if(list.length===0)html+='<div style="padding:12px;text-align:center">Koi dish nahi</div>';
 list.forEach(d=>{html+=`<div class="row"><div class="col-photo"><img src="${d.img}"></div><div class="col-name">${d.name}</div><div class="col-rate">₹${d.rate}<br><button class="btn-add" onclick="addToCart(${d.id})">Add</button></div></div>`});
 let myOrders=orders.slice().reverse();
-html+=`<div style="padding:10px;font-weight:800;background:#fffbeb;margin-top:12px">📦 Aapke Orders (Click karo detail + tracking)</div>`;
+html+=`<div style="padding:10px;font-weight:800;background:#fffbeb;margin-top:12px">📦 Aapke Orders - Click detail</div>`;
 if(myOrders.length===0)html+='<div style="padding:10px;text-align:center;background:white">Koi order nahi</div>';
 myOrders.forEach(o=>{
-html+=`<div class="row" style="background:white;${o.status.includes('Cancelled')?'background:#fee2e2':''}" onclick="openOrderDetail(${o.id})"><div class="col-name" style="font-size:11px"><b style="color:#b91c1c">${o.orderId}</b> - ₹${o.total} - ${o.items.map(i=>i.name).join(', ')}<br><span style="font-size:10px">${getEta(o)}</span><br><span class="badge ${o.status.includes('Cancelled')?'cancelled':o.status.includes('Delivered')?'delivered':'paid'}">${o.status}</span></div><div class="col-rate" onclick="event.stopPropagation()">${o.status==='Paid - New'?`<button class="btn-small btn-cancel" onclick="cancelOrder(${o.id})">❌ Cancel</button>`:o.status}</div></div>`});
+let contactPreview=o.status==='Paid - New'||o.status==='Ready for Pickup'?`🏪 Store: ${o.storePhone}`:`🛵 Del: ${o.deliveryPhone}`;
+html+=`<div class="row" style="background:white;${o.status.includes('Cancelled')?'background:#fee2e2':''}" onclick="openOrderDetail(${o.id})"><div class="col-name" style="font-size:11px"><b style="color:#b91c1c">${o.orderId}</b> - ₹${o.total}<br>${contactPreview} | ${getEta(o).substring(0,35)}<br><span class="badge ${o.status.includes('Cancelled')?'cancelled':o.status.includes('Delivered')?'delivered':'paid'}">${o.status}</span></div><div class="col-rate" onclick="event.stopPropagation()">${o.status==='Paid - New'?`<button class="btn-small btn-cancel" onclick="cancelOrder(${o.id})">❌ Cancel</button>`:o.status}</div></div>`});
 box.innerHTML=html;
 }else if(role==='delivery'){
 let filtered=orders.filter(o=>o.status==='Ready for Pickup'||o.status==='Out for Delivery');
-let html=`<div style="padding:10px;font-weight:800;background:#fffbeb">🛵 Pickup (${filtered.length}) - Click detail</div>`;
-if(filtered.length===0)html+='<div style="padding:20px;text-align:center;background:white">Koi pickup nahi</div>';
+let html=`<div style="padding:10px;font-weight:800;background:#fffbeb">🛵 Pickup (${filtered.length})</div>`;
+if(filtered.length===0)html+='<div style="padding:20px;text-align:center;background:white">Koi pickup nahi - Shop Ready karega to 🔔</div>';
 filtered.slice().reverse().forEach(o=>{
 let btn=o.status==='Ready for Pickup'?`<button class="btn-small btn-pick pulse" onclick="pickupOrder(${o.id})">🛵 Pickup</button>`:o.status==='Out for Delivery'?`<button class="btn-small btn-approve pulse" onclick="openOtpVerify(${o.id})">🔐 OTP Deliver</button>`:o.status;
-html+=`<div class="row" style="${o.status==='Ready for Pickup'?'background:#eff6ff;border:2px solid #3b82f6':''}" onclick="openOrderDetail(${o.id})"><div class="col-name" style="font-size:11px"><b style="color:#b91c1c">${o.orderId}</b> ${o.status==='Ready for Pickup'?'🔔 NEW':''}<br><b>${o.customer}</b> ${o.phone}<br>₹${o.total} | ${getEta(o).substring(0,40)}</div><div class="col-rate" onclick="event.stopPropagation()">${btn}</div></div>`});
+html+=`<div class="row" style="${o.status==='Ready for Pickup'?'background:#eff6ff;border:2px solid #3b82f6':''}" onclick="openOrderDetail(${o.id})"><div class="col-name" style="font-size:11px"><b style="color:#b91c1c">${o.orderId}</b> ${o.status==='Ready for Pickup'?'🔔 NEW':''}<br><b>${o.customer}</b> ${o.phone}<br>₹${o.total} | OTP:${o.otp}</div><div class="col-rate" onclick="event.stopPropagation()">${btn}</div></div>`});
 box.innerHTML=html;
 }else if(role==='admin'){
-let delivered=orders.filter(o=>o.status==='Delivered');let cancelled=orders.filter(o=>o.status.includes('Cancelled'));
-let html=`<div style="padding:10px;font-weight:800;background:#dcfce7">✅ Delivered (${delivered.length}) - Click detail</div>`;
-if(delivered.length===0)html+='<div style="padding:15px;text-align:center;background:white">Koi delivered nahi</div>';
-delivered.slice().reverse().forEach(o=>{html+=`<div class="row" style="background:white" onclick="openOrderDetail(${o.id})"><div class="col-name" style="font-size:11px"><b style="color:#b91c1c">${o.orderId}</b> - ${o.customer}<br>${o.items.map(i=>i.name).join(', ')}<br>${o.deliveredAt||''} - OTP ${o.otp} OK<br><span class="badge delivered">DELIVERED</span></div><div class="col-rate">₹${o.total}</div></div>`});
-let totalSale=delivered.reduce((s,o)=>s+o.total,0);
-html+=`<div style="background:#111827;color:white;padding:12px;text-align:center;font-weight:800;margin-top:10px;border-radius:10px">💰 Total: ₹${totalSale} | D: ${delivered.length} | C: ${cancelled.length}</div>`;
+// --- ADMIN APPROVE SECTION FIX ---
+let approveBox=document.getElementById('adminApproveBox');
+let pendingDishes=dishes.filter(d=>d.status==='pending');
+let approveHtml=`<div class="admin-section"><div class="admin-title">🍛 Shop ne Naya Item Dala - Approve Karo (${pendingDishes.length})</div>`;
+if(pendingDishes.length===0){approveHtml+=`<div style="padding:12px;text-align:center;color:#666">Koi naya item pending nahi hai</div>`;}
+else{
+approveHtml+=`<div class="table-head"><div class="col-photo">PHOTO</div><div class="col-name">NAME</div><div class="col-rate">ACTION</div></div>`;
+pendingDishes.forEach(d=>{
+approveHtml+=`<div class="row" style="background:white"><div class="col-photo"><img src="${d.img}"></div><div class="col-name">${d.name}<br>₹${d.rate}<br><span class="badge pending">pending - Shop ne dala</span></div><div class="col-rate"><button class="btn-small btn-approve pulse" onclick="approve(${d.id})">✅ Approve</button><br><button class="btn-small btn-reject" onclick="rejectDish(${d.id})">❌ Reject</button></div></div>`;
+});
+}
+approveHtml+=`</div><div class="admin-section"><div class="admin-title">✅ Approved Dishes (${dishes.filter(d=>d.status==='approved').length}) - Customer ko dikh rahe</div><div style="font-size:11px">`;
+dishes.filter(d=>d.status==='approved').forEach(d=>{approveHtml+=`<span style="background:#dcfce7;padding:4px 8px;border-radius:12px;margin:2px;display:inline-block">🍛 ${d.name} - ₹${d.rate} <button onclick="removeDish(${d.id})" style="border:none;background:transparent;color:red">✕</button></span>`});
+approveHtml+=`</div></div>`;
+approveBox.innerHTML=approveHtml;
+
+// Orders full details
+let all=orders;
+let html=`<div class="admin-section"><div class="admin-title">📦 All Orders Full Customer Details (${all.length}) - Click detail</div>`;
+if(all.length===0)html+='<div style="padding:15px;text-align:center">Koi order nahi</div>';
+else{
+all.slice().reverse().forEach(o=>{
+html+=`<div class="row" style="background:white" onclick="openOrderDetail(${o.id})"><div class="col-name" style="font-size:11px"><b style="color:#b91c1c">${o.orderId}</b> - <b>${o.customer}</b><br>📞 Cust: ${o.phone} | 🏪 Store: ${o.storePhone} | 🛵 Del: ${o.deliveryPhone||'N/A'}<br>📍 ${o.address.substring(0,50)}<br>🍛 ${o.items.map(i=>i.name).join(', ')}<br>₹${o.total} | OTP ${o.otp} | Txn ${o.txnId}<br><span class="badge ${o.status.includes('Cancelled')?'cancelled':o.status.includes('Delivered')?'delivered':'paid'}">${o.status}</span> | ${o.time}</div><div class="col-rate">₹${o.total}</div></div>`;
+});
+let delivered=orders.filter(o=>o.status==='Delivered');let totalSale=delivered.reduce((s,o)=>s+o.total,0);
+html+=`<div style="background:#111827;color:white;padding:12px;text-align:center;font-weight:800;margin-top:10px;border-radius:10px">💰 Total Sale: ₹${totalSale} | Delivered: ${delivered.length}</div>`;
+}
+html+=`</div>`;
 box.innerHTML=html;
 }
 }
 }
-setInterval(()=>{let all=JSON.parse(localStorage.getItem('shri_orders')||'[]');if(JSON.stringify(all)!==JSON.stringify(orders)){orders=all;render();let np=localStorage.getItem('shri_new_pickup');if(np&&role==='delivery'){let o=JSON.parse(np);if(o.id>lastNotifiedId) notifyDelivery(o);}}},2500);
-window.addEventListener('storage',e=>{if(e.key==='shri_new_pickup' && role==='delivery'){let o=JSON.parse(e.newValue);notifyDelivery(o);render();}if(e.key==='shri_orders'){orders=JSON.parse(e.newValue||'[]');render();}});
+setInterval(()=>{let all=JSON.parse(localStorage.getItem('shri_orders')||'[]');let allDishes=JSON.parse(localStorage.getItem('shri_dishes_v2')||'[]');if(JSON.stringify(all)!==JSON.stringify(orders)||JSON.stringify(allDishes)!==JSON.stringify(dishes)){orders=all;dishes=allDishes;render();}},2500);
 render();
 </script>
 </body>
