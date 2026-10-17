@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ShriBhog - Firebase Final - Aapke Design Wala</title>
+<title>ShriBhog - FINAL - GPS + Firebase + Aapka Design</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:system-ui;background:#fff;padding-bottom:90px}
@@ -35,10 +35,12 @@ body{font-family:system-ui;background:#fff;padding-bottom:90px}
 .btn-approve{background:#22c55e;color:white}.btn-reject{background:#ef4444;color:white}.btn-ready{background:#3b82f6;color:white}.btn-pick{background:#f97316;color:white}.btn-cancel{background:#ef4444;color:white}.btn-edit{background:#fbbf24;color:#000}
 .btn-add{background:#f97316;color:white;padding:8px 16px;border-radius:20px;border:none;font-weight:800;cursor:pointer;font-size:13px}
 .cart-bar{position:fixed;bottom:0;left:0;right:0;background:#111827;color:white;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;z-index:20}
+.cart-bar button{background:#f97316;color:white;border:none;padding:10px 18px;border-radius:25px;font-weight:800}
 .modal{position:fixed;top:0;left:0;right:0;bottom:0;background:#0009;display:none;justify-content:center;align-items:flex-end;z-index:50}
 .modal.active{display:flex}
 .modal-box{background:white;width:100%;max-width:500px;border-radius:20px 20px 0 0;padding:18px;max-height:92vh;overflow:auto}
 .btn-loc{background:#fef3c7;border:1px solid #fbbf24;padding:9px;border-radius:10px;width:100%;margin-bottom:10px;font-weight:700;font-size:13px}
+.upi-box{background:#f0fdf4;border:2px solid #22c55e;border-radius:14px;padding:12px;text-align:center;margin:10px 0}
 .otp-big{background:#111827;color:#facc15;font-size:34px;font-weight:900;letter-spacing:10px;padding:14px;border-radius:14px;text-align:center;margin:10px 0;border:3px dashed #facc15}
 .pulse{animation:pulse 1s infinite}@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.04)}100%{transform:scale(1)}}
 .track{display:flex;justify-content:space-between;margin:15px 0;position:relative}
@@ -54,26 +56,32 @@ body{font-family:system-ui;background:#fff;padding-bottom:90px}
 .food-card{background:white;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px #0002;cursor:pointer}
 .food-card img{width:100%;height:120px;object-fit:cover;display:block}
 .food-info{padding:8px}
-.food-name{font-weight:800;font-size:13px}
+.food-name{font-weight:800;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .food-rate{font-size:12px;color:#16a34a;font-weight:700}
 .qty-bar{display:flex;align-items:center;justify-content:space-between;background:#fff7ed;border:1px solid #f97316;border-radius:20px;padding:2px;margin-top:6px}
 .qty-btn{background:#f97316;color:white;border:none;width:28px;height:28px;border-radius:50%;font-weight:800;font-size:16px;cursor:pointer}
 .qty-count{font-weight:800;font-size:14px}
+.shop-code-badge{background:#111827;color:#facc15;padding:6px 10px;border-radius:8px;font-weight:800;font-size:12px;display:inline-block;border:2px solid #facc15}
+.detail-section{background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:10px;margin:8px 0}
+.detail-title{font-weight:800;font-size:13px;margin-bottom:6px;border-bottom:1px solid #e5e7eb;padding-bottom:4px}
+.profit-card{background:linear-gradient(135deg,#111827,#1f2937);color:white;border-radius:16px;padding:14px;margin:10px 0}
+.profit-row{display:flex;justify-content:space-between;margin:6px 0;font-size:13px}
+.profit-big{font-size:20px;font-weight:800;color:#facc15}
+.shop-notif-popup{position:fixed;top:80px;left:10px;right:10px;background:#ef4444;color:white;padding:14px;border-radius:12px;z-index:100;display:none;box-shadow:0 4px 12px #0005}
+.shop-notif-popup.show{display:block;animation:pulse 1s infinite}
+.order-items-grid{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.order-item-small{background:white;border:1px solid #e5e7eb;border-radius:10px;padding:6px;display:flex;gap:6px;align-items:center;min-width:140px}
+.order-item-small img{width:40px;height:40px;border-radius:8px;object-fit:cover}
+.slide-container{display:flex;align-items:center;justify-content:space-between;background:white;border-radius:12px;padding:12px;margin:10px 0;border:2px solid #e5e7eb}
+.slide-switch{position:relative;width:60px;height:32px;background:#e5e7eb;border-radius:20px;cursor:pointer;transition:0.3s}
+.slide-switch.on{background:#16a34a}.slide-switch.off{background:#ef4444}
+.slide-knob{position:absolute;top:3px;left:3px;width:26px;height:26px;background:white;border-radius:50%;transition:0.3s;box-shadow:0 2px 4px #0003;display:flex;align-items:center;justify-content:center;font-size:12px}
+.slide-status{font-size:11px;font-weight:700;margin-left:8px}.slide-status.on{color:#16a34a}.slide-status.off{color:#ef4444}
 .your-code-box{background:#111827;color:#facc15;border:2px solid #facc15;border-radius:12px;padding:10px;margin-bottom:10px;text-align:center;display:none}
 .your-code-box.show{display:block;animation:pulse 1s infinite}
 .your-code-text{font-size:16px;font-weight:900;letter-spacing:1px}
 .otp-hide{background:#111827;color:#facc15;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:800}
 .otp-input-big{width:100%;padding:16px;border:3px solid #111827;border-radius:12px;font-size:32px;letter-spacing:14px;text-align:center;font-weight:900;background:#fffbeb;margin:12px 0}
-.shop-notif-popup{position:fixed;top:80px;left:10px;right:10px;background:#ef4444;color:white;padding:14px;border-radius:12px;z-index:100;display:none;box-shadow:0 4px 12px #0005}
-.shop-notif-popup.show{display:block;animation:pulse 1s infinite}
-.profit-card{background:linear-gradient(135deg,#111827,#1f2937);color:white;border-radius:16px;padding:14px;margin:10px 0}
-.profit-row{display:flex;justify-content:space-between;margin:6px 0;font-size:13px}
-.profit-big{font-size:20px;font-weight:800;color:#facc15}
-.slide-container{display:flex;align-items:center;justify-content:space-between;background:white;border-radius:12px;padding:12px;margin:10px 0;border:2px solid #e5e7eb}
-.slide-switch{position:relative;width:60px;height:32px;background:#e5e7eb;border-radius:20px;cursor:pointer}
-.slide-switch.on{background:#16a34a}.slide-switch.off{background:#ef4444}
-.slide-knob{position:absolute;top:3px;left:3px;width:26px;height:26px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center}
-.detail-section{background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:10px;margin:8px 0}
 </style>
 </head>
 <body>
@@ -92,67 +100,55 @@ body{font-family:system-ui;background:#fff;padding-bottom:90px}
 <div class="orange-bg">
 <div class="shop-title" id="panelTitle"><span>🏪 Shop Panel</span><span id="shopLiveStatus" style="font-size:12px;background:#16a34a;padding:4px 8px;border-radius:10px">🔔 ON</span></div>
 <div id="ownerPanel">
-<div id="yourShopCodeBox" class="your-code-box"><div style="font-size:11px;color:#9ca3af">YOUR SHOP CODE</div><div class="your-code-text" id="yourShopCodeText">SHOP-XXXX</div></div>
+<div id="yourShopCodeBox" class="your-code-box"><div style="font-size:11px;color:#9ca3af">YOUR SHOP CODE (Left Top me bhi)</div><div class="your-code-text" id="yourShopCodeText">SHOP-XXXX - Save karke Generate hoga</div></div>
 <div class="add-card">
-<h3>🏪 Shop Owner Detail - Save pe Code Generate</h3>
+<h3>🏪 Shop Owner Detail - Save pe Code Generate + GPS</h3>
 <input id="shopOwnerName" class="inp" placeholder="Owner ka Naam"><input id="shopNameInput" class="inp" placeholder="Shop Naam"><input id="storePhoneInput" class="inp" placeholder="Shop Mobile No"><input id="shopAddressInput" class="inp" placeholder="Shop Address">
 <button class="btn-save" onclick="saveShopOwnerDetail()">💾 Save Detail - Shop Code Generate Hoga</button>
-<div id="shopOnOffSlide" class="slide-container"><div><div style="font-weight:800">🏪 Shop ON / OFF</div></div><div style="display:flex;align-items:center"><div id="shopSlideSwitch" class="slide-switch on" onclick="toggleShopOnline()"><div class="slide-knob">🟢</div></div><span id="shopSlideStatus" style="margin-left:6px;font-weight:800;color:#16a34a">ON</span></div></div>
+<div id="shopOnOffSlide" class="slide-container"><div><div style="font-weight:800">🏪 Shop ON / OFF</div><div style="font-size:11px;color:#666">ON pe hi customer ko dikhega</div></div><div style="display:flex;align-items:center"><div id="shopSlideSwitch" class="slide-switch on" onclick="toggleShopOnline()"><div class="slide-knob">🟢</div></div><span id="shopSlideStatus" class="slide-status on">ON</span></div></div>
+<button class="btn-loc" onclick="getShopLocation()">📍 Shop Location Set - Distance ke liye ZARURI</button><p id="shopLocStatus" style="font-size:11px;color:green"></p>
 <hr style="margin:10px 0"><h4>🍛 Dish Add Karo</h4>
 <input type="file" id="fImg" accept="image/*" class="inp"><input type="text" id="fName" placeholder="Dish naam" class="inp"><input type="number" id="fRate" placeholder="Rate" class="inp">
-<button class="btn-green" onclick="addDish()">✅ Approval bhejo - Firebase pe jayega</button>
+<button class="btn-green" onclick="addDish()">✅ Approval bhejo - Firebase pe</button>
 </div>
 <div id="ownerProfitSection" class="profit-card"><h3>💰 My Profit - <span id="profitShopCode"></span></h3><div class="profit-row"><span>Today Sale:</span><span id="ownerTodaySale">₹0</span></div><div class="profit-row"><span>Pending:</span><span class="profit-big" id="ownerProfitPending">₹0</span></div></div>
 <div style="color:white;font-weight:700;margin:15px 0 8px">📋 Dishes - Firebase Live</div><div class="table-card" id="ownerList"></div>
-<div style="color:white;font-weight:700;margin:15px 0 8px">📦 Order History - Firebase Live</div><div class="table-card" id="ownerOrders"></div>
+<div style="color:white;font-weight:700;margin:15px 0 8px">📦 Order History - GPS Distance ke saath</div><div class="table-card" id="ownerOrders"></div>
 </div>
 <div id="otherPanel" style="display:none"><div id="deliveryPanelFull" style="display:none"></div><div id="adminApproveBox" style="display:none"></div><div class="table-card" id="otherList"></div><div id="customerFoodGrid"></div><div id="customerOrdersList" class="table-card" style="margin-top:12px"></div></div>
 </div>
 <div class="cart-bar" id="cartBar" style="display:none"><div>🛒 <span id="cartCount">0</span> Items | ₹<span id="cartTotal">0</span></div><div><button onclick="openCheckout()" style="background:#f97316;color:white;border:none;padding:10px 18px;border-radius:25px;font-weight:800">Order Karo</button></div></div>
-
-<div class="modal" id="checkoutModal"><div class="modal-box"><h3>📍 Delivery + UPI</h3><input id="cName" class="inp" style="margin-top:10px" placeholder="Naam"><input id="cPhone" class="inp" placeholder="Phone"><textarea id="cAddr" class="inp" placeholder="Address"></textarea><button class="btn-green" id="finalOrderBtn" onclick="confirmOrder()">✅ Confirm Order - Firebase</button><button onclick="document.getElementById('checkoutModal').classList.remove('active')" style="background:#eee;border:none;padding:9px;width:100%;border-radius:10px;margin-top:6px">Cancel</button></div></div>
-<div class="modal" id="otpModal"><div class="modal-box" style="text-align:center"><h3>✅ Order Confirmed!</h3><p>ID: <b id="showOrderId"></b></p><div class="otp-big" id="showOtp">----</div><button class="btn-green" onclick="document.getElementById('otpModal').classList.remove('active')">OK</button></div></div>
-<div class="modal" id="deliveryOtpModal"><div class="modal-box"><h3 style="background:#111827;color:#facc15;padding:12px;border-radius:10px;text-align:center">🔐 OTP DALO - Customer se puchh ke</h3><p id="otpCustomerInfo" style="font-size:12px;background:#fffbeb;padding:10px;border-radius:8px;border:2px solid #fbbf24;margin:10px 0"></p><input id="inputOtp" type="number" class="otp-input-big" placeholder="****"><button class="btn-green" style="font-size:17px;padding:16px" onclick="verifyDeliveryOtp()">✅ OTP VERIFY KARO</button><p id="otpError" style="color:red;display:none">❌ Galat OTP</p></div></div>
+<div class="modal" id="checkoutModal"><div class="modal-box"><h3>📍 Delivery + GPS - ZARURI</h3><input id="cName" class="inp" style="margin-top:10px" placeholder="Naam"><input id="cPhone" class="inp" placeholder="Phone"><textarea id="cAddr" class="inp" placeholder="Address"></textarea><button class="btn-loc" onclick="getLocation()">📍 Customer Location - GPS ON karo - Distance ke liye</button><p id="locStatus" style="font-size:11px;color:green"></p><button class="btn-green" id="finalOrderBtn" onclick="confirmOrder()">✅ Confirm Order - Firebase + GPS</button><button onclick="document.getElementById('checkoutModal').classList.remove('active')" style="background:#eee;border:none;padding:9px;width:100%;border-radius:10px;margin-top:6px">Cancel</button></div></div>
+<div class="modal" id="otpModal"><div class="modal-box" style="text-align:center"><h3>✅ Order Confirmed!</h3><p>ID: <b id="showOrderId"></b></p><div class="otp-big" id="showOtp">----</div><div id="afterOrderContact" class="contact-box"></div><button class="btn-green" onclick="document.getElementById('otpModal').classList.remove('active')">OK</button></div></div>
+<div class="modal" id="deliveryOtpModal"><div class="modal-box"><h3 style="background:#111827;color:#facc15;padding:12px;border-radius:10px;text-align:center">🔐 OTP DALO - Customer se puchh ke</h3><p id="otpCustomerInfo" style="font-size:12px;background:#fffbeb;padding:10px;border-radius:8px;border:2px solid #fbbf24;margin:10px 0"></p><div style="background:#fee2e2;border:2px solid #ef4444;border-radius:12px;padding:10px;text-align:center"><div style="font-weight:900;color:#991b1b">⚠️ OTP yahan pehle se nahi dikhega - Security - Detail rahega</div></div><input id="inputOtp" type="number" class="otp-input-big" placeholder="****"><button class="btn-green" style="font-size:17px;padding:16px" onclick="verifyDeliveryOtp()">✅ OTP VERIFY KARO - DELIVERED</button><p id="otpError" style="color:red;display:none">❌ Galat OTP</p></div></div>
 <div class="modal" id="detailModal"><div class="modal-box"><h3 id="detailId"></h3><div id="detailContent"></div><button onclick="document.getElementById('detailModal').classList.remove('active')" style="background:#eee;border:none;padding:9px;width:100%;border-radius:10px;margin-top:10px">Band karo</button></div></div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-const firebaseConfig = {
-  apiKey: "AIzaSyDLWArfHEBERO2ehyhApk_zE0kWeM2tow8",
-  authDomain: "shri-bhog.firebaseapp.com",
-  projectId: "shri-bhog",
-  storageBucket: "shri-bhog.firebasestorage.app",
-  messagingSenderId: "246826560255",
-  appId: "1:246826560255:web:d1d409cf6d9d0ea854faca",
-  measurementId: "G-0WPK34QN6G"
-};
-const appFB = initializeApp(firebaseConfig);
-const db = getFirestore(appFB);
+const firebaseConfig = {apiKey:"AIzaSyDLWArfHEBERO2ehyhApk_zE0kWeM2tow8",authDomain:"shri-bhog.firebaseapp.com",projectId:"shri-bhog",storageBucket:"shri-bhog.firebasestorage.app",messagingSenderId:"246826560255",appId:"1:246826560255:web:d1d409cf6d9d0ea854faca",measurementId:"G-0WPK34QN6G"};
+const appFB=initializeApp(firebaseConfig);const db=getFirestore(appFB);
 
 let SHOP_OWNER_NAME=localStorage.getItem('shop_owner_name')||"";
 let SHOP_NAME=localStorage.getItem('shop_name')||"";
 let STORE_PHONE=localStorage.getItem('store_phone')||"";
 let SHOP_ADDRESS=localStorage.getItem('shop_address')||"";
 let SHOP_CODE=localStorage.getItem('shop_code')||"";
+let SHOP_LAT=localStorage.getItem('shop_lat')||"";let SHOP_LNG=localStorage.getItem('shop_lng')||"";
 let SHOP_ONLINE=localStorage.getItem('shop_online')||"on";
 let DELIVERY_NAME=localStorage.getItem('delivery_name')||"Raju Shrma";
 let DELIVERY_PHONE=localStorage.getItem('delivery_phone')||"9876500000";
 let DELIVERY_DUTY=localStorage.getItem('delivery_duty')||"off";
-let dishes=[];let orders=[];let cart=[];let role='owner';let currentDeliveryOrderDocId=null;let lastShopOrderCount=0;
+let DELIVERY_BASE=Number(localStorage.getItem('delivery_base')||20);let DELIVERY_PER_KM=Number(localStorage.getItem('delivery_per_km')||5);let DELIVERY_EXTRA_200=Number(localStorage.getItem('delivery_extra_200')||10);
+let dishes=[];let orders=[];let cart=[];let role='owner';let currentDeliveryOrderDocId=null;let currentLat="";let currentLng="";let currentLoc="";let lastShopOrderCount=0;
 
-onSnapshot(collection(db,"dishes"),(snap)=>{
-  dishes=snap.docs.map(d=>({docId:d.id, id:d.data().id||d.id, ...d.data()}));
-  render();checkBadges();
-});
-onSnapshot(collection(db,"orders"),(snap)=>{
-  orders=snap.docs.map(d=>({docId:d.id, ...d.data()}));
-  render();checkBadges();
+onSnapshot(collection(db,"dishes"),s=>{dishes=s.docs.map(d=>({docId:d.id,...d.data()}));render();checkBadges();});
+onSnapshot(collection(db,"orders"),s=>{orders=s.docs.map(d=>({docId:d.id,...d.data()}));render();checkBadges();
   let myOrders=orders.filter(o=>o.shopCode===SHOP_CODE);
   if(myOrders.length>lastShopOrderCount && myOrders.length>0){
     let last=myOrders[myOrders.length-1];
     if(last.status==='Paid - New'){
-      document.getElementById('shopNotifText').innerText=`${last.orderId} - ${last.customer} - ₹${last.total}`;
+      document.getElementById('shopNotifText').innerText=`${last.orderId} - ${last.customer} - ₹${last.total} - ${last.distance?.toFixed(2)}km`;
       document.getElementById('shopNotifPopup').classList.add('show');
       setTimeout(()=>document.getElementById('shopNotifPopup').classList.remove('show'),6000);
     }
@@ -160,169 +156,144 @@ onSnapshot(collection(db,"orders"),(snap)=>{
   }
 });
 
-function checkBadges(){
-  let newForShop=orders.filter(o=>o.shopCode===SHOP_CODE && o.status==='Paid - New').length;
-  let readyForDelivery=orders.filter(o=>o.status==='Ready for Pickup').length;
-  let b1=document.getElementById('badge-owner');b1.innerText=newForShop;b1.className=newForShop>0?'notif-badge show':'notif-badge';
-  let b2=document.getElementById('badge-delivery');b2.innerText=readyForDelivery;b2.className=readyForDelivery>0?'notif-badge show':'notif-badge';
+function checkBadges(){let n=orders.filter(o=>o.shopCode===SHOP_CODE&&o.status==='Paid - New').length;let r=orders.filter(o=>o.status==='Ready for Pickup').length;let b1=document.getElementById('badge-owner');b1.innerText=n;b1.className=n>0?'notif-badge show':'notif-badge';let b2=document.getElementById('badge-delivery');b2.innerText=r;b2.className=r>0?'notif-badge show':'notif-badge';}
+
+// GPS WAPAS - ZARURI
+window.getShopLocation=()=>{
+  let st=document.getElementById('shopLocStatus');st.innerText='Shop location le raha hu... GPS allow karo';
+  navigator.geolocation.getCurrentPosition(p=>{
+    SHOP_LAT=p.coords.latitude;SHOP_LNG=p.coords.longitude;
+    localStorage.setItem('shop_lat',SHOP_LAT);localStorage.setItem('shop_lng',SHOP_LNG);
+    st.innerHTML=`✅ Shop Location: ${SHOP_LAT.toFixed(4)}, ${SHOP_LNG.toFixed(4)} - Ab distance sahi niklega - Firebase pe bhi jayega`;
+  },()=>{st.innerText='❌ Location permission do - GPS ON karo';});
 }
+window.getLocation=()=>{
+  let st=document.getElementById('locStatus');st.innerText='Customer location le raha hu...';
+  navigator.geolocation.getCurrentPosition(p=>{
+    currentLat=p.coords.latitude;currentLng=p.coords.longitude;currentLoc=`https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
+    st.innerHTML=`✅ Customer Location: ${p.coords.latitude.toFixed(4)} - Shop se distance: ${SHOP_LAT?haversine(parseFloat(SHOP_LAT),parseFloat(SHOP_LNG),currentLat,currentLng).toFixed(2)+' km':''}`;
+    document.getElementById('cAddr').value+=`\n📍 ${currentLoc}`;
+  },()=>{st.innerText='❌ GPS allow karo';});
+}
+window.haversine=(lat1,lon1,lat2,lon2)=>{function toRad(x){return x*Math.PI/180;}let R=6371;let dLat=toRad(lat2-lat1);let dLon=toRad(lon2-lon1);let a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)*Math.sin(dLon/2);let c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));return R*c;}
+window.calculateDeliveryEarning=(order)=>{let dist=order.distance||0;let total=Math.round(DELIVERY_BASE+(dist*DELIVERY_PER_KM)+(order.total>200?DELIVERY_EXTRA_200:0));return {dist:dist.toFixed(2),totalEarn:total};}
 
 window.saveShopOwnerDetail=()=>{
-  let ownerName=document.getElementById('shopOwnerName').value.trim();
-  let shopName=document.getElementById('shopNameInput').value.trim();
-  let phone=document.getElementById('storePhoneInput').value.trim();
-  let address=document.getElementById('shopAddressInput').value.trim();
-  if(!ownerName||!shopName||!phone) return alert('Owner Naam, Shop Naam, Mobile bharo');
-  SHOP_OWNER_NAME=ownerName;SHOP_NAME=shopName;STORE_PHONE=phone;SHOP_ADDRESS=address;
-  localStorage.setItem('shop_owner_name',SHOP_OWNER_NAME);localStorage.setItem('shop_name',SHOP_NAME);localStorage.setItem('store_phone',STORE_PHONE);localStorage.setItem('shop_address',SHOP_ADDRESS);
-  if(!SHOP_CODE){SHOP_CODE=shopName.substring(0,4).toUpperCase()+"-"+Math.floor(1000+Math.random()*9000);localStorage.setItem('shop_code',SHOP_CODE);}
-  updateHeader();alert(`✅ Saved! Shop Code: ${SHOP_CODE}`);render();
+  let owner=document.getElementById('shopOwnerName').value.trim(),shop=document.getElementById('shopNameInput').value.trim(),phone=document.getElementById('storePhoneInput').value.trim(),addr=document.getElementById('shopAddressInput').value.trim();
+  if(!owner||!shop||!phone) return alert('Owner, Shop, Mobile bharo');
+  SHOP_OWNER_NAME=owner;SHOP_NAME=shop;STORE_PHONE=phone;SHOP_ADDRESS=addr;
+  localStorage.setItem('shop_owner_name',owner);localStorage.setItem('shop_name',shop);localStorage.setItem('store_phone',phone);localStorage.setItem('shop_address',addr);
+  if(!SHOP_CODE){SHOP_CODE=shop.substring(0,4).toUpperCase()+"-"+Math.floor(1000+Math.random()*9000);localStorage.setItem('shop_code',SHOP_CODE);}
+  updateHeader();alert(`✅ Saved! Shop Code: ${SHOP_CODE} + GPS: ${SHOP_LAT?SHOP_LAT+', '+SHOP_LNG:'Location Set karna hai'}`);render();
 }
 window.saveDeliveryDetail=()=>{
-  let name=document.getElementById('deliveryNameInput')?.value.trim()||DELIVERY_NAME;
-  let phone=document.getElementById('deliveryPhoneInput')?.value.trim()||DELIVERY_PHONE;
-  DELIVERY_NAME=name;DELIVERY_PHONE=phone;
-  localStorage.setItem('delivery_name',name);localStorage.setItem('delivery_phone',phone);
-  updateHeader();alert(`✅ Delivery Saved: ${name} - ${phone}`);render();
+  let n=document.getElementById('deliveryNameInput')?.value.trim()||DELIVERY_NAME,p=document.getElementById('deliveryPhoneInput')?.value.trim()||DELIVERY_PHONE;
+  DELIVERY_NAME=n;DELIVERY_PHONE=p;localStorage.setItem('delivery_name',n);localStorage.setItem('delivery_phone',p);updateHeader();render();
 }
-function updateHeader(){
-  let el=document.getElementById('headerShopCode');
-  if(SHOP_CODE){el.innerText=`Your Shop Code: ${SHOP_CODE}`;el.classList.add('show');document.getElementById('yourShopCodeBox').classList.add('show');document.getElementById('yourShopCodeText').innerText=`${SHOP_CODE} - ${SHOP_NAME}`;document.getElementById('profitShopCode').innerText=`${SHOP_CODE}`;}
-  let el2=document.getElementById('headerDelivery');
-  if(DELIVERY_NAME){el2.innerText=`Delivery: ${DELIVERY_NAME} - ${DELIVERY_PHONE}`;el2.classList.add('show');}
-}
+function updateHeader(){let e=document.getElementById('headerShopCode');if(SHOP_CODE){e.innerText=`Your Shop Code: ${SHOP_CODE}`;e.classList.add('show');document.getElementById('yourShopCodeBox').classList.add('show');document.getElementById('yourShopCodeText').innerText=`${SHOP_CODE} - ${SHOP_NAME}`;let pr=document.getElementById('profitShopCode');if(pr) pr.innerText=SHOP_CODE;}let e2=document.getElementById('headerDelivery');if(DELIVERY_NAME){e2.innerText=`Delivery: ${DELIVERY_NAME} - ${DELIVERY_PHONE}`;e2.classList.add('show');}let ls=document.getElementById('shopLocStatus');if(SHOP_LAT&&ls) ls.innerText=`✅ Location Saved: ${SHOP_LAT}, ${SHOP_LNG}`;}
 window.toggleShopOnline=()=>{SHOP_ONLINE=SHOP_ONLINE==='on'?'off':'on';localStorage.setItem('shop_online',SHOP_ONLINE);let sw=document.getElementById('shopSlideSwitch');sw.className=SHOP_ONLINE==='on'?'slide-switch on':'slide-switch off';sw.innerHTML=`<div class="slide-knob">${SHOP_ONLINE==='on'?'🟢':'🔴'}</div>`;document.getElementById('shopSlideStatus').innerText=SHOP_ONLINE==='on'?'ON':'OFF';render();}
 window.toggleDuty=()=>{DELIVERY_DUTY=DELIVERY_DUTY==='on'?'off':'on';localStorage.setItem('delivery_duty',DELIVERY_DUTY);render();}
 
 window.addDish=()=>{
   if(!SHOP_CODE) return alert('Pehle Shop Detail Save karo');
   let n=document.getElementById('fName').value.trim(),rt=document.getElementById('fRate').value.trim(),fi=document.getElementById('fImg').files[0];
-  if(!n||!rt) return alert('Naam Rate bharo');if(!fi) return alert('Photo chuno');
+  if(!n||!rt||!fi) return alert('Photo, Naam, Rate bharo');
   let rd=new FileReader();rd.onload=async e=>{
-    await addDoc(collection(db,"dishes"),{id:Date.now(),name:n,rate:rt,img:e.target.result,status:'pending',shopName:SHOP_NAME,shopCode:SHOP_CODE,shopOwner:SHOP_OWNER_NAME,shopOnline:SHOP_ONLINE,createdAt:serverTimestamp()});
+    await addDoc(collection(db,"dishes"),{id:Date.now(),name:n,rate:rt,img:e.target.result,status:'pending',shopName:SHOP_NAME,shopCode:SHOP_CODE,shopOwner:SHOP_OWNER_NAME,shopLat:SHOP_LAT,shopLng:SHOP_LNG,shopOnline:SHOP_ONLINE,createdAt:serverTimestamp()});
     document.getElementById('fName').value='';document.getElementById('fRate').value='';document.getElementById('fImg').value='';
   };rd.readAsDataURL(fi);
 }
-window.approve=async(docId)=>{await updateDoc(doc(db,"dishes",docId),{status:'approved'});}
-window.rejectDish=async(docId)=>{await deleteDoc(doc(db,"dishes",docId));}
-
+window.approve=async(id)=>{await updateDoc(doc(db,"dishes",id),{status:'approved'});}
+window.rejectDish=async(id)=>{if(confirm('Reject?')) await deleteDoc(doc(db,"dishes",id));}
 window.switchRole=(r)=>{
   role=r;document.querySelectorAll('.tab-pill').forEach(b=>b.classList.remove('active'));document.getElementById('t-'+r).classList.add('active');
-  document.getElementById('ownerPanel').style.display=(r==='owner')?'block':'none';document.getElementById('otherPanel').style.display=(r==='owner')?'none':'block';document.getElementById('deliveryPanelFull').style.display=(r==='delivery')?'block':'none';document.getElementById('adminApproveBox').style.display=(r==='admin')?'block':'none';
-  document.getElementById('panelTitle').innerHTML=r==='customer'?'<span>🛒 Customer - Firebase Live</span>':r==='admin'?'<span>👑 Admin - Firebase Live</span>':r==='delivery'?'<span>🛵 Delivery - Detail + OTP Hide - Firebase</span>':'<span>🏪 Shop Panel - Firebase Live</span>';
+  document.getElementById('ownerPanel').style.display=r==='owner'?'block':'none';document.getElementById('otherPanel').style.display=r==='owner'?'none':'block';document.getElementById('deliveryPanelFull').style.display=r==='delivery'?'block':'none';document.getElementById('adminApproveBox').style.display=r==='admin'?'block':'none';
+  document.getElementById('panelTitle').innerHTML=r==='customer'?'<span>🛒 Customer - Firebase + GPS</span>':r==='admin'?'<span>👑 Admin - Firebase + GPS</span>':r==='delivery'?'<span>🛵 Delivery - GPS Distance + OTP Hide + Detail</span>':'<span>🏪 Shop Panel - Firebase + GPS</span>';
   if(r==='owner'){document.getElementById('shopOwnerName').value=SHOP_OWNER_NAME;document.getElementById('shopNameInput').value=SHOP_NAME;document.getElementById('storePhoneInput').value=STORE_PHONE;document.getElementById('shopAddressInput').value=SHOP_ADDRESS;}
   render();
 }
-
-window.addToCart=(docId)=>{let d=dishes.find(x=>x.docId===docId);let ex=cart.find(x=>x.docId===docId);if(ex) ex.qty++;else cart.push({...d,qty:1});updateCart();render();}
-window.incQty=(docId)=>{let i=cart.find(x=>x.docId===docId);if(i) i.qty++;updateCart();render();}
-window.decQty=(docId)=>{let i=cart.find(x=>x.docId===docId);if(i){i.qty--;if(i.qty<=0) cart=cart.filter(x=>x.docId!==docId);}updateCart();render();}
-function updateCart(){let tot=cart.reduce((s,x)=>s+Number(x.rate)*x.qty,0);let count=cart.reduce((s,x)=>s+x.qty,0);document.getElementById('cartCount').innerText=count;document.getElementById('cartTotal').innerText=tot;document.getElementById('cartBar').style.display=(role==='customer'&&cart.length>0)?'flex':'none';}
+window.addToCart=(id)=>{let d=dishes.find(x=>x.docId===id);let ex=cart.find(x=>x.docId===id);if(ex) ex.qty++;else cart.push({...d,qty:1});updateCart();render();}
+window.incQty=(id)=>{let i=cart.find(x=>x.docId===id);if(i) i.qty++;updateCart();render();}
+window.decQty=(id)=>{let i=cart.find(x=>x.docId===id);if(i){i.qty--;if(i.qty<=0) cart=cart.filter(x=>x.docId!==id);}updateCart();render();}
+function updateCart(){let tot=cart.reduce((s,x)=>s+Number(x.rate)*x.qty,0);let c=cart.reduce((s,x)=>s+x.qty,0);document.getElementById('cartCount').innerText=c;document.getElementById('cartTotal').innerText=tot;document.getElementById('cartBar').style.display=role==='customer'&&cart.length>0?'flex':'none';}
 window.openCheckout=()=>{if(cart.length===0) return;document.getElementById('checkoutModal').classList.add('active');}
 window.confirmOrder=async()=>{
   let nm=document.getElementById('cName').value.trim(),ph=document.getElementById('cPhone').value.trim(),ad=document.getElementById('cAddr').value.trim();
   if(!nm||!ph||!ad) return alert('Details bharo');
-  let tot=cart.reduce((s,x)=>s+Number(x.rate)*x.qty,0);let otp=Math.floor(1000+Math.random()*9000);let oid='SHRI-'+String(Date.now()).slice(-4);
+  let tot=cart.reduce((s,x)=>s+Number(x.rate)*x.qty,0);
+  let distance=0;
+  if(SHOP_LAT&&SHOP_LNG&&currentLat&&currentLng){distance=haversine(parseFloat(SHOP_LAT),parseFloat(SHOP_LNG),parseFloat(currentLat),parseFloat(currentLng));}else{distance=2.5+Math.random()*2;}
+  let earn=Math.round(DELIVERY_BASE+distance*DELIVERY_PER_KM+(tot>200?DELIVERY_EXTRA_200:0));
+  let otp=Math.floor(1000+Math.random()*9000);let oid='SHRI-'+String(Date.now()).slice(-4);
   let itemsCopy=cart.map(c=>({name:c.name,rate:c.rate,qty:c.qty,img:c.img}));
-  await addDoc(collection(db,"orders"),{orderId:oid,items:itemsCopy,total:tot,commission:Math.round(tot*0.2),customer:nm,phone:ph,address:ad,distance:2.5+Math.random()*3,deliveryEarning:30,otp:otp,shopName:SHOP_NAME||'Shree Mithai',shopCode:SHOP_CODE||'SHRI123',storePhone:STORE_PHONE,status:'Paid - New',time:new Date().toLocaleString(),createdAt:serverTimestamp(),deliveryName:'',deliveryPhone:''});
-  cart=[];updateCart();document.getElementById('checkoutModal').classList.remove('active');document.getElementById('showOrderId').innerText=oid;document.getElementById('showOtp').innerText=otp;document.getElementById('otpModal').classList.add('active');
+  await addDoc(collection(db,"orders"),{orderId:oid,items:itemsCopy,total:tot,commission:Math.round(tot*0.2),customer:nm,phone:ph,address:ad,location:currentLoc||'',customerLat:currentLat,customerLng:currentLng,shopLat:SHOP_LAT,shopLng:SHOP_LNG,distance:distance,deliveryBase:DELIVERY_BASE,deliveryPerKm:DELIVERY_PER_KM,deliveryExtra:tot>200?DELIVERY_EXTRA_200:0,deliveryEarning:earn,otp:otp,shopName:SHOP_NAME||'Shree Mithai',shopCode:SHOP_CODE||'SHRI123',storePhone:STORE_PHONE,status:'Paid - New',time:new Date().toLocaleString(),createdAt:serverTimestamp(),deliveryName:'',deliveryPhone:''});
+  cart=[];updateCart();document.getElementById('checkoutModal').classList.remove('active');document.getElementById('showOrderId').innerText=oid;document.getElementById('showOtp').innerText=otp;document.getElementById('afterOrderContact').innerHTML=`🏪 ${SHOP_NAME} - ${SHOP_CODE}<br>📍 Distance: ${distance.toFixed(2)} km | 🛵 Earning: ₹${earn}<br>Shop GPS: ${SHOP_LAT||'N/A'} | Customer GPS: ${currentLat||'N/A'}`;document.getElementById('otpModal').classList.add('active');
 }
-
-window.shopReady=async(docId)=>{await updateDoc(doc(db,"orders",docId),{status:'Ready for Pickup'});}
-window.pickupOrder=async(docId)=>{
-  if(!DELIVERY_NAME) return alert('Delivery Name Mobile Save karo');
-  await updateDoc(doc(db,"orders",docId),{status:'Out for Delivery',deliveryName:DELIVERY_NAME,deliveryPhone:DELIVERY_PHONE});
-}
-window.openOtpVerify=(docId)=>{
-  let o=orders.find(x=>x.docId===docId);if(!o) return;
-  currentDeliveryOrderDocId=docId;
-  document.getElementById('otpCustomerInfo').innerHTML=`<b style="color:#b91c1c">${o.orderId}</b> - ${o.shopName} (${o.shopCode})<br>👤 ${o.customer} - ${o.phone} <a href="tel:${o.phone}" style="background:#16a34a;color:white;padding:3px 8px;border-radius:8px;text-decoration:none">📞 Call - OTP puchho</a><br>📍 ${o.distance.toFixed(2)} km | ₹${o.deliveryEarning}<br>🛵 Delivery: ${DELIVERY_NAME} - ${DELIVERY_PHONE}<br><br><span class="otp-hide">🔒 OTP: **** Hidden - Detail rahega</span>`;
+window.shopReady=async(id)=>{await updateDoc(doc(db,"orders",id),{status:'Ready for Pickup',readyAt:Date.now()});}
+window.pickupOrder=async(id)=>{if(!DELIVERY_NAME) return alert('Delivery Name Save karo');await updateDoc(doc(db,"orders",id),{status:'Out for Delivery',deliveryName:DELIVERY_NAME,deliveryPhone:DELIVERY_PHONE});}
+window.openOtpVerify=(id)=>{
+  let o=orders.find(x=>x.docId===id);if(!o) return;currentDeliveryOrderDocId=id;
+  let earn=calculateDeliveryEarning(o);
+  document.getElementById('otpCustomerInfo').innerHTML=`<b style="color:#b91c1c">${o.orderId}</b> - ${o.shopName} (${o.shopCode})<br>👤 ${o.customer} - ${o.phone} <a href="tel:${o.phone}" style="background:#16a34a;color:white;padding:3px 8px;border-radius:8px;text-decoration:none">📞 Call - OTP puchho</a><br>📍 Shop GPS: ${o.shopLat||SHOP_LAT} | Customer GPS: ${o.customerLat||currentLat}<br>📍 Distance: ${o.distance.toFixed(2)} km | 💰 Earning: ₹${o.deliveryEarning||earn.totalEarn}<br>🗺️ <a href="${o.location}" target="_blank">📍 Map Kholo - GPS Location</a><br>🛵 Delivery: ${DELIVERY_NAME} - ${DELIVERY_PHONE}<br><br><span class="otp-hide">🔒 OTP: **** Hidden - Detail rahega - GPS ke saath</span>`;
   document.getElementById('inputOtp').value='';document.getElementById('otpError').style.display='none';document.getElementById('deliveryOtpModal').classList.add('active');
 }
 window.verifyDeliveryOtp=async()=>{
-  let entered=document.getElementById('inputOtp').value.trim();
-  let o=orders.find(x=>x.docId===currentDeliveryOrderDocId);if(!o) return;
-  if(entered==o.otp){await updateDoc(doc(db,"orders",currentDeliveryOrderDocId),{status:'Delivered'});document.getElementById('deliveryOtpModal').classList.remove('active');alert(`✅ Delivered!`);}else document.getElementById('otpError').style.display='block';
+  let entered=document.getElementById('inputOtp').value.trim();let o=orders.find(x=>x.docId===currentDeliveryOrderDocId);if(!o) return;
+  if(entered==o.otp){await updateDoc(doc(db,"orders",currentDeliveryOrderDocId),{status:'Delivered',deliveredAt:Date.now()});document.getElementById('deliveryOtpModal').classList.remove('active');alert(`✅ Delivered! Distance: ${o.distance.toFixed(2)}km - ₹${o.deliveryEarning}`);}else document.getElementById('otpError').style.display='block';
 }
-window.openOrderDetail=(docId)=>{
-  let o=orders.find(x=>x.docId===docId);if(!o) return;
-  document.getElementById('detailId').innerText=o.orderId;
-  let otpPart=role==='delivery'?`<span class="otp-hide">OTP: **** Hidden - Detail rahega</span>`:`OTP: <b>${o.otp}</b>`;
-  document.getElementById('detailContent').innerHTML=`Shop: ${o.shopName} (${o.shopCode})<br>Customer: ${o.customer}<br>Phone: ${o.phone} <a href="tel:${o.phone}">Call</a><br>Address: ${o.address}<br>📍 ${o.distance?.toFixed(2)} km | 💰 ₹${o.deliveryEarning}<br>Status: ${o.status}<br>${otpPart}<br>Delivery: ${o.deliveryName||DELIVERY_NAME}<br><hr>🍛 ${o.items?.map(i=>i.name+' x'+i.qty).join(', ')}<br>Total: ₹${o.total}`;
+window.openOrderDetail=(id)=>{
+  let o=orders.find(x=>x.docId===id);if(!o) return;document.getElementById('detailId').innerText=o.orderId;
+  let otpPart=role==='delivery'?`<span class="otp-hide">OTP: **** Hidden - Detail rahega - GPS: ${o.distance.toFixed(2)}km</span>`:`OTP: <b>${o.otp}</b>`;
+  document.getElementById('detailContent').innerHTML=`
+  <div class="detail-section"><div class="detail-title">🏪 Shop + GPS - Firebase Live</div>Shop: ${o.shopName} (${o.shopCode})<br>Shop GPS: ${o.shopLat||SHOP_LAT}, ${o.shopLng||SHOP_LNG}<br>Customer GPS: ${o.customerLat||''}, ${o.customerLng||''}<br>📍 Distance: ${o.distance?.toFixed(2)} km - GPS se nikla</div>
+  <div class="detail-section"><div class="detail-title">👤 Customer + Distance</div>Naam: ${o.customer}<br>Phone: <a href="tel:${o.phone}">${o.phone}</a><br>Address: ${o.address}<br><a href="${o.location}" target="_blank">📍 Map Kholo - GPS Location</a><br>${otpPart}<br>💰 Delivery Earning: ₹${o.deliveryEarning} (${o.distance?.toFixed(2)}km x ₹${o.deliveryPerKm||5})</div>
+  <div class="detail-section"><div class="detail-title">🍛 Items</div>🍛 ${o.items?.map(i=>i.name+' x'+i.qty).join(', ')}<br>Total: ₹${o.total}</div>`;
   document.getElementById('detailModal').classList.add('active');
 }
 
 function render(){
   updateHeader();
-  let profitCalc=()=>{let my=orders.filter(o=>o.shopCode===SHOP_CODE && o.status==='Delivered');let pending=my.filter(o=>!o.settled);return {pending:pending.reduce((s,o)=>s+o.total,0)}};
-  let pc=profitCalc();let pendEl=document.getElementById('ownerProfitPending');if(pendEl) pendEl.innerText='₹'+(pc.pending||0);
+  let pendingProfit=orders.filter(o=>o.shopCode===SHOP_CODE&&o.status==='Delivered').reduce((s,o)=>s+o.total,0);
+  let el=document.getElementById('ownerProfitPending');if(el) el.innerText='₹'+pendingProfit;
   if(role==='owner'){
-    let box=document.getElementById('ownerList');let html='<div class="table-head"><div class="col-photo">PHOTO</div><div class="col-name">NAME</div><div class="col-rate">ACTION</div></div>';
-    if(dishes.length===0) html+='<div style="padding:12px;text-align:center">Koi dish nahi - Firebase se load hoga</div>';
-    else dishes.filter(d=>d.shopCode===SHOP_CODE||!SHOP_CODE).forEach(d=>{html+=`<div class="row"><div class="col-photo"><img class="dish-thumb" src="${d.img}"></div><div class="col-name" style="font-size:11px"><b>${d.name}</b><br>₹${d.rate} - <span class="badge ${d.status}">${d.status}</span><br><span style="font-size:9px">${d.shopCode}</span></div><div class="col-rate"><button class="btn-small" style="background:#eee" onclick="rejectDish('${d.docId}')">🗑️</button></div></div>`});
+    let box=document.getElementById('ownerList');let html='<div class="table-head"><div class="col-photo">PHOTO</div><div class="col-name">NAME + GPS</div><div class="col-rate">ACTION</div></div>';
+    if(dishes.length===0) html+='<div style="padding:12px;text-align:center">Koi dish nahi - Firebase Live - GPS: '+(SHOP_LAT?'✅':'❌ Location set karo')+'</div>';
+    else dishes.filter(d=>d.shopCode===SHOP_CODE||!SHOP_CODE).forEach(d=>{html+=`<div class="row"><div class="col-photo"><img class="dish-thumb" src="${d.img}"></div><div class="col-name" style="font-size:11px"><b>${d.name}</b><br>₹${d.rate} - <span class="badge ${d.status}">${d.status}</span><br>📍 Shop GPS: ${d.shopLat?d.shopLat.slice(0,6):'N/A'} - ${d.shopCode}</div><div class="col-rate"><button class="btn-small" style="background:#eee" onclick="rejectDish('${d.docId}')">🗑️</button></div></div>`});
     box.innerHTML=html;
     let myOrders=orders.filter(o=>!SHOP_CODE||o.shopCode===SHOP_CODE);
-    let ob=document.getElementById('ownerOrders');let oh=`<div class="table-head"><div class="col-name">📦 ORDER HISTORY - Firebase - ${SHOP_CODE||''}</div><div class="col-rate">ACTION</div></div>`;
-    if(myOrders.length===0) oh+='<div style="padding:12px;text-align:center">Koi order nahi - Firebase Live</div>';
-    else myOrders.slice().reverse().forEach(o=>{
-      let act=o.status==='Paid - New'?`<button class="btn-small btn-ready pulse" onclick="shopReady('${o.docId}')">🍳 Ready</button>`:`<span style="font-size:10px">${o.status}</span>`;
-      oh+=`<div class="row ${o.status==='Paid - New'?'new-order':''}" onclick="openOrderDetail('${o.docId}')"><div class="col-name" style="font-size:11px"><b style="color:#b91c1c">${o.orderId}</b> - ${o.customer} - ₹${o.total}<br>📞 ${o.phone} | 📍 ${o.distance?.toFixed(2)} km | <span class="otp-hide">OTP **** Hidden</span></div><div class="col-rate">${act}</div></div>`;
-    });
+    let ob=document.getElementById('ownerOrders');let oh=`<div class="table-head"><div class="col-name">📦 ORDER - GPS Distance - ${SHOP_CODE||''} - Shop GPS: ${SHOP_LAT?SHOP_LAT.slice(0,6):'N/A'}</div><div class="col-rate">ACTION</div></div>`;
+    if(myOrders.length===0) oh+='<div style="padding:12px;text-align:center">Koi order nahi - Firebase Live - Customer GPS aayega tab distance niklega</div>';
+    else myOrders.slice().reverse().forEach(o=>{let act=o.status==='Paid - New'?`<button class="btn-small btn-ready pulse" onclick="shopReady('${o.docId}')">🍳 Ready</button>`:`<span style="font-size:10px">${o.status} - ${o.distance?.toFixed(2)}km</span>`;oh+=`<div class="row ${o.status==='Paid - New'?'new-order':''}" onclick="openOrderDetail('${o.docId}')"><div class="col-name" style="font-size:11px"><b style="color:#b91c1c">${o.orderId}</b> - ${o.customer} - ₹${o.total}<br>📞 ${o.phone} | 📍 ${o.distance?.toFixed(2)} km GPS | <span class="otp-hide">OTP ****</span> | 🛵 ₹${o.deliveryEarning}</div><div class="col-rate">${act}</div></div>`;});
     ob.innerHTML=oh;
   }
   if(role==='customer'){
-    let grid=document.getElementById('customerFoodGrid');
-    let approved=dishes.filter(d=>d.status==='approved');
-    let html='<div class="food-grid">';
-    if(approved.length===0) html+='<div style="padding:20px;text-align:center;background:white;border-radius:12px">Koi dish nahi - Admin approve karega tab dikhega - Firebase Live</div>';
-    else approved.forEach(d=>{
-      let inCart=cart.find(x=>x.docId===d.docId);let qty=inCart?inCart.qty:0;
-      html+=`<div class="food-card"><img src="${d.img}"><div class="food-info"><div class="food-name">${d.name}</div><div class="food-rate">₹${d.rate}</div><div style="font-size:9px">${d.shopCode} 🟢</div>${qty===0?`<button class="btn-add" style="width:100%;margin-top:6px" onclick="addToCart('${d.docId}')">ADD +</button>`:`<div class="qty-bar"><button class="qty-btn" onclick="decQty('${d.docId}')">−</button><span class="qty-count">${qty}</span><button class="qty-btn" onclick="incQty('${d.docId}')">+</button></div>`}</div></div>`;
-    });
+    let grid=document.getElementById('customerFoodGrid');let approved=dishes.filter(d=>d.status==='approved');let html='<div class="food-grid">';
+    if(approved.length===0) html+='<div style="padding:20px;text-align:center;background:white;border-radius:12px">Koi dish nahi - Admin approve karega - Shop GPS: '+(SHOP_LAT?'✅':'')+'</div>';
+    else approved.forEach(d=>{let inCart=cart.find(x=>x.docId===d.docId);let qty=inCart?inCart.qty:0;html+=`<div class="food-card"><img src="${d.img}"><div class="food-info"><div class="food-name">${d.name}</div><div class="food-rate">₹${d.rate}</div><div style="font-size:9px">📍 ${d.shopCode} - Shop GPS: ${d.shopLat?'✅':'❌'} 🟢</div>${qty===0?`<button class="btn-add" style="width:100%;margin-top:6px" onclick="addToCart('${d.docId}')">ADD +</button>`:`<div class="qty-bar"><button class="qty-btn" onclick="decQty('${d.docId}')">−</button><span class="qty-count">${qty}</span><button class="qty-btn" onclick="incQty('${d.docId}')">+</button></div>`}</div></div>`;});
     html+='</div>';grid.innerHTML=html;
-    let list=document.getElementById('customerOrdersList');
-    list.innerHTML=`<div class="table-head"><div class="col-name">📦 MY ORDERS - Firebase Live (${orders.length})</div></div>${orders.slice(-10).reverse().map(o=>`<div class="row" onclick="openOrderDetail('${o.docId}')"><div class="col-name" style="font-size:11px"><b>${o.orderId}</b> - ₹${o.total} - ${o.shopName} (${o.shopCode})<br>🍛 ${o.items?.map(i=>i.name+' x'+i.qty).join(', ')}<br>📍 ${o.distance?.toFixed(2)} km | ${o.status} | <span class="otp-hide">OTP ****</span></div></div>`).join('') || '<div class="row">Koi order nahi</div>'}`;
+    let list=document.getElementById('customerOrdersList');list.innerHTML=`<div class="table-head"><div class="col-name">📦 MY ORDERS - GPS Distance - Firebase Live</div></div>${orders.slice(-10).reverse().map(o=>`<div class="row" onclick="openOrderDetail('${o.docId}')"><div class="col-name" style="font-size:11px"><b>${o.orderId}</b> - ₹${o.total} - 📍 ${o.distance?.toFixed(2)} km - ${o.status}<br>🍛 ${o.items?.map(i=>i.name+' x'+i.qty).join(', ')} | <a href="${o.location}" target="_blank">📍 Map</a></div></div>`).join('') || '<div class="row">Koi order nahi</div>'}`;
   }
   if(role==='delivery'){
-    let deliveryBox=document.getElementById('deliveryPanelFull');
-    deliveryBox.innerHTML=`
-      <div class="add-card" style="background:white;border:2px solid #111827">
-      <h3>🛵 Delivery Detail - Name + Mobile - Firebase Live</h3>
-      <input id="deliveryNameInput" class="inp" placeholder="Delivery Boy Naam" value="${DELIVERY_NAME}">
-      <input id="deliveryPhoneInput" class="inp" placeholder="Delivery Mobile" value="${DELIVERY_PHONE}">
-      <button class="btn-save" style="background:#065f46;color:white" onclick="saveDeliveryDetail()">💾 Save Delivery Detail</button>
-      <div class="slide-container"><div><div style="font-weight:800">🛵 Duty ON / OFF</div></div><div style="display:flex;align-items:center"><div class="slide-switch ${DELIVERY_DUTY==='on'?'on':'off'}" onclick="toggleDuty()"><div class="slide-knob">${DELIVERY_DUTY==='on'?'🟢':'🔴'}</div></div><span style="margin-left:6px;font-weight:800">${DELIVERY_DUTY==='on'?'ON':'OFF'}</span></div></div>
-      </div>
-    `;
+    document.getElementById('deliveryPanelFull').innerHTML=`<div class="add-card" style="background:white;border:2px solid #111827"><h3>🛵 Delivery - GPS + Name Mobile - Firebase</h3><input id="deliveryNameInput" class="inp" placeholder="Delivery Boy Naam" value="${DELIVERY_NAME}"><input id="deliveryPhoneInput" class="inp" placeholder="Delivery Mobile" value="${DELIVERY_PHONE}"><button class="btn-save" style="background:#065f46;color:white" onclick="saveDeliveryDetail()">💾 Save Delivery Detail</button><div class="slide-container"><div><div style="font-weight:800">🛵 Duty ON / OFF - GPS Distance</div></div><div style="display:flex;align-items:center"><div class="slide-switch ${DELIVERY_DUTY==='on'?'on':'off'}" onclick="toggleDuty()"><div class="slide-knob">${DELIVERY_DUTY==='on'?'🟢':'🔴'}</div></div><span style="margin-left:6px;font-weight:800">${DELIVERY_DUTY==='on'?'ON':'OFF'}</span></div></div></div>`;
     let filtered=DELIVERY_DUTY==='on'?orders.filter(o=>o.status==='Ready for Pickup'||o.status==='Out for Delivery'):[];
     let allMy=orders.filter(o=>o.deliveryPhone===DELIVERY_PHONE);
-    let box=document.getElementById('otherList');
-    let html=`<div class="table-head" style="background:#b91c1c;color:white"><div class="col-name" style="font-weight:800">🛵 Pickup Orders (${filtered.length}) - SABSE UPAR FIX - Firebase Live - ${DELIVERY_NAME}</div></div>`;
-    if(DELIVERY_DUTY!=='on'){html+='<div style="padding:20px;text-align:center;background:white">🔴 Duty OFF - ON karo</div>';}
+    let box=document.getElementById('otherList');let html=`<div class="table-head" style="background:#b91c1c;color:white"><div class="col-name" style="font-weight:800">🛵 Pickup Orders (${filtered.length}) - GPS Distance - SABSE UPAR - ${DELIVERY_NAME}</div></div>`;
+    if(DELIVERY_DUTY!=='on'){html+='<div style="padding:20px;text-align:center;background:white">🔴 Duty OFF - ON karo - GPS Distance ke saath</div>';}
     else{
-      if(filtered.length===0) html+='<div style="padding:20px;text-align:center;background:white">Koi pickup nahi - Shop Ready karega tab ayega - Firebase Live</div>';
-      filtered.forEach(o=>{
-        let btn=o.status==='Ready for Pickup'?`<button class="btn-small btn-pick pulse" onclick="pickupOrder('${o.docId}')">🛵 Pickup Karo - Detail rahega</button>`:`<button class="btn-small btn-approve pulse" onclick="openOtpVerify('${o.docId}')">🔐 OTP DALO - **** Hidden</button> <button class="btn-small btn-edit" onclick="openOrderDetail('${o.docId}')">Detail</button>`;
-        html+=`<div class="row" onclick="openOrderDetail('${o.docId}')"><div class="col-name" style="font-size:11px"><b style="color:#b91c1c">${o.orderId}</b> - ${o.shopName} (${o.shopCode})<br>👤 ${o.customer} - ${o.phone} <a href="tel:${o.phone}" style="background:#16a34a;color:white;padding:2px 6px;border-radius:6px;text-decoration:none">📞 Call</a><br>📍 ${o.distance?.toFixed(2)} km | 💰 ₹${o.deliveryEarning}<br><span class="otp-hide">🔒 OTP: **** Hidden - Detail rahega</span><br>Delivery: ${DELIVERY_NAME}</div><div class="col-rate">${btn}</div></div>`;
-      });
+      if(filtered.length===0) html+='<div style="padding:20px;text-align:center;background:white">Koi pickup nahi - Shop Ready karega - Firebase Live - GPS Distance ke saath</div>';
+      filtered.forEach(o=>{let btn=o.status==='Ready for Pickup'?`<button class="btn-small btn-pick pulse" onclick="pickupOrder('${o.docId}')">🛵 Pickup - ${o.distance?.toFixed(2)}km</button>`:`<button class="btn-small btn-approve pulse" onclick="openOtpVerify('${o.docId}')">🔐 OTP DALO - **** Hidden - ${o.distance?.toFixed(2)}km</button> <button class="btn-small btn-edit" onclick="openOrderDetail('${o.docId}')">Detail + GPS</button>`;html+=`<div class="row" onclick="openOrderDetail('${o.docId}')"><div class="col-name" style="font-size:11px"><b style="color:#b91c1c">${o.orderId}</b> - ${o.shopName} (${o.shopCode})<br>👤 ${o.customer} - ${o.phone} <a href="tel:${o.phone}" style="background:#16a34a;color:white;padding:2px 6px;border-radius:6px;text-decoration:none">📞 Call</a><br>📍 Shop GPS: ${o.shopLat?.toString().slice(0,6)||''} → Customer GPS: ${o.customerLat?.toString().slice(0,6)||''}<br>📍 Distance: ${o.distance?.toFixed(2)} km - GPS se | 💰 ₹${o.deliveryEarning}<br><span class="otp-hide">🔒 OTP: **** Hidden - Detail rahega - GPS</span><br>🗺️ <a href="${o.location}" target="_blank">📍 Map Kholo</a></div><div class="col-rate">${btn}</div></div>`;});
     }
-    html+=`<div style="margin-top:12px" class="table-head"><div class="col-name" style="font-weight:800">📦 My Delivery History - Detail rahega - OTP **** Hidden - Firebase Live</div></div>`;
-    if(allMy.length===0) html+='<div style="padding:10px;text-align:center;background:white">Koi delivery nahi</div>';
-    else allMy.slice().reverse().slice(0,20).forEach(o=>{
-      html+=`<div class="row" style="background:${o.status==='Delivered'?'#dcfce7':'white'}" onclick="openOrderDetail('${o.docId}')"><div class="col-name" style="font-size:11px"><b>${o.orderId}</b> - ${o.shopName} (${o.shopCode})<br>👤 ${o.customer} | 📍 ${o.distance?.toFixed(2)} km<br><span class="otp-hide">OTP: **** Hidden - Detail rahega</span> | ${o.status}</div><div class="col-rate">${o.status==='Out for Delivery'?`<button class="btn-small btn-approve" onclick="openOtpVerify('${o.docId}')">🔐 OTP DALO</button>`:o.status}</div></div>`;
-    });
+    html+=`<div style="margin-top:12px" class="table-head"><div class="col-name" style="font-weight:800">📦 My Delivery History - GPS Distance - Detail rahega - Firebase Live</div></div>`;
+    if(allMy.length===0) html+='<div style="padding:10px;text-align:center;background:white">Koi delivery nahi - GPS Distance ke saath ayega</div>';
+    else allMy.slice().reverse().slice(0,20).forEach(o=>{html+=`<div class="row" style="background:${o.status==='Delivered'?'#dcfce7':'white'}" onclick="openOrderDetail('${o.docId}')"><div class="col-name" style="font-size:11px"><b>${o.orderId}</b> - ${o.shopName} (${o.shopCode})<br>👤 ${o.customer} | 📍 ${o.distance?.toFixed(2)} km GPS | 🛵 ₹${o.deliveryEarning}<br><span class="otp-hide">OTP: **** Hidden - GPS: ${o.distance?.toFixed(2)}km</span> | ${o.status} | <a href="${o.location}" target="_blank">📍 Map</a></div><div class="col-rate">${o.status==='Out for Delivery'?`<button class="btn-small btn-approve" onclick="openOtpVerify('${o.docId}')">🔐 OTP DALO</button>`:o.status}</div></div>`;});
     box.innerHTML=html;
-    document.getElementById('customerFoodGrid').innerHTML='';document.getElementById('customerOrdersList').innerHTML='';
   }
   if(role==='admin'){
-    let box=document.getElementById('adminApproveBox');
-    let pending=dishes.filter(d=>d.status==='pending');
-    let html=`<div class="admin-section"><div class="admin-title">🍛 Approve Karo (${pending.length}) - Firebase Live</div><div class="table-head"><div class="col-photo">PHOTO</div><div class="col-name">NAME + SHOP CODE</div><div class="col-rate">ACTION</div></div>`;
-    if(pending.length===0) html+='<div style="padding:12px;text-align:center">Koi pending nahi - Firebase Live</div>';
-    else pending.forEach(d=>{html+=`<div class="row" style="background:white"><div class="col-photo"><img class="dish-thumb" src="${d.img}"></div><div class="col-name" style="font-size:11px">${d.name}<br>₹${d.rate}<br>🏪 ${d.shopName} (${d.shopCode})</div><div class="col-rate"><button class="btn-small btn-approve pulse" onclick="approve('${d.docId}')">✅ Approve</button><br><button class="btn-small btn-reject" onclick="rejectDish('${d.docId}')">❌ Reject</button></div></div>`});
+    let box=document.getElementById('adminApproveBox');let pending=dishes.filter(d=>d.status==='pending');let html=`<div class="admin-section"><div class="admin-title">🍛 Approve Karo (${pending.length}) - GPS + Firebase Live - Shop GPS: ${SHOP_LAT?'✅':'❌'}</div><div class="table-head"><div class="col-photo">PHOTO</div><div class="col-name">NAME + SHOP CODE + GPS</div><div class="col-rate">ACTION</div></div>`;
+    if(pending.length===0) html+='<div style="padding:12px;text-align:center">Koi pending nahi - GPS ke saath</div>';
+    else pending.forEach(d=>{html+=`<div class="row" style="background:white"><div class="col-photo"><img class="dish-thumb" src="${d.img}"></div><div class="col-name" style="font-size:11px">${d.name}<br>₹${d.rate}<br>🏪 ${d.shopName} (${d.shopCode})<br>📍 Shop GPS: ${d.shopLat||'N/A'} - Code Permanent</div><div class="col-rate"><button class="btn-small btn-approve pulse" onclick="approve('${d.docId}')">✅ Approve</button><br><button class="btn-small btn-reject" onclick="rejectDish('${d.docId}')">❌ Reject</button></div></div>`});
     html+='</div>';box.innerHTML=html;
-    let other=document.getElementById('otherList');
-    other.innerHTML=`<div class="admin-section"><div class="admin-title">📦 All Orders - Firebase Live (${orders.length}) - OTP **** Hidden - Detail rahega</div>${orders.slice(-20).reverse().map(o=>`<div class="row" onclick="openOrderDetail('${o.docId}')"><div class="col-name" style="font-size:11px"><b>${o.orderId}</b> - ${o.customer} - ₹${o.total} - ${o.status} - <span class="otp-hide">**** Hidden</span> <button style="background:#eee;border:none;padding:4px 8px;border-radius:6px">Detail</button></div></div>`).join('')}</div>`;
+    let other=document.getElementById('otherList');other.innerHTML=`<div class="admin-section"><div class="admin-title">📦 All Orders - GPS Distance - Firebase Live - OTP **** Hidden</div>${orders.slice(-20).reverse().map(o=>`<div class="row" onclick="openOrderDetail('${o.docId}')"><div class="col-name" style="font-size:11px"><b>${o.orderId}</b> - ${o.customer} - ₹${o.total} - 📍 ${o.distance?.toFixed(2)} km GPS - <span class="otp-hide">**** Hidden</span> - ${o.status}<br>Shop GPS: ${o.shopLat?.toString().slice(0,6)} → Customer GPS: ${o.customerLat?.toString().slice(0,6)} - <a href="${o.location}" target="_blank">Map</a></div></div>`).join('')}</div>`;
   }
 }
 render();updateHeader();
